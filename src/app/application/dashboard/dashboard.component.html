@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <h2 class="text-black mt-4" style="font-size: 32px;">Submissions</h2>
     <div class="row mt-4 filter_button">
-        <div class="col-lg-9 col-md-12 d-flex block filter_input justify-content-between ">
+        <div class="col-lg-9 col-xl-9 col-md-12 d-flex block filter_input justify-content-between ">
             <div class="search-bar">
                 <span class="p-input-icon-left  ">
                     <i class="pi pi-search"></i>
@@ -20,13 +20,13 @@
             <div class="datepicker-input">
                 <span class="p-input-icon-left  ">
                     <i class="pi pi-calendar"></i>
-                    <input type="date" class="search-text" pInputText placeholder="22/10/2022" />
+                    <input type="text"  pInputText placeholder="22/10/2022" />
                     <!-- <p-calendar [showIcon]="true" inputId="icon" placeholder="24/20/2002"></p-calendar> -->
                 </span>
             </div>
         
         </div>
-        <div class="col-lg-3 col-sm-12 filter_button d-flex justify-content-center start">
+        <div class="col-lg-3 col-xl-3 col-sm-12 filter_button d-flex justify-content-center start">
             <div class="list">
                 <p-selectButton [options]="stateOptions" [(ngModel)]="value1"  optionLabel="label" optionValue="value"></p-selectButton>
             </div>
@@ -37,14 +37,14 @@
         </div>
     </div>
     <div class="row mt-3  ">
-        <div class="col-lg-4 col-md-6 card_pannel">
+        <div class="col-lg-4 col-xl-4 col-md-6 card_pannel">
             <div class="card_wrapper mb-2 p-2">
                 <div class="col ">
                     <div class="row">
-                        <div class=" col-lg-8">
+                        <div class=" col-lg-8 col-xl-8">
                             <h5 class="text-bold">Work Flow : Requires Location</h5>
                         </div>
-                        <div class="col-lg-4 d-flex justify-content-end startt">
+                        <div class="col-lg-4 col-xl-4 d-flex justify-content-end startt">
                             <!-- <p-tag icon="pi pi-circle-fill" severity="danger" value="Uncomplete"></p-tag> -->
                             <button class="tag-button"><div class="circule"></div>
                             Uncomplete</button>
@@ -67,10 +67,10 @@
             <div class="card_wrapper mb-2 p-2">
                 <div class="col ">
                     <div class="row">
-                        <div class=" col-lg-8">
+                        <div class=" col-lg-8 col-xl-8 col-xl-8">
                             <h5 class="text-bold">Work Flow : Requires Location</h5>
                         </div>
-                        <div class="col-lg-4 d-flex justify-content-end startt">
+                        <div class="col-lg-4 col-xl-4 d-flex justify-content-end startt">
                             <button class="risk-button"><div class="circule"></div>
                                Low Risk</button>
                         </div>
@@ -92,10 +92,10 @@
             <div class="card_wrapper mb-2 p-2">
                 <div class="col ">
                     <div class="row">
-                        <div class=" col-lg-8">
+                        <div class=" col-lg-8 col-xl-8">
                             <h5 class="text-bold">Work Flow : Requires Location</h5>
                         </div>
-                        <div class="col-lg-4 d-flex justify-content-end startt">
+                        <div class="col-lg-4 col-xl-4 d-flex justify-content-end startt">
                             <button class="tag-button"><div class="circule"></div>
                                 Uncomplete</button>
                         </div>
@@ -117,10 +117,10 @@
             <div class="card_wrapper mb-2 p-2">
                 <div class="col ">
                     <div class="row">
-                        <div class=" col-lg-8">
+                        <div class=" col-lg-8 col-xl-8">
                             <h5 class="text-bold">Work Flow : Requires Location</h5>
                         </div>
-                        <div class="col-lg-4 d-flex justify-content-end startt">
+                        <div class="col-lg-4 col-xl-4 d-flex justify-content-end startt">
                             <button class="review-button"><div class="circule"></div>
                                 Need Review</button>
                         </div>
@@ -140,7 +140,7 @@
                 </div>
             </div>
         </div>
-        <div class="row col-lg-8 col-md-6 map_area">
+        <div class="row col-lg-8 col-xl-8 col-md-6 map_area">
             <app-map></app-map>
         </div>
     </div>

@@ -1,0 +1,128 @@
+button.tag-button {
+    position: absolute;
+    width: 128px;
+    height: 27px;
+    left: 315px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FF3D00;
+    top: 15px;
+    background: rgba(255, 61, 0, 0.1);
+    border: 1px solid #FF3D00;
+    border-radius: 4px;
+
+    .circule {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 7.5px;
+        border-radius: 5px;
+        background: #FF3D00;
+    }
+}
+.risk-button{
+    position: absolute;
+    width: 128px;
+    height: 27px;
+    left: 315px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #53D86A;
+    top: 15px;
+    background: #D7E5DA;
+    border: 1px solid #53D86A;
+    border-radius: 4px;
+
+    .circule {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 7.5px;
+        border-radius: 5px;
+        background: #53D86A;
+    }
+}
+.review-button{
+    position: absolute;
+    width: 128px;
+    height: 27px;
+    left: 315px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #B8B9BC;
+    top: 15px;
+    background: #ECECED;
+    border: 1px solid #B8B9BC;
+    border-radius: 4px;
+
+    .circule {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 7.5px;
+        border-radius: 5px;
+        background: #B8B9BC;
+    }
+}
+span.ng-tns-c69-1.p-calendar.p-calendar-w-btn {
+    width: 100%;
+}
+.card_wrapper {
+    position: relative;
+    width: 459px;
+    height: 144px;
+    border: 1px solid #B8B9BC;
+    border-radius: 4px;
+    
+}
+@media(max-width:573px) {
+    button.tag-button {
+        position: unset;
+        .circule{
+            top: 57.5px;
+        } 
+    }
+   .risk-button{
+    position: unset;
+    .circule{
+        top: 57.5px;
+    }
+   }
+   .review-button{
+    position: unset;
+    .circule{
+        top: 57.5px;
+    }
+   }
+   .card_wrapper {
+    position: relative;
+    width: 100% !important;
+    height: auto;
+}
+
+}
+@media screen and (max-width: 990px) and (min-width: 574px) {
+    button.tag-button {
+        position: unset;
+        .circule{
+            top: 57.5px;
+        } 
+    }
+   .risk-button{
+    position: unset;
+    .circule{
+        top: 57.5px;
+    }
+   }
+   .review-button{
+    position: unset;
+    .circule{
+        top: 57.5px;
+    }
+   }
+   .card_wrapper {
+    position: relative;
+    width: 100% !important;
+    height: auto;
+}
+}

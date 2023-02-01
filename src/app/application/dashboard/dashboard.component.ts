@@ -8,6 +8,7 @@ import * as coorddata from '../../../assets/coordinate.json';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
+  value1: string = 'Map';
   stateOptions = [
     { label: 'Map', value: 'Map' },
     { label: 'List', value: 'List' },

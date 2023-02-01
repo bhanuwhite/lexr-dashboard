@@ -14,6 +14,9 @@ import { TagModule } from 'primeng/tag';
 import { OverlayModule } from 'primeng/overlay';
 import { LayoutModule } from './layout/layout.module';
 
+
+
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -29,7 +32,8 @@ import { LayoutModule } from './layout/layout.module';
     GMapModule,
     TagModule,
     LayoutModule,
-    OverlayModule
+    OverlayModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent],

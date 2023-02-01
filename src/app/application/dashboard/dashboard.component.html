@@ -20,14 +20,15 @@
             <div class="datepicker-input">
                 <span class="p-input-icon-left  ">
                     <i class="pi pi-calendar"></i>
-                    <input type="text" pInputText placeholder="24/12/2020" />
+                    <input type="date" class="search-text" pInputText placeholder="22/10/2022" />
+                    <!-- <p-calendar [showIcon]="true" inputId="icon" placeholder="24/20/2002"></p-calendar> -->
                 </span>
             </div>
         
         </div>
         <div class="col-lg-3 col-sm-12 filter_button d-flex justify-content-center start">
             <div class="list">
-                <p-selectButton [options]="stateOptions" optionLabel="label" optionValue="value"></p-selectButton>
+                <p-selectButton [options]="stateOptions" [(ngModel)]="value1"  optionLabel="label" optionValue="value"></p-selectButton>
             </div>
             <div class="list d-flex ms-3 align-items-center">
                 <i class="pi pi-cloud-download text-blue"></i>
@@ -37,74 +38,103 @@
     </div>
     <div class="row mt-3  ">
         <div class="col-lg-4 col-md-6 card_pannel">
-            <div class="card mb-2 p-2">
+            <div class="card_wrapper mb-2 p-2">
                 <div class="col ">
                     <div class="row">
                         <div class=" col-lg-8">
-                            <h6 class="text-bold">Work Flow : Requires Location</h6>
+                            <h5 class="text-bold">Work Flow : Requires Location</h5>
                         </div>
                         <div class="col-lg-4 d-flex justify-content-end startt">
-                            <p-tag icon="pi pi-circle-fill" severity="danger" value="Uncomplete"></p-tag>
+                            <!-- <p-tag icon="pi pi-circle-fill" severity="danger" value="Uncomplete"></p-tag> -->
+                            <button class="tag-button"><div class="circule"></div>
+                            Uncomplete</button>
                         </div>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">From:</span>
+                        <span class="me-1 from" style="color:#B8B9BC;">From:</span>
                         <span style="color: #000;">denisgordiyenya@gmail.com</span>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">To:</span>
+                        <span class="me-1 from" style="color: #B8B9BC;">To:</span>
                         <span style="color: #000; font-size: 16px;">denisgordiyenya@gmail.com</span>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">Due Date:</span>
+                        <span class="me-1 from" style="color: #B8B9BC;">Due Date:</span>
                         <span class="text-denger" style="color:orangered ;"> 6 December</span>
                     </div>
                 </div>
             </div>
-            <div class="card mb-2 p-2">
+            <div class="card_wrapper mb-2 p-2">
                 <div class="col ">
                     <div class="row">
                         <div class=" col-lg-8">
-                            <h6 class="text-bold">Work Flow : Requires Location</h6>
+                            <h5 class="text-bold">Work Flow : Requires Location</h5>
                         </div>
                         <div class="col-lg-4 d-flex justify-content-end startt">
-                            <p-tag icon="pi pi-circle-fill" severity="success" value="Low Risk"></p-tag>
+                            <button class="risk-button"><div class="circule"></div>
+                               Low Risk</button>
                         </div>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">From:</span>
+                        <span class="me-1 from"  >From:</span>
                         <span style="color: #000;">denisgordiyenya@gmail.com</span>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">To:</span>
+                        <span class="me-1 from"  >To:</span>
                         <span style="color: #000;">denisgordiyenya@gmail.com</span>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">Due Date:</span>
+                        <span class="me-1 from"  >Due Date:</span>
                         <span class="text-denger" style="color:orangered ;"> 6 December</span>
                     </div>
                 </div>
             </div>
-            <div class="card mb-2 p-2">
+            <div class="card_wrapper mb-2 p-2">
                 <div class="col ">
                     <div class="row">
                         <div class=" col-lg-8">
-                            <h6 class="text-bold">Work Flow : Requires Location</h6>
+                            <h5 class="text-bold">Work Flow : Requires Location</h5>
                         </div>
                         <div class="col-lg-4 d-flex justify-content-end startt">
-                            <p-tag icon="pi pi-circle-fill" severity="danger" value="Uncomplete"></p-tag>
+                            <button class="tag-button"><div class="circule"></div>
+                                Uncomplete</button>
                         </div>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">From:</span>
+                        <span class="me-1 from" >From:</span>
                         <span style="color: #000;">denisgordiyenya@gmail.com</span>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">To:</span>
+                        <span class="me-1 from"  >To:</span>
                         <span style="color: #000;">denisgordiyenya@gmail.com</span>
                     </div>
                     <div>
-                        <span class="me-1" style="color: #80808080;">Due Date:</span>
+                        <span class="me-1 from"  >Due Date:</span>
+                        <span class="text-denger" style="color:orangered ;"> 6 December</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card_wrapper mb-2 p-2">
+                <div class="col ">
+                    <div class="row">
+                        <div class=" col-lg-8">
+                            <h5 class="text-bold">Work Flow : Requires Location</h5>
+                        </div>
+                        <div class="col-lg-4 d-flex justify-content-end startt">
+                            <button class="review-button"><div class="circule"></div>
+                                Need Review</button>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="me-1 from"  >From:</span>
+                        <span style="color: #000;">denisgordiyenya@gmail.com</span>
+                    </div>
+                    <div>
+                        <span class="me-1 from"  >To:</span>
+                        <span style="color: #000;">denisgordiyenya@gmail.com</span>
+                    </div>
+                    <div>
+                        <span class="me-1 from"  >Due Date:</span>
                         <span class="text-denger" style="color:orangered ;"> 6 December</span>
                     </div>
                 </div>

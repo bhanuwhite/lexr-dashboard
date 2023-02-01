@@ -12,7 +12,7 @@ export class MapComponent implements OnInit {
   map: any = {};
   tempData: any = (coorddata as any).default;
   style = 'mapbox://styles/mapbox/streets-v12';
-  zoom: number = 8;
+  zoom: number = 15;
   constructor() {
     mapboxgl!.accessToken = environment.mapbox.accessToken;
   }

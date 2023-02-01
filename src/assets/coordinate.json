@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "message": "canara ATM",
+        "iconSize": [60, 60],
+        "image": "../../../assets/image/atm.png"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [75.1, 32]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "message": "Bar & Hotel",
+        "iconSize": [50, 50],
+        "image": "../../../assets/image/hotel.png"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [86.5721, 21.57779]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "message": "school",
+        "iconSize": [40, 40],
+        "image": "../../../assets/image/school.png"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [85.839452, 20.260296]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "message": "Movie",
+        "iconSize": [40.839452, 40.260296],
+        "image": "../../../assets/image/movie.png"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [75.3, 32]
+      }
+    }
+  ]
+}

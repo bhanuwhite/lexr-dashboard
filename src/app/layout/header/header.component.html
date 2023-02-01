@@ -1,0 +1,62 @@
+<nav class="navbar  bg-blue navbar-expand-lg navbar-light shadow-sm" style="height: 72px; background-color: #2188d9;">
+    <div class="container-fluid">
+        <div class="col-lg-2">
+            <a class="navbar-brand d-small-none" style="font-size: 24px; color: white;">Welcome</a>
+            <button class="navbar-toggler text-white" (click)="toggle()" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <p-overlay [(visible)]="overlayVisible"
+                [responsive]="{ breakpoint: '640px', direction: 'top', contentStyleClass: 'h-20rem' }"
+                contentStyleClass="p-4 surface-overlay shadow-2 border-round">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <button pButton pRipple label="Forms" icon="pi pi-list"></button>
+                    </li>
+                    <li class="nav-item">
+                        <button pButton pRipple label="Customers" icon="pi pi-users"></button>
+                    </li>
+                    <li class="nav-item  ">
+                        <button pButton pRipple label="Submissions" icon="pi pi-times"></button>
+
+                    </li>
+                    <li class="nav-item  ">
+                        <button pButton pRipple label="History" icon="pi pi-history"></button>
+
+                    </li>
+                    <li class="nav-item  ">
+                        <button pButton pRipple label="Reports" icon="pi pi-chart-bar"></button>
+
+                    </li>
+                    <li class="nav-item  ">
+                        <button pButton pRipple label="Workflow" icon="pi pi-chart-bar"></button>
+
+                    </li>
+
+                </ul>
+
+            </p-overlay>
+        </div>
+
+        <div class="col-lg-8">
+            <a class="navbar-brand   d-lg-none" style="font-size: 24px; color: white;">Welcome</a>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav" style="font-size: 24px;">
+                <span class="p-buttonset">
+                    <button pButton pRipple label="Forms" icon="pi pi-list"></button>
+                    <button pButton pRipple label="Customers" icon="pi pi-users"></button>
+                    <button pButton pRipple label="Submissions" icon="pi pi-times"></button>
+                    <button pButton pRipple label="History" icon="pi pi-history"></button>
+                    <button pButton pRipple label="Reports" icon="pi pi-chart-bar"></button>
+                    <button pButton pRipple label="Workflow" icon="pi pi-chart-bar"></button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-2 d-flex justify-content-center  ">
+            <button pButton pRipple type="button" icon="pi pi-bell"
+                class="p-button-rounded  text-white  p-button-text"></button>
+            <button pButton pRipple type="button" icon="pi pi-sign-out"
+                class="p-button-rounded  text-white  p-button-text"></button>
+        </div>
+    </div>
+</nav>

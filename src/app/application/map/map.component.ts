@@ -26,6 +26,15 @@ export class MapComponent implements OnInit {
       zoom: this.zoom,
       center: [this.coordinatesPoint[0], this.coordinatesPoint[1]],
     });
+    let geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: true,
+    });
+    this.map.addControl(geolocate);
+    this.map.addControl(new mapboxgl.NavigationControl());
+
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false,

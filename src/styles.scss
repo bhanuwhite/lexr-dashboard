@@ -49,6 +49,9 @@ button.navbar-toggler.text-white {
     font-weight: bold;
 }
 
+.p-calendar .p-inputtext {
+    border-radius: 0px 6px 6px 0px !important;
+}
 
 
 @media(max-width:573px) {
@@ -57,9 +60,11 @@ button.navbar-toggler.text-white {
         border: 0 !important;
         color: #2188d9;
     }
+
     span.ng-tns-c69-1.p-calendar.p-calendar-w-btn {
         width: 100% !important;
     }
+
     .mapboxgl-ctrl-attrib-button {
         display: none;
     }
@@ -120,7 +125,7 @@ button.navbar-toggler.text-white {
         }
     }
 
-   
+
 
     // #map {
     //     width: 100%;
@@ -128,6 +133,7 @@ button.navbar-toggler.text-white {
     //     margin: 0 !important;
     //     overflow: hidden;
     // }
+
 }
 
 @media screen and (max-width: 990px) and (min-width: 574px) {

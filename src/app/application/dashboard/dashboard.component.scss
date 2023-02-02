@@ -20,7 +20,8 @@ button.tag-button {
         background: #FF3D00;
     }
 }
-.risk-button{
+
+.risk-button {
     position: absolute;
     width: 128px;
     height: 27px;
@@ -42,7 +43,8 @@ button.tag-button {
         background: #53D86A;
     }
 }
-.review-button{
+
+.review-button {
     position: absolute;
     width: 128px;
     height: 27px;
@@ -64,65 +66,86 @@ button.tag-button {
         background: #B8B9BC;
     }
 }
+
 span.ng-tns-c69-1.p-calendar.p-calendar-w-btn {
     width: 100%;
 }
+
 .card_wrapper {
     position: relative;
     width: 459px;
     height: 144px;
     border: 1px solid #B8B9BC;
     border-radius: 4px;
-    
+
 }
+
+.calenderlabel {
+    border-radius: 6px 0px 0px 6px;
+    width: 45px
+}
+
 @media(max-width:573px) {
     button.tag-button {
         position: unset;
-        .circule{
+
+        .circule {
             top: 57.5px;
-        } 
+        }
     }
-   .risk-button{
-    position: unset;
-    .circule{
-        top: 57.5px;
+
+    .risk-button {
+        position: unset;
+
+        .circule {
+            top: 57.5px;
+        }
     }
-   }
-   .review-button{
-    position: unset;
-    .circule{
-        top: 57.5px;
+
+    .review-button {
+        position: unset;
+
+        .circule {
+            top: 57.5px;
+        }
     }
-   }
-   .card_wrapper {
-    position: relative;
-    width: 100% !important;
-    height: auto;
-}
+
+    .card_wrapper {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+    }
 
 }
+
 @media screen and (max-width: 990px) and (min-width: 574px) {
     button.tag-button {
         position: unset;
-        .circule{
+
+        .circule {
             top: 57.5px;
-        } 
+        }
     }
-   .risk-button{
-    position: unset;
-    .circule{
-        top: 57.5px;
+
+    .risk-button {
+        position: unset;
+
+        .circule {
+            top: 57.5px;
+        }
     }
-   }
-   .review-button{
-    position: unset;
-    .circule{
-        top: 57.5px;
+
+    .review-button {
+        position: unset;
+
+        .circule {
+            top: 57.5px;
+        }
     }
-   }
-   .card_wrapper {
-    position: relative;
-    width: 100% !important;
-    height: auto;
-}
+
+    .card_wrapper {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+    }
 }

@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
+  
+   
   overlayVisible: boolean = false;
 
   toggle() {
@@ -16,4 +18,8 @@ export class HeaderComponent {
     { label: 'Map', value: 'Map' },
     { label: 'List', value: 'List' },
   ];
+  ngOnInit(): void{
+    // @ts-ignore
+    document.getElementById('activeMenu').focus();
+  }
 }

@@ -2,7 +2,7 @@ button.tag-button {
     position: absolute;
     width: 128px;
     height: 27px;
-    left: 315px;
+    
     font-size: 14px;
     font-weight: 500;
     color: #FF3D00;
@@ -25,7 +25,7 @@ button.tag-button {
     position: absolute;
     width: 128px;
     height: 27px;
-    left: 315px;
+   
     font-size: 14px;
     font-weight: 500;
     color: #53D86A;
@@ -48,7 +48,7 @@ button.tag-button {
     position: absolute;
     width: 128px;
     height: 27px;
-    left: 315px;
+    
     font-size: 14px;
     font-weight: 500;
     color: #B8B9BC;
@@ -66,15 +66,33 @@ button.tag-button {
         background: #B8B9BC;
     }
 }
+.text-blue {
+    color: #2188d9;
+}
 
+.search-text {
+    width: 334px;
+}
+.text-bold {
+    font-weight: 700;
+    line-height: 25.2px;
+    font-size: 17px;
+    color: #060C1B;
+}
+.from {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 130%;
+    color: #B8B9BC;
+}
 span.ng-tns-c69-1.p-calendar.p-calendar-w-btn {
     width: 100%;
 }
 
 .card_wrapper {
     position: relative;
-    width: 459px;
-    height: 144px;
+    width: 100%;
+     
     border: 1px solid #B8B9BC;
     border-radius: 4px;
 
@@ -82,10 +100,44 @@ span.ng-tns-c69-1.p-calendar.p-calendar-w-btn {
 
 .calenderlabel {
     border-radius: 6px 0px 0px 6px;
-    width: 45px
+    width: 45px;
+    height: 50px;
+}
+.search-bar {
+    width: 30%;
+}
+span.p-input-icon-left {
+    display: block;
+}
+.search-text {
+    width: 100%;
+}
+.select-form-input{
+    width: 20%;
+}
+.select-status-bar {
+    width: 20%;
+}
+.calender-picker{
+    width: 25%;
 }
 
 @media(max-width:573px) {
+    .search-bar {
+        width: 100%;
+    }
+    .select-form-input{
+        width: 100%;
+    }
+    .select-status-bar {
+        width: 100%;
+    }
+    .calender-picker{
+        width: 100%;
+    }
+    span.ng-tns-c69-1.p-calendar {
+        width: 100%;
+    }
     button.tag-button {
         position: unset;
 

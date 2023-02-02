@@ -17,29 +17,7 @@ button.navbar-toggler.text-white {
     overflow: hidden;
 }
 
-.text-blue {
-    color: #2188d9;
-}
 
-
-
-.search-text {
-    width: 334px;
-}
-
-.text-bold {
-    font-weight: 700;
-    line-height: 25.2px;
-    font-size: 18px;
-    color: #060C1B;
-}
-
-.from {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 130%;
-    color: #B8B9BC;
-}
 
 
 
@@ -52,7 +30,27 @@ button.navbar-toggler.text-white {
 .p-calendar .p-inputtext {
     border-radius: 0px 6px 6px 0px !important;
 }
-
+.select-form-input{
+    .p-component {
+        width: 100%;
+    }
+}
+.select-status-bar{
+    .p-component {
+        width: 100%;
+    }
+}
+.calender-picker{
+    span.p-calendar {
+        width: 100%;
+    }
+    p-calendar  {
+        width: 100%;
+    }
+}
+// .p-dropdown .p-dropdown-label {
+//     width: 13.0625rem !important
+// }
 
 @media(max-width:573px) {
     button.p-element.p-button.p-component {
@@ -60,7 +58,9 @@ button.navbar-toggler.text-white {
         border: 0 !important;
         color: #2188d9;
     }
-
+    span.ng-tns-c69-1.p-calendar {
+        width: 100% !important;
+    }
     span.ng-tns-c69-1.p-calendar.p-calendar-w-btn {
         width: 100% !important;
     }

@@ -19,7 +19,7 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     this.mapBox();
   }
-  mapBox() {
+  private mapBox = (): void => {
     this.map = new mapboxgl.Map({
       container: 'map',
       style: this.style,
@@ -52,14 +52,12 @@ export class MapComponent implements OnInit {
       el.style.backgroundSize = '100%';
       el.style.cursor = 'pointer';
       el.addEventListener('mouseenter', () => {
-        // window.alert(marker.properties.message);
         popup
           .setLngLat(marker.geometry.coordinates)
           .setHTML(marker.properties.message)
           .addTo(this.map);
       });
       el.addEventListener('mouseleave', () => {
-        // window.alert(marker.properties.message);
         popup.remove();
       });
       // Add markers to the map.
@@ -67,9 +65,8 @@ export class MapComponent implements OnInit {
         .setLngLat(marker.geometry.coordinates)
         .addTo(this.map);
     }
-    // new mapboxgl.Marker(el)
     new mapboxgl.Marker()
       .setLngLat([this.coordinatesPoint[0], this.coordinatesPoint[1]])
       .addTo(this.map);
-  }
+  };
 }

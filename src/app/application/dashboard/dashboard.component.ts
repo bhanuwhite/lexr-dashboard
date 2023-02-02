@@ -13,6 +13,4 @@ export class DashboardComponent {
     { label: 'Map', value: 'Map' },
     { label: 'List', value: 'List' },
   ];
-
-  ngOnInit() {}
 }

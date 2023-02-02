@@ -1,5 +1,5 @@
  button.p-element.p-button.p-component {
-     background: none !important;
+     background: #2188d9;
      border: 0 !important;
  }
 
@@ -35,10 +35,10 @@
  // }
 
  .btnActive:focus {
-    background-color: blue !important;
-    border: none;
-    box-shadow: none;
-}
+     background-color: blue !important;
+     border: none;
+     box-shadow: none;
+ }
 
  .text-bold {
      font-weight: bold;

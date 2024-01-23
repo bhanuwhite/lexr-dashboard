@@ -16,8 +16,9 @@ import { environment } from 'src/environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
+import { CategoriesComponent } from './categories/categories.component';
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, CategoriesComponent],
   imports: [
     CommonModule,
     ApplicationRoutingModule,

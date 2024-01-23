@@ -1,0 +1,56 @@
+<div [ngClass]="{' small-sidebar': step === 1, ' large-sidebar' : step === 2 }" class="sidebar float-left">
+    <div class="sidebar-header">
+      <span class="d-flex align-items-center ml-2 " style="color:#fff;">
+        <i style="font-size: 2rem" class="me-2">@</i>
+        <span class="site-name fw-500" style="font-size: 24px;">The Brando</span>
+      </span>
+    </div>
+    <div class="sidebar-content">
+      <div class="list-wrapper">
+        <ul class="sidebar_ul">
+          <li class="sidebar_nav" [routerLink]="['/']" [ngClass]="{'active-class':tabstr.toLowerCase()==='overview'}"  (click)="tabName('Overview')">
+            <i class="pi pi-th-large me-3"></i> <span> Overview</span>
+          </li>
+          <li class="sidebar_nav" [routerLink]="['categories']" [ngClass]="{'active-class':tabstr.toLowerCase()==='categories'}"  (click)="tabName('categories')">
+            <i class="pi pi pi-slack me-3"></i> <span>Categories</span>
+          </li>
+          <li class="sidebar_nav" [ngClass]="{'hover-class':tabstr.toLowerCase()==='yourneighbors'}"  (click)="tabName('yourneighbors')">
+            <i class="pi pi pi-slack me-3"></i> <span class="me-3">Your neighbors</span>
+            <i class="pi pi-shield me-3" *ngIf="step !== 1"></i>
+          </li>
+          <li class="sidebar_nav" [ngClass]="{'active-class':tabstr.toLowerCase()==='askanything'}"  (click)="tabName('askanything')">
+            <i class="pi pi-comments me-3"></i><span>Ask anything</span>
+          </li>
+          <li class="sidebar_nav" [ngClass]="{'active-class':tabstr.toLowerCase()==='worldmap'}"  (click)="tabName('worldmap')">
+            <i class="pi pi-globe me-3"></i><span>World Map</span>
+          </li>
+          <hr class="mt-2 mb-2">
+          <div class="my-3">
+            <li style="font-weight: 400;padding: 0.25rem 1.25rem;">
+              <span style="color: #402807;">Help</span>
+            </li>
+            <li style="font-weight: 400;padding: 0.25rem 1.25rem;">
+              <span style="color: #402807;">Contact us</span>
+            </li>
+          </div>
+
+        </ul>
+      </div>
+
+    </div>
+    <div class="sidebar-footer d-flex align-items-center flex-column justify-content-center cursor-pointer text-center"
+      style="background-color: #000;position: relative;height: 200px;">
+      <!-- Conditionally render Logout icon and hide Feedback section when sidebar is closed -->
+      <li class="sidebar_nav text-white" *ngIf="step === 1">
+        <i class="pi pi-sign-out me-3"></i> <span>Logout</span>
+      </li>
+      <h4 class="fw-bold text-white mb-1" *ngIf="step !== 1">Feedback</h4>
+      <span class="text-white fw-bold fs-15" *ngIf="step !== 1">By Data Island</span>
+      <div class="close_sidebar">
+        <div class="text-white">
+          <i class="pi pi-angle-left cursor-pointer site-name close-menu" style="font-size: 20px" (click)="step=1"></i>
+          <i class="pi pi-angle-right site-name1" style="font-size: 20px" (click)="step=2" *ngIf="step==1"></i>
+        </div>
+      </div>
+    </div>
+  </div>

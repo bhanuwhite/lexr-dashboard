@@ -1,218 +1,202 @@
-button.tag-button {
-    position: absolute;
-    width: 128px;
-    height: 27px;
-
-    font-size: 14px;
-    font-weight: 500;
-    color: #FF3D00;
-    top: 15px;
-    background: rgba(255, 61, 0, 0.1);
-    border: 1px solid #FF3D00;
-    border-radius: 4px;
-
-    .circule {
-        width: 12px;
-        height: 12px;
-        position: absolute;
-        top: 7.5px;
-        border-radius: 5px;
-        background: #FF3D00;
+// sidebar close styles
+.small-sidebar li span {
+    display: none;
+  }
+  
+  .small-sidebar {
+    .sidebar-header {
+      display: block !important;
+      text-align: center;
     }
-}
-
-.risk-button {
-    position: absolute;
-    width: 128px;
-    height: 27px;
-
-    font-size: 14px;
-    font-weight: 500;
-    color: #53D86A;
-    top: 15px;
-    background: #D7E5DA;
-    border: 1px solid #53D86A;
-    border-radius: 4px;
-
-    .circule {
-        width: 12px;
-        height: 12px;
-        position: absolute;
-        top: 7.5px;
-        border-radius: 5px;
-        background: #53D86A;
+  
+    .pi {
+      font-size: 20px;
     }
-}
-
-.review-button {
-    position: absolute;
-    width: 128px;
-    height: 27px;
-
-    font-size: 14px;
-    font-weight: 500;
-    color: #B8B9BC;
-    top: 15px;
-    background: #ECECED;
-    border: 1px solid #B8B9BC;
-    border-radius: 4px;
-
-    .circule {
-        width: 12px;
-        height: 12px;
-        position: absolute;
-        top: 7.5px;
-        border-radius: 5px;
-        background: #B8B9BC;
+  
+    transition: all linear 0.3s;
+  
+    .site-name {
+      display: none !important;
     }
-}
-
-.text-blue {
-    color: #2188d9;
-}
-
-.search-text {
-    width: 334px;
-}
-
-.text-bold {
-    font-weight: 700;
-    line-height: 25.2px;
-    font-size: 17px;
-    color: #060C1B;
-}
-
-.from {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 130%;
-    color: #B8B9BC;
-}
-
-span.ng-tns-c69-1.p-calendar.p-calendar-w-btn {
-    width: 100%;
-}
-
-.card_wrapper {
+  
+    width: 6rem;
+    text-align: center;
+  }
+  
+  .large-sidebar {
+    transition: all linear 0.2s;
+    width: 20rem !important;
+  
+    .site-name1 {
+      display: none !important;
+    }
+  }
+  
+  .sidebar {
+    background-color: #202123 !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    // background: #ffffff;
+    color: #606060;
+    border: 0 none;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+  
+    .sidebar-header {
+        padding: 1.25rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .sidebar-content {
+    //   border-top: 1px solid #eee;
+      padding: 1rem;
+      position: relative;
+    }
+  }
+  
+  .container-fluid {
+    position: absolute;
+    left: 15rem;
+    width: calc(100% - 20rem);
+  }
+  
+  .sidebar_nav {
+    margin: 0;
+    padding: 0.75rem 1.25rem;
+    border: 0 none;
+    color: #919ba4;
+    transition: box-shadow 0.2s;
+    border-radius: 0;
+    cursor: pointer;
     position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    user-select: none;
+  }
+  
+  .sidebar .sidebar-header+.sidebar-content {
+    padding-top: 0;
+  }
+  
+  .sidebar-footer {
+    margin-top: auto;
+  }
+  
+  .sidebar .sidebar-footer {
+    padding: 1.25rem;
+  }
+  
+  
+  .sidebar_ul {
+    padding: 0.75rem 0;
+    list-style-type: none;
+    margin: 0;
+  }
+  
+  .sidebar_nav:hover {
+    background-color: #444444;
+    color: #fff;
+    // background-color: #bdedcf;
+    // color: #0d6efd;
+    font-weight: 500;
+    border-radius: 10px;
+  }
+  
+  // header
+//   .header {
+//     height: 72px !important;
+//     box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+//     width: 100%;
+//     background-color: #FFF !important;
+  
+//     button.menu-button {
+//       display: none;
+//       padding: 10px 15px;
+//       background: #fff;
+//       border-radius: 5px;
+//       border: 1px solid #000;
+//     }
+//   }
+  
+  input.p-inputtext.p-component.p-element.search-text {
+    border: none !important;
+  }
+  
+ 
+  
+  .col-lg-2 {
+    flex: 0 0 auto;
+    width: 20% !important;
+  }
+  
+ 
+  
+//   .class-content-one {
+//     padding: 15px;
+//     background: #FEF6D2;
+//     border-left: 5px solid yellow;
+//   }
+  
+//   .class-content-two {
+//     padding: 15px;
+//     background: #E9F8FF;
+//     border-left: 5px solid #1FB6E5;
+//   }
+  
+//   .active {
+//     color:;
+//   }
+  
+  .content-inner {
     width: 100%;
-
-    border: 1px solid #B8B9BC;
-    border-radius: 4px;
-
-}
-
-.calenderlabel {
-    border-radius: 6px 0px 0px 6px;
-    width: 45px;
-    height: 50px;
-}
-
-.search-bar {
-    width: 30%;
-}
-
-span.p-input-icon-left {
-    display: block;
-}
-
-.search-text {
-    width: 100%;
-}
-
-.select-form-input {
-    width: 20%;
-}
-
-.select-status-bar {
-    width: 20%;
-}
-
-.calender-picker {
-    width: 25%;
-}
-
-@media(max-width:573px) {
-    .search-bar {
-        width: 100%;
+    background: #F3F3F3;
+  }
+  
+  @media only screen and (max-width: 760px) {
+    .sidebar {
+      display: none !important;
     }
-
-    .select-form-input {
-        width: 100%;
+  
+    .header {
+      box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+      width: 100% !important;
+      // float: left;
+      // left: 0;
+      // position: fixed;
+      background-color: #FFF !important;
+  
+      .none {
+        display: none !important;
+      }
+  
+      button.menu-button {
+        display: block;
+        padding: 10px 15px;
+        background: #fff;
+        border-radius: 5px;
+        border: 1px solid #000;
+      }
     }
-
-    .select-status-bar {
-        width: 100%;
+  
+    .content-inner {
+      overflow-x: hidden !important;
     }
+  
+  }
+  
 
-    .calender-picker {
-        width: 100%;
-    }
-
-    span.ng-tns-c69-1.p-calendar {
-        width: 100%;
-    }
-
-    button.tag-button {
-        position: unset;
-
-        .circule {
-            top: 57.5px;
-        }
-    }
-
-    .risk-button {
-        position: unset;
-
-        .circule {
-            top: 57.5px;
-        }
-    }
-
-    .review-button {
-        position: unset;
-
-        .circule {
-            top: 57.5px;
-        }
-    }
-
-    .card_wrapper {
-        position: relative;
-        width: 100% !important;
-        height: auto;
-    }
-
-}
-
-@media screen and (max-width: 990px) and (min-width: 574px) {
-    button.tag-button {
-        position: unset;
-
-        .circule {
-            top: 57.5px;
-        }
-    }
-
-    .risk-button {
-        position: unset;
-
-        .circule {
-            top: 57.5px;
-        }
-    }
-
-    .review-button {
-        position: unset;
-
-        .circule {
-            top: 57.5px;
-        }
-    }
-
-    .card_wrapper {
-        position: relative;
-        width: 100% !important;
-        height: auto;
-    }
-}
+  
+  ::ng-deep .p-tieredmenu {
+    border: none;
+  }
+  ::ng-deep .p-tieredmenu:hover {
+    border: none;
+  }
+  
+  

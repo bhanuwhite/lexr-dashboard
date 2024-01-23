@@ -10,13 +10,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { MapComponent } from './map/map.component';
+// import { MapComponent } from './map/map.component';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { environment } from 'src/environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 @NgModule({
-  declarations: [DashboardComponent, MapComponent],
+  declarations: [DashboardComponent],
   imports: [
     CommonModule,
     ApplicationRoutingModule,

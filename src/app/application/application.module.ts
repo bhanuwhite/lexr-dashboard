@@ -15,6 +15,7 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { environment } from 'src/environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
+import { ChartModule } from 'primeng/chart';
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
@@ -29,6 +30,7 @@ import { CalendarModule } from 'primeng/calendar';
     SelectButtonModule,
     FormsModule,
     CalendarModule,
+    ChartModule,
     NgxMapboxGLModule.withConfig({
       accessToken: environment.mapbox.accessToken, // Optional, can also be set per map (accessToken input of mgl-map)
     }),

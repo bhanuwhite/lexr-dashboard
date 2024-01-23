@@ -13,85 +13,45 @@ export class DashboardComponent implements OnInit {
   visibleSidebar1!: boolean;
   items: any;
   public TechCat: any;
-  constructor(private router: Router) {}
+  data: any;
+  cities: any[] = [];
+selectedCity: any;
 
-  ngOnInit(): void {
-    this.iconMenu();
-    this.techDropdown()
-  }
-
-  public isActive(base: string): boolean {
-    return this.router.url === base;
-  }
-
-  techItems:any
-  public techDropdown():void {
-    this.techItems = [
-      { name: 'Tech' },
-      { name: 'Technology', code: 'tech' },
-      { name: 'Category', code: 'cat' }
-  ];
-    // this.techItems = [
-
-    //   {
-    //     label:'Tech',
-    //     icon:'pi pi-database',
-    //     items :[
-    //       {
-    //         label:'Technology',
-    //         command: () => {
-    //           this.router.navigateByUrl('/admin/technology');
-    //         },
-    //       },
-    //       {
-    //         label:'Category',
-    //         command: () => {
-    //           this.router.navigateByUrl('/admin/category');
-    //         },
-    //       }
-    //     ]
-    //   }
-    // ]
-  }
-  public iconMenu(): void {
-    this.items = [
-      {
-        label: 'Action',
-        items: [
-          {
-            label: 'Change Password',
-            icon: 'pi pi-key ',
-            command: () => {},
-          },
-          {
-            label: 'Profile',
-            icon: 'pi pi-user',
-            command: () => {
-              this.router.navigateByUrl('/admin/profile');
-            },
-          },
-          {
-            label: 'Account Settings',
-            icon: 'pi pi-cog',
-            command: () => {
-              this.router.navigateByUrl('/admin/account-settings');
-            },
-          },
-          {
-            label: 'Logout',
-            icon: 'pi pi-sign-out mt-0 text-danger',
-            command: () => {
-              this.onLogout();
-            },
-          },
-        ],
+  ngOnInit() {
+    this.data = {
+      labels: ['January', 'February', 'March', 'April', 'May'],
+      datasets: [
+        {
+          label: 'My First Dataset',
+          data: [65, 59, 80, 81, 56],
+          borderColor: '#FF9F1C',
+          borderWidth: 2,
+        },
+        {
+          label: 'My Second Dataset',
+          data: [40, 48, 62, 70, 45],
+          borderColor: 'grey', // Grey color
+          borderWidth: 2,
       },
-    ];
+      ],
+      
+    };
+    this.cities = [
+      { name: 'All Category', code: 'NY' },
+      { name: 'Los Angeles', code: 'LA' },
+      { name: 'Chicago', code: 'CH' },
+      // Add more cities as needed
+  ];
   }
 
-  // logout
-  public onLogout(): void {
-    this.router.navigateByUrl('/login');
-    localStorage.clear();
-  }
 }
+
+
+
+
+
+
+
+
+
+

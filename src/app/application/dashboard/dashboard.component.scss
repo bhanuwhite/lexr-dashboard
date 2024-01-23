@@ -2,27 +2,21 @@
 .small-sidebar li span {
     display: none;
   }
-  
   .small-sidebar {
     .sidebar-header {
       display: block !important;
       text-align: center;
     }
-  
     .pi {
       font-size: 20px;
     }
-  
     transition: all linear 0.3s;
-  
     .site-name {
       display: none !important;
     }
-  
     width: 6rem;
     text-align: center;
   }
-  
   .large-sidebar {
     transition: all linear 0.2s;
     width: 20rem !important;
@@ -31,9 +25,8 @@
       display: none !important;
     }
   }
-  
   .sidebar {
-    background-color: #202123 !important;
+    background-color: #FF9F1C;
     top: 0;
     left: 0;
     height: 100vh;
@@ -41,7 +34,7 @@
     display: flex;
     flex-direction: column;
     // background: #ffffff;
-    color: #606060;
+    color: #000;
     border: 0 none;
     box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
   
@@ -57,19 +50,23 @@
       padding: 1rem;
       position: relative;
     }
+    .close_sidebar{
+      position: absolute;
+      right: -8px;
+      top: 60%;
+      background-color: #232323;
+      border-radius: 10px;
+    }
   }
-  
   .container-fluid {
     position: absolute;
     left: 15rem;
     width: calc(100% - 20rem);
   }
-  
   .sidebar_nav {
     margin: 0;
     padding: 0.75rem 1.25rem;
     border: 0 none;
-    color: #919ba4;
     transition: box-shadow 0.2s;
     border-radius: 0;
     cursor: pointer;
@@ -78,125 +75,72 @@
     display: flex;
     align-items: center;
     user-select: none;
+    font-weight: 500;
   }
-  
   .sidebar .sidebar-header+.sidebar-content {
     padding-top: 0;
   }
-  
   .sidebar-footer {
     margin-top: auto;
   }
-  
   .sidebar .sidebar-footer {
     padding: 1.25rem;
   }
-  
-  
   .sidebar_ul {
-    padding: 0.75rem 0;
+    padding: 0;
     list-style-type: none;
     margin: 0;
   }
-  
   .sidebar_nav:hover {
-    background-color: #444444;
-    color: #fff;
-    // background-color: #bdedcf;
-    // color: #0d6efd;
-    font-weight: 500;
-    border-radius: 10px;
+    background-color: #C0C0C0;
+    color: grey;
+    border-radius: 15px;
   }
-  
-  // header
-//   .header {
-//     height: 72px !important;
-//     box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
-//     width: 100%;
-//     background-color: #FFF !important;
-  
-//     button.menu-button {
-//       display: none;
-//       padding: 10px 15px;
-//       background: #fff;
-//       border-radius: 5px;
-//       border: 1px solid #000;
-//     }
-//   }
-  
   input.p-inputtext.p-component.p-element.search-text {
     border: none !important;
   }
-  
- 
-  
-  .col-lg-2 {
-    flex: 0 0 auto;
-    width: 20% !important;
-  }
-  
- 
-  
-//   .class-content-one {
-//     padding: 15px;
-//     background: #FEF6D2;
-//     border-left: 5px solid yellow;
-//   }
-  
-//   .class-content-two {
-//     padding: 15px;
-//     background: #E9F8FF;
-//     border-left: 5px solid #1FB6E5;
-//   }
-  
-//   .active {
-//     color:;
-//   }
-  
+ .active{
+  background-color: #FF9F1C;
+ }
+ .fs-15{
+  font-size: 15px;
+ }
   .content-inner {
     width: 100%;
+    overflow-x: hidden !important;
     background: #F3F3F3;
   }
-  
   @media only screen and (max-width: 760px) {
     .sidebar {
       display: none !important;
     }
-  
-    .header {
-      box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
-      width: 100% !important;
-      // float: left;
-      // left: 0;
-      // position: fixed;
-      background-color: #FFF !important;
-  
-      .none {
-        display: none !important;
-      }
-  
-      button.menu-button {
-        display: block;
-        padding: 10px 15px;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #000;
-      }
-    }
-  
-    .content-inner {
-      overflow-x: hidden !important;
-    }
-  
   }
-  
-
-  
   ::ng-deep .p-tieredmenu {
     border: none;
   }
   ::ng-deep .p-tieredmenu:hover {
     border: none;
   }
-  
-  
+  .fw-500{
+    font-weight: 500;
+  }
+  .overview{
+    .card{
+      min-height: 180px;
+    }
+    .chart_card{
+      min-height: 422px !important;
+      position: relative;
+    }
+    .next_icon {
+      position: absolute;
+      right: 15px;
+      bottom: 20px;
+  }
+  }
+  .p-dropdown.p-component{
+    border-radius: 30px !important;
+    height: 50px !important;
+    display: flex !important;
+    align-items: center !important;
+  }

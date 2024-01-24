@@ -32,9 +32,9 @@ import { CategoriesComponent } from './categories/categories.component';
     FormsModule,
     CalendarModule,
     ChartModule,
-    NgxMapboxGLModule.withConfig({
-      accessToken: environment.mapbox.accessToken, // Optional, can also be set per map (accessToken input of mgl-map)
-    }),
+    // NgxMapboxGLModule.withConfig({
+    //   accessToken: environment.mapbox.accessToken, // Optional, can also be set per map (accessToken input of mgl-map)
+    // }),
   ],
 })
 export class ApplicationModule {}

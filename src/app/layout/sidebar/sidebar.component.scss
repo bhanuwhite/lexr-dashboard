@@ -14,7 +14,7 @@
     .site-name {
       display: none !important;
     }
-    width: 6rem;
+    width: 4.2rem;
     text-align: center;
   }
   .large-sidebar {
@@ -101,7 +101,7 @@
     // background-color: #C0C0C0;
     color: white;
     // border-left: 5px solid #fff;
-    height: 30px;
+    height: 40px;
     // border-radius: 15px;
   }
   .hover-class{
@@ -137,3 +137,24 @@
   .fw-500{
     font-weight: 500;
   }
+  .active-class::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;  /* Adjust the width of the left border as needed */
+    background-color: #fff;  /* Replace with your desired border color */
+  }
+  
+  .active-class {
+    position: relative;  /* Make sure the positioning context is set to relative */
+    // padding-left: 10px;  /* Adjust the padding to leave space for the border */
+  }
+  
+  /* Add your other styles, such as active styles, here */
+  
+  .active-class::before {
+    background-color: #fff;  /* Replace with your desired active border color */
+  }
+  

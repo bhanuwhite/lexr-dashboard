@@ -32,8 +32,8 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/fonts/font-style.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

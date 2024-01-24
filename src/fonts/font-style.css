@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'rota';
+    src: url('./Rota-Black.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* @font-face {
+    font-family: 'rota';
+    src: url('./Rota-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+  }
+   */

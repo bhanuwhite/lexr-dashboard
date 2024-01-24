@@ -73,7 +73,7 @@ export class CategoriesComponent {
         {
           label: 'My Second Dataset',
           data: [40, 48, 62, 70, 45],
-          borderColor: 'grey', // Grey color
+          borderColor: '#c7bebe', // Grey color
           borderWidth: 2,
         },
       ],

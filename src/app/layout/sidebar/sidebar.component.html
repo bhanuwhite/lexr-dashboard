@@ -1,6 +1,6 @@
 <div [ngClass]="{' small-sidebar': step === 1, ' large-sidebar' : step === 2 }" class="sidebar float-left">
     <div class="sidebar-header">
-      <span class="d-flex align-items-center ml-2 " style="color:#fff;">
+      <span class="d-flex align-items-center" style="color:#fff;">
         <i style="font-size: 2rem" class="me-2">@</i>
         <span class="site-name fw-500" style="font-size: 24px;">The Brando</span>
       </span>
@@ -18,10 +18,10 @@
             <i class="pi pi pi-slack me-3"></i> <span class="me-3">Your neighbors</span>
             <i class="pi pi-shield me-3" *ngIf="step !== 1"></i>
           </li>
-          <li class="sidebar_nav" [ngClass]="{'active-class':tabstr.toLowerCase()==='askanything'}"  (click)="tabName('askanything')">
+          <li class="sidebar_nav"[routerLink]="['askanything']" [ngClass]="{'active-class':tabstr.toLowerCase()==='askanything'}"  (click)="tabName('askanything')">
             <i class="pi pi-comments me-3"></i><span>Ask anything</span>
           </li>
-          <li class="sidebar_nav" [ngClass]="{'active-class':tabstr.toLowerCase()==='worldmap'}"  (click)="tabName('worldmap')">
+          <li class="sidebar_nav" [routerLink]="['worldmap']" [ngClass]="{'active-class':tabstr.toLowerCase()==='worldmap'}"  (click)="tabName('worldmap')">
             <i class="pi pi-globe me-3"></i><span>World Map</span>
           </li>
           <hr class="mt-2 mb-2">
@@ -47,7 +47,7 @@
       <h4 class="fw-bold text-white mb-1" *ngIf="step !== 1">Feedback</h4>
       <span class="text-white fw-bold fs-15" *ngIf="step !== 1">By Data Island</span>
       <div class="close_sidebar">
-        <div class="text-white">
+        <div class="text-white d-flex align-items-center p-1">
           <i class="pi pi-angle-left cursor-pointer site-name close-menu" style="font-size: 20px" (click)="step=1"></i>
           <i class="pi pi-angle-right site-name1" style="font-size: 20px" (click)="step=2" *ngIf="step==1"></i>
         </div>

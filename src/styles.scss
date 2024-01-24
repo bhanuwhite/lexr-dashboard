@@ -1,3 +1,7 @@
+body {
+    font-family: 'Rota-Black', sans-serif;
+  }
+  
 .p-dropdown.p-component {
     border-radius: 30px !important;
     height: 40px !important;
@@ -10,7 +14,7 @@
 }
 
 canvas {
-    height: 260px !important;
+    // height: 260px !important;
     width: 100% !important;
 }
 
@@ -35,4 +39,32 @@ canvas {
     width: 100%;
     overflow-x: hidden !important;
     background: #F3F3F3;
+}
+.Categories{
+    canvas {
+        height: 260px !important;
+        width: 100% !important;
+    }
+}
+.ask_anything{
+    .custom-search-bar {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      
+      .custom-search-input {
+        border: 2px solid #ced4da;   
+        border-radius: 20px;
+        padding: 8px;
+        padding-left: 40px;   
+        width: 70%;
+      }
+      
+      .custom-search-icon {
+        position: absolute;
+        left: 16%;
+        color: grey;   
+      }
+      
 }

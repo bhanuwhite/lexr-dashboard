@@ -17,8 +17,10 @@ import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
 import { CategoriesComponent } from './categories/categories.component';
+import { AskAnythingComponent } from './ask-anything/ask-anything.component';
+import { WorldMapComponent } from './world-map/world-map.component';
 @NgModule({
-  declarations: [DashboardComponent, CategoriesComponent],
+  declarations: [DashboardComponent, CategoriesComponent, AskAnythingComponent, WorldMapComponent],
   imports: [
     CommonModule,
     ApplicationRoutingModule,

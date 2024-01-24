@@ -1,5 +1,12 @@
+@font-face {
+    font-family: 'RotaBlack';
+    src: url('../src/fonts/Rota-Black.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
 body {
-    font-family: 'Rota-Black', sans-serif;
+    font-family: 'RotaBlack', sans-serif;
   }
   
 .p-dropdown.p-component {

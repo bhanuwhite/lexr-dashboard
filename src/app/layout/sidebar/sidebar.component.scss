@@ -39,7 +39,7 @@
     box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
   
     .sidebar-header {
-        padding: 1.25rem 1.25rem;
+        padding: 1.25rem 0.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -47,7 +47,7 @@
   
     .sidebar-content {
     //   border-top: 1px solid #eee;
-      padding: 1rem;
+      padding: 0.2rem;
       position: relative;
     }
     .close_sidebar{
@@ -99,6 +99,8 @@
   .active-class{
     // background-color: #C0C0C0;
     color: white;
+    border-left: 5px solid #fff;
+    height: 30px;
     // border-radius: 15px;
   }
   .hover-class{

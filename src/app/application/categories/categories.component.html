@@ -1,1 +1,91 @@
-<p>categories works!</p>
+<div class="content-inner">
+    <div class="py-4 bg-white">
+        <div class="container">
+            <div class="row align-items-center mx-3">
+                <div class="col-lg-3">
+                    <h4 class="m-0">Categories</h4>
+                </div>
+                <div class="col-lg-5 text-center">
+                </div>
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-2 justify-content-end">
+                        <div class="img">
+                            <img src="assets/image/user.png" width="40px" height="40px" style="border-radius: 50%;"
+                                alt="">
+                        </div>
+                        <div style="font-size: 15px;font-weight: 500;">
+                            Valentin Garnier
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-4 pb-3 Categories">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="card my-4 p-3  border-none" style="border-radius: 20px;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="text-black fw-500">Sentiment Performance</div>
+                            <div class="d-flex gap-2">
+                                <p-dropdown placeholder="All Categories" optionLabel="name"></p-dropdown>
+                            </div>
+                        </div>
+                        <p-chart type="bar" [data]="data" [options]="options"></p-chart>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card my-4 p-3  border-none" style="border-radius: 20px;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="text-black fw-500">Summary and Recommendation</div>
+                            <div class="d-flex gap-2">
+                                <p-dropdown placeholder="Restaurant" optionLabel="name"></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="my-3" style="font-size: 15px;">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus optio obcaecati nihil eaque
+                            perferendis.
+                        </div>
+                        <hr>
+                        <div class="fs-15">
+                            <ul>
+                                <li>
+                                    Point 1
+                                </li>
+                                <li>
+                                    Point 2
+                                </li>
+                                <li>
+                                    Point 3
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="card my-0 p-3  border-none" style="border-radius: 20px;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="text-black fw-500">Category over Time</div>
+                            <div class="d-flex gap-2">
+                                <p-dropdown placeholder="All Categories" optionLabel="name"></p-dropdown>
+                            </div>
+                        </div>
+                        <p-chart type="line" [data]="dataa"></p-chart>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card my-0 p-3  border-none" style="border-radius: 20px;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="text-black fw-500"> Top Category</div>
+                        </div>
+                        <p-chart type="doughnut" [data]="dataaa" [options]="options"></p-chart>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

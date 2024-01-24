@@ -1,13 +1,29 @@
-.p-dropdown.p-component{
+.p-dropdown.p-component {
     border-radius: 30px !important;
     height: 40px !important;
     display: flex !important;
     align-items: center !important;
-  }
-  .p-dropdown .p-dropdown-label {
- font-size: 15px !important;
 }
+
+.p-dropdown .p-dropdown-label {
+    font-size: 15px !important;
+}
+
 canvas {
     height: 260px !important;
     width: 100% !important;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fs-15 {
+    font-size: 15px;
+}
+
+.content-inner {
+    width: 100%;
+    overflow-x: hidden !important;
+    background: #F3F3F3;
 }

@@ -76,6 +76,7 @@
     align-items: center;
     user-select: none;
     font-weight: 500;
+    margin: 5px 0;
   }
   .sidebar .sidebar-header+.sidebar-content {
     padding-top: 0;
@@ -99,7 +100,7 @@
   .active-class{
     // background-color: #C0C0C0;
     color: white;
-    border-left: 5px solid #fff;
+    // border-left: 5px solid #fff;
     height: 30px;
     // border-radius: 15px;
   }

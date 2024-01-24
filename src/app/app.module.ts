@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { GMapModule } from 'primeng/gmap';
+// import { GMapModule } from 'primeng/gmap';
 import { TagModule } from 'primeng/tag';
 import { OverlayModule } from 'primeng/overlay';
 import { LayoutModule } from './layout/layout.module';
@@ -29,7 +29,7 @@ import { LayoutModule } from './layout/layout.module';
     DropdownModule,
     CardModule,
     SelectButtonModule,
-    GMapModule,
+    // GMapModule,
     TagModule,
     LayoutModule,
     OverlayModule,

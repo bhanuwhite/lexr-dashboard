@@ -28,17 +28,6 @@ export class CategoriesComponent {
         }
       ]
     };
-    this.options = {
-      cutout: '60%',
-      plugins: {
-        legend: {
-          labels: {
-            color: textColor
-          }
-        }
-      }
-    };
-
     this.data = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
@@ -66,16 +55,16 @@ export class CategoriesComponent {
       labels: ['January', 'February', 'March', 'April', 'May'],
       datasets: [
         {
-          label: 'My First Dataset',
+          label: 'Current Year',
           backgroundColor: ['#FF9F1C'],
-          data: [65, 80, 55, 75, 56,90,40],
+          data: [65, 80, 55, 75, 56, 90, 40],
           borderColor: '#FF9F1C',
           borderWidth: 2,
           lineTension: 0.5,
         },
         {
-          label: 'My Second Dataset',
-          data: [40, 65, 30, 70, 20,80,16],
+          label: 'Last Year',
+          data: [40, 65, 30, 70, 20, 80, 16],
           backgroundColor: ['#c7bebe'],
           borderColor: '#c7bebe', // Grey color
           borderWidth: 2,
@@ -84,68 +73,36 @@ export class CategoriesComponent {
       ],
 
     };
-    // this.optionss = {
-    //   scales: {
-    //     x: [
-    //       {
-    //         grid: {
-    //           display: false, // Set to false to hide vertical grid lines
-    //         },
-    //         ticks: {
-    //           font: {
-    //             family: 'RotaBlack',
-    //           },
-    //         },
-    //       },
-    //     ],
-    //     y: [
-    //       {
-    //         ticks: {
-    //           font: {
-    //             family: 'RotaBlack',
-    //           },
-    //         },
-    //       },
-    //     ],
-    //   },
-    // };
-
-    this.options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        },
-        legend: {
-          labels: {
-            color: textColor
+  
+    this.options= {
+      scales: {
+        x: {
+          grid: {
+            display: false  
           }
         }
       },
-      scales: {
-        x: {
-          stacked: true,
-          ticks: {
-            color: textColorSecondary
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
-          }
-        },
-        y: {
-          stacked: true,
-          ticks: {
-            color: textColorSecondary
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack',  
+              // weight: 500,
+              // size: 10  
+            }
           }
         }
       }
-    };
+    }
+    this.optionss = {
+      cutout: '90%',
+      plugins: {
+          legend: {
+              labels: {
+                  color: textColor
+              }
+          }
+      }
+  };
   }
 }

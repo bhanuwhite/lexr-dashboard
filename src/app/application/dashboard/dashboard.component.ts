@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
       labels: ['January', 'February', 'March', 'April', 'May'],
       datasets: [
         {
-          label: 'My First Dataset',
+          label: 'Current Year',
           backgroundColor: ['#FF9F1C'],
           data: [65, 80, 55, 75, 56, 90, 40],
           borderColor: '#FF9F1C',
@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
           lineTension: 0.5,
         },
         {
-          label: 'My Second Dataset',
+          label: 'Last Year',
           data: [40, 65, 30, 70, 20, 80, 16],
           backgroundColor: ['#c7bebe'],
           borderColor: '#c7bebe', // Grey color
@@ -41,31 +41,26 @@ export class DashboardComponent implements OnInit {
       ],
 
     };
-    this.options = {
+    this.options= {
       scales: {
-        x: [
-          {
-            grid: {
-              display: false, // Set to false to hide vertical grid lines
-            },
-            ticks: {
-              font: {
-                family: 'RotaBlack',
-              },
-            },
-          },
-        ],
-        y: [
-          {
-            ticks: {
-              font: {
-                family: 'RotaBlack',
-              },
-            },
-          },
-        ],
+        x: {
+          grid: {
+            display: false // Hide vertical grid lines
+          }
+        }
       },
-    };
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack', // Specify your desired font family here
+              // weight: 100,
+              // size: 10 // Specify your desired font weight here
+            }
+          }
+        }
+      }
+    }
     this.cities = [
       { name: 'All Category', code: 'NY' },
       { name: 'Los Angeles', code: 'LA' },

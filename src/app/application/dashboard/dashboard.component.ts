@@ -15,7 +15,8 @@ export class DashboardComponent implements OnInit {
   public TechCat: any;
   data: any;
   cities: any[] = [];
-selectedCity: any;
+  selectedCity: any;
+  options: any;
 
   ngOnInit() {
     this.data = {
@@ -23,25 +24,54 @@ selectedCity: any;
       datasets: [
         {
           label: 'My First Dataset',
-          data: [65, 59, 80, 81, 56],
+          backgroundColor: ['#FF9F1C'],
+          data: [65, 80, 55, 75, 56, 90, 40],
           borderColor: '#FF9F1C',
           borderWidth: 2,
+          lineTension: 0.5,
         },
         {
           label: 'My Second Dataset',
-          data: [40, 48, 62, 70, 45],
+          data: [40, 65, 30, 70, 20, 80, 16],
+          backgroundColor: ['#c7bebe'],
           borderColor: '#c7bebe', // Grey color
           borderWidth: 2,
-      },
+          lineTension: 0.5,
+        },
       ],
-      
+
+    };
+    this.options = {
+      scales: {
+        x: [
+          {
+            grid: {
+              display: false, // Set to false to hide vertical grid lines
+            },
+            ticks: {
+              font: {
+                family: 'RotaBlack',
+              },
+            },
+          },
+        ],
+        y: [
+          {
+            ticks: {
+              font: {
+                family: 'RotaBlack',
+              },
+            },
+          },
+        ],
+      },
     };
     this.cities = [
       { name: 'All Category', code: 'NY' },
       { name: 'Los Angeles', code: 'LA' },
       { name: 'Chicago', code: 'CH' },
       // Add more cities as needed
-  ];
+    ];
   }
 
 }

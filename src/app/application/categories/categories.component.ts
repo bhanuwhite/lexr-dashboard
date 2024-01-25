@@ -11,6 +11,7 @@ export class CategoriesComponent {
   options: any;
   dataa: any;
   dataaa: any;
+  optionss:  any
 
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -44,19 +45,19 @@ export class CategoriesComponent {
         {
           type: 'bar',
           label: 'Dataset 1',
-          backgroundColor: ['#FF9F1C', '#CB997E', '#CB997E'],
+          backgroundColor: ['#FF9F1C'],
           data: [50, 25, 12, 48, 90, 76, 42]
         },
         {
           type: 'bar',
           label: 'Dataset 2',
-          backgroundColor: ['#FF9F1C', '#CB997E', '#CB997E'],
+          backgroundColor: ['#CB997E'],
           data: [21, 84, 24, 75, 37, 65, 34]
         },
         {
           type: 'bar',
           label: 'Dataset 3',
-          backgroundColor: ['#FF9F1C', '#CB997E', '#CB997E'],
+          backgroundColor: ['#CB997E'],
           data: [41, 52, 24, 74, 23, 21, 32]
         }
       ]
@@ -66,19 +67,48 @@ export class CategoriesComponent {
       datasets: [
         {
           label: 'My First Dataset',
-          data: [65, 59, 80, 81, 56],
+          backgroundColor: ['#FF9F1C'],
+          data: [65, 80, 55, 75, 56,90,40],
           borderColor: '#FF9F1C',
           borderWidth: 2,
+          lineTension: 0.5,
         },
         {
           label: 'My Second Dataset',
-          data: [40, 48, 62, 70, 45],
+          data: [40, 65, 30, 70, 20,80,16],
+          backgroundColor: ['#c7bebe'],
           borderColor: '#c7bebe', // Grey color
           borderWidth: 2,
+          lineTension: 0.5,
         },
       ],
 
     };
+    // this.optionss = {
+    //   scales: {
+    //     x: [
+    //       {
+    //         grid: {
+    //           display: false, // Set to false to hide vertical grid lines
+    //         },
+    //         ticks: {
+    //           font: {
+    //             family: 'RotaBlack',
+    //           },
+    //         },
+    //       },
+    //     ],
+    //     y: [
+    //       {
+    //         ticks: {
+    //           font: {
+    //             family: 'RotaBlack',
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   },
+    // };
 
     this.options = {
       maintainAspectRatio: false,

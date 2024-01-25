@@ -10,6 +10,11 @@
     overflow-x: hidden !important;
     background: #F3F3F3;
   }
+  .top_bar{
+    height: 120px;
+    display: flex;
+    align-items: center;
+  }
   @media only screen and (max-width: 760px) {
     .sidebar {
       display: none !important;

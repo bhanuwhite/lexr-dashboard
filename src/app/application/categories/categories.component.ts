@@ -19,11 +19,11 @@ export class CategoriesComponent {
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
-      labels: ['A', 'B', 'C'],
+      labels: ['Restaurant', 'Spa', 'Rooms'],
       datasets: [
         {
           data: [300, 50, 100],
-          backgroundColor: ['#FF9F1C', '#CB997E', '#CB997E'],
+          backgroundColor: ['#FF9F1C', '#CB997E', '#f5f5dc'],
           // hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
         }
       ]

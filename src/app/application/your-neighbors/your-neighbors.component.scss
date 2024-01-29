@@ -3,7 +3,10 @@
     overflow-x: hidden !important;
     background: #F3F3F3;
     .card{
-        min-height: 360px;
+        // min-height: 360px;
+    }
+    .bg-orange{
+        background-color: #FFDFB4;
     }
   }
   .top_bar{
@@ -11,3 +14,6 @@
     display: flex;
     align-items: center;
   }
+  .active{
+    background-color: #FF9F1C;
+}

@@ -36,6 +36,7 @@ export class WorldMapComponent implements OnInit {
 
     var options = {
       colorAxis: { colors: ['#E39224', '#FF9F1C'] },
+      chartArea: { width: '100%', height: '100%' },
     };
 
     var chart = new google.visualization.GeoChart(

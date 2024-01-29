@@ -11,7 +11,9 @@ export class CategoriesComponent {
   options: any;
   dataa: any;
   dataaa: any;
-  optionss:  any
+  optionss:  any;
+  optionsss: any;
+  baroptions: any
 
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -74,11 +76,11 @@ export class CategoriesComponent {
 
     };
   
-    this.options= {
+    this.optionsss= {
       scales: {
         x: {
           grid: {
-            display: false  
+            display: false // Hide vertical grid lines
           }
         }
       },
@@ -86,9 +88,29 @@ export class CategoriesComponent {
         legend: {
           labels: {
             font: {
-              family: 'RotaBlack',  
-              // weight: 500,
-              // size: 10  
+              family: 'RotaBlack', // Specify your desired font family here
+              // weight: 100,
+              // size: 10 // Specify your desired font weight here
+            }
+          }
+        }
+      }
+    }
+    this.baroptions= {
+      scales: {
+        x: {
+          grid: {
+            display: false // Hide vertical grid lines
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack', // Specify your desired font family here
+              // weight: 100,
+              // size: 10 // Specify your desired font weight here
             }
           }
         }

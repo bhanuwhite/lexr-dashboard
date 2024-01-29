@@ -21,11 +21,11 @@ export class CategoriesComponent {
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
-      labels: ['Restaurant', 'Spa', 'Rooms'],
+      labels: [' Best comment', ' worst comment', 'summary comment','Average sentiment score'],
       datasets: [
         {
-          data: [300, 50, 100],
-          backgroundColor: ['#FF9F1C', '#CB997E', '#f5f5dc'],
+          data: [200, 50, 100,70],
+          backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455','#FFBF69'],
           // hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
         }
       ]
@@ -35,22 +35,16 @@ export class CategoriesComponent {
       datasets: [
         {
           type: 'bar',
-          label: 'Dataset 1',
+          label: 'Positive Review',
           backgroundColor: ['#FF9F1C'],
           data: [50, 25, 12, 48, 90, 76, 42]
         },
         {
           type: 'bar',
-          label: 'Dataset 2',
+          label: 'Negative Review',
           backgroundColor: ['#CB997E'],
           data: [21, 84, 24, 75, 37, 65, 34]
         },
-        {
-          type: 'bar',
-          label: 'Dataset 3',
-          backgroundColor: ['#CB997E'],
-          data: [41, 52, 24, 74, 23, 21, 32]
-        }
       ]
     };
     this.dataa = {
@@ -99,10 +93,14 @@ export class CategoriesComponent {
     this.baroptions= {
       scales: {
         x: {
+          stacked: true,
           grid: {
             display: false // Hide vertical grid lines
           }
-        }
+        },
+        y: {
+          stacked: true,
+        },
       },
       plugins: {
         legend: {

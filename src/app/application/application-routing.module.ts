@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { AskAnythingComponent } from './ask-anything/ask-anything.component';
 import { WorldMapComponent } from './world-map/world-map.component';
+import { YourNeighborsComponent } from './your-neighbors/your-neighbors.component';
 // import { MapComponent } from './map/map.component';
 
 const routes: Routes = [
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'worldmap',
     component: WorldMapComponent,
+  },
+  {
+    path: 'neighbors',
+    component: YourNeighborsComponent,
   },
 ];
 

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.scss']
+  styleUrls: ['./categories.component.scss'],
 })
 export class CategoriesComponent {
   data: any;
@@ -11,24 +11,31 @@ export class CategoriesComponent {
   options: any;
   dataa: any;
   dataaa: any;
-  optionss:  any;
+  optionss: any;
   optionsss: any;
-  baroptions: any
+  baroptions: any;
 
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const textColorSecondary = documentStyle.getPropertyValue(
+      '--text-color-secondary'
+    );
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
-      labels: [' Best comment', ' worst comment', 'summary comment','Average sentiment score'],
+      labels: [
+        ' Best comment',
+        ' worst comment',
+        'summary comment',
+        'Average sentiment score',
+      ],
       datasets: [
         {
-          data: [200, 50, 100,70],
-          backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455','#FFBF69'],
+          data: [200, 50, 100, 70],
+          backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455', '#FFBF69'],
           // hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
-        }
-      ]
+        },
+      ],
     };
     this.data = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -37,15 +44,15 @@ export class CategoriesComponent {
           type: 'bar',
           label: 'Positive Review',
           backgroundColor: ['#FF9F1C'],
-          data: [50, 25, 12, 48, 90, 76, 42]
+          data: [50, 25, 12, 48, 90, 76, 42],
         },
         {
           type: 'bar',
           label: 'Negative Review',
           backgroundColor: ['#CB997E'],
-          data: [21, 84, 24, 75, 37, 65, 34]
+          data: [21, 84, 24, 75, 37, 65, 34],
         },
-      ]
+      ],
     };
     this.dataa = {
       labels: ['January', 'February', 'March', 'April', 'May'],
@@ -67,16 +74,15 @@ export class CategoriesComponent {
           lineTension: 0.5,
         },
       ],
-
     };
-  
-    this.optionsss= {
+
+    this.optionsss = {
       scales: {
         x: {
           grid: {
-            display: false // Hide vertical grid lines
-          }
-        }
+            display: false, // Hide vertical grid lines
+          },
+        },
       },
       plugins: {
         legend: {
@@ -85,18 +91,18 @@ export class CategoriesComponent {
               family: 'RotaBlack', // Specify your desired font family here
               // weight: 100,
               // size: 10 // Specify your desired font weight here
-            }
-          }
-        }
-      }
-    }
-    this.baroptions= {
+            },
+          },
+        },
+      },
+    };
+    this.baroptions = {
       scales: {
         x: {
           stacked: true,
           grid: {
-            display: false // Hide vertical grid lines
-          }
+            display: false, // Hide vertical grid lines
+          },
         },
         y: {
           stacked: true,
@@ -109,20 +115,24 @@ export class CategoriesComponent {
               family: 'RotaBlack', // Specify your desired font family here
               // weight: 100,
               // size: 10 // Specify your desired font weight here
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    };
     this.optionss = {
       cutout: '90%',
       plugins: {
-          legend: {
-              labels: {
-                  color: textColor
-              }
-          }
-      }
-  };
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack', // Specify your desired font family here
+              // weight: 100,
+              // size: 10 // Specify your desired font weight here
+            },
+          },
+        },
+      },
+    };
   }
 }

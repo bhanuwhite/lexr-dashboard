@@ -14,7 +14,7 @@
           <li class="sidebar_nav" [routerLink]="['categories']" [ngClass]="{'active-class':tabstr.toLowerCase()==='categories'}"  (click)="tabName('categories')">
             <i class="pi pi-map me-3"></i> <span>Categories</span>
           </li>
-          <li class="sidebar_nav hover-class">
+          <li class="sidebar_nav hover-class" [routerLink]="['neighbors']">
             <i class="pi pi pi-slack me-3"></i> <span class="me-3">Your neighbors</span>
             <i class="pi pi-shield me-3" *ngIf="step !== 1"></i>
           </li>

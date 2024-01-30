@@ -12,9 +12,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { InnerHeaderComponent } from './inner-header/inner-header.component';
 
 @NgModule({
-  declarations: [LayoutComponent, HeaderComponent, SidebarComponent],
+  declarations: [LayoutComponent, HeaderComponent, SidebarComponent, InnerHeaderComponent],
   imports: [
     CommonModule,
     LayoutRoutingModule,

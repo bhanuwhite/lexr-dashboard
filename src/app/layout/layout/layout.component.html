@@ -1,9 +1,13 @@
 <!-- <app-header></app-header>
 <router-outlet></router-outlet> -->
 <div class="d-flex">
-    <app-sidebar></app-sidebar>
+  <!-- layout.component.html -->
+<app-sidebar (itemClicked)="onItemClicked($event)"></app-sidebar>
+
     <div class="w-100" style=" background: #F3F3F3;">
-        <router-outlet></router-outlet> 
+      <!-- <app-header></app-header> -->
+      <app-inner-header  [selectedItem]="selectedItem"></app-inner-header>
+        <router-outlet></router-outlet>
     </div>
-   
+
 </div>

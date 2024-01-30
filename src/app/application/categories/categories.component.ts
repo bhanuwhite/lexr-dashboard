@@ -25,7 +25,7 @@ export class CategoriesComponent {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
       labels: [
-        ' Number of reviews per category ', 
+          'Best comment','Worst comment','Summary comment','Average sentiment score'
       ],
       datasets: [
         {
@@ -126,17 +126,26 @@ export class CategoriesComponent {
           borderRadius: 10, // Adjust this value to make the doughnut more rounded
         }
       },
+      // plugins: {
+      //   legend: {
+      //     labels: {
+      //       font: {
+      //         family: 'RotaBlack', // Specify your desired font family here
+      //         // weight: 100,
+      //         // size: 10 // Specify your desired font weight here
+      //       },
+      //     },
+      //   },
+      // },
+
+
       plugins: {
         legend: {
-          labels: {
-            font: {
-              family: 'RotaBlack', // Specify your desired font family here
-              // weight: 100,
-              // size: 10 // Specify your desired font weight here
-            },
-          },
+          display: false // Hide legend
         },
-      },
-    };    
+       
+      }
+
+    };   
   }
 }

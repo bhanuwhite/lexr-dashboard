@@ -1,13 +1,27 @@
 .content-inner {
-    width: 100%;
-    overflow-x: hidden !important;
-    background: #F3F3F3;
-    .card{
-        min-height: 360px;
+  width: 100%;
+  overflow-x: hidden !important;
+  background: #f3f3f3;
+  .card {
+    min-height: 360px;
+    .chart_title {
+      font-size: 13px;
+      text-align: center;
+      color: #686868;
+      .square {
+        background: #c7bebe;
+        width: 40px;
+        display: flex;
+        height: 14px;
+        position: absolute;
+        left: 19%;
+        top: 18%;
+      }
     }
   }
-  .top_bar{
-    height: 120px;
-    display: flex;
-    align-items: center;
-  }
+}
+.top_bar {
+  height: 120px;
+  display: flex;
+  align-items: center;
+}

@@ -8,18 +8,6 @@
 
     <div class="sidebar-content">
       <div class="list-wrapper">
-<<<<<<< HEAD
-        <ul class="sidebar_ul">
-          <li class="sidebar_nav" [routerLink]="['/']" [ngClass]="{'active-class':tabstr.toLowerCase()==='overview'}"  (click)="tabName('Overview')">
-            <i class="pi pi-th-large me-3"></i> <span> Overview</span>
-          </li>
-          <li class="sidebar_nav" [routerLink]="['categories']" [ngClass]="{'active-class':tabstr.toLowerCase()==='categories'}"  (click)="tabName('categories')">
-            <i class="pi pi-map me-3"></i> <span>Categories</span>
-          </li>
-          <li class="sidebar_nav hover-class" [routerLink]="['neighbors']">
-            <i class="pi pi pi-slack me-3"></i> <span class="me-3">Your neighbors</span>
-            <i class="pi pi-lock me-3" *ngIf="step !== 1"></i>
-=======
        <ul  class="sidebar_ul">
         <ng-container *ngFor="let item of sidebarData; let i = index">
          <li *ngIf="item.url !== 'neighbors'" class="sidebar_nav">
@@ -35,7 +23,7 @@
 
             <i class="pi pi pi-slack me-3"></i>
              <span class="me-3">Your neighbors</span>
-            <i class="pi pi-shield me-3" *ngIf="step !== 1"></i>
+            <i class="pi pi-lock me-3" *ngIf="step !== 1"></i>
 
         </li>
 
@@ -44,7 +32,6 @@
         <div class="my-3">
           <li style="font-weight: 400;padding: 0.25rem 1.25rem;">
             <span style="color: #402807;">Help</span>
->>>>>>> 677cbe6be73d0ebcc3668d7eac884c581da7104e
           </li>
           <li style="font-weight: 400;padding: 0.25rem 1.25rem;">
             <span style="color: #402807;">Contact us</span>

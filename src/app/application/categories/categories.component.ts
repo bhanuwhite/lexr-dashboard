@@ -25,13 +25,13 @@ export class CategoriesComponent {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
       labels: [
-        ' Number of reviews per category ',
+        ' Number of reviews per category ', 
       ],
       datasets: [
         {
           data: [200, 50, 100, 70],
           backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455', '#FFBF69'],
-          // hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
+          
         },
       ],
     };
@@ -122,7 +122,7 @@ export class CategoriesComponent {
       cutout: '85%', // Adjust this value to set the gap between the data points
       elements: {
         arc: {
-          borderWidth: 7,
+          // borderWidth: 6,
           borderRadius: 10, // Adjust this value to make the doughnut more rounded
         }
       },

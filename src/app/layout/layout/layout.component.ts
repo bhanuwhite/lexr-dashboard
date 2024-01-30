@@ -10,8 +10,7 @@ export class LayoutComponent {
   selectedItem :any ;
 
   constructor() {
-    // Retrieve selected item from localStorage on service initialization
-    this.selectedItem = JSON.parse(localStorage.getItem('selectedItem')!) ||  'Overview';
+    this.selectedItem = JSON.parse(sessionStorage.getItem('selectedItem')!) ||  'Overview';
   }
 
 
@@ -20,7 +19,7 @@ export class LayoutComponent {
 this.selectedItem =item.header;
 console.log(this.selectedItem );
 
-localStorage.setItem('selectedItem', JSON.stringify(this.selectedItem) )
+sessionStorage.setItem('selectedItem', JSON.stringify(this.selectedItem) )
 
   }
 }

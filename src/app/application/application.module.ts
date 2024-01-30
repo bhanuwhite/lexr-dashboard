@@ -20,9 +20,9 @@ import { CategoriesComponent } from './categories/categories.component';
 import { AskAnythingComponent } from './ask-anything/ask-anything.component';
 import { WorldMapComponent } from './world-map/world-map.component';
 import { YourNeighborsComponent } from './your-neighbors/your-neighbors.component';
-import { HeaderComponent } from './header/header.component';
+
 @NgModule({
-  declarations: [DashboardComponent, CategoriesComponent, AskAnythingComponent, WorldMapComponent, YourNeighborsComponent, HeaderComponent],
+  declarations: [DashboardComponent, CategoriesComponent, AskAnythingComponent, WorldMapComponent, YourNeighborsComponent],
   imports: [
     CommonModule,
     ApplicationRoutingModule,

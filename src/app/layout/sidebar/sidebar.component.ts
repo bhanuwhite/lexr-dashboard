@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ROUTES } from './menu-items';
+
 
 @Component({
   selector: 'app-sidebar',
@@ -6,6 +9,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
+  sidebarData: any = ROUTES;
   step: number = 2;
   visibleSidebar1!: boolean;
   items: any;
@@ -14,8 +18,17 @@ export class SidebarComponent {
   cities: any[] = [];
 selectedCity: any;
 
+constructor(private route: ActivatedRoute, ) {}
+
+@Output() itemClicked: EventEmitter<any> = new EventEmitter<any>();
+
   ngOnInit() {
-    
+
+
+console.log(this.sidebarData);
+
+
+
     this.data = {
       labels: ['January', 'February', 'March', 'April', 'May'],
       datasets: [
@@ -32,7 +45,7 @@ selectedCity: any;
           borderWidth: 2,
       },
       ],
-      
+
     };
     this.cities = [
       { name: 'All Category', code: 'NY' },
@@ -40,10 +53,21 @@ selectedCity: any;
       { name: 'Chicago', code: 'CH' },
       // Add more cities as needed
   ];
-  }
-tabstr='overview'
-  tabName(str:string){
-    this.tabstr = str
+
+
   }
 
+  toggleDropdown(item: any): void {
+  console.log(item);
+
+  this.itemClicked.emit(item);
+
+
 }
+
+  }
+
+
+
+
+

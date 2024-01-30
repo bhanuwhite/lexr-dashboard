@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   ];
   ngOnInit(): void {
     // @ts-ignore
-    document.getElementById('activeMenu').focus();
+    // document.getElementById('activeMenu').focus();
+
   }
 }

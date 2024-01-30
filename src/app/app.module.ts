@@ -30,7 +30,7 @@ import { LayoutModule } from './layout/layout.module';
     TagModule,
     LayoutModule,
     OverlayModule,
-    
+
   ],
   providers: [],
   bootstrap: [AppComponent],

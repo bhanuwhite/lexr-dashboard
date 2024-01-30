@@ -24,10 +24,7 @@ export class CategoriesComponent {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
       labels: [
-        ' Best comment',
-        ' worst comment',
-        'summary comment',
-        'Average sentiment score',
+        ' Number of reviews per category ',
       ],
       datasets: [
         {
@@ -121,7 +118,13 @@ export class CategoriesComponent {
       },
     };
     this.optionss = {
-      cutout: '90%',
+      cutout: '85%', // Adjust this value to set the gap between the data points
+      elements: {
+        arc: {
+          borderWidth: 7,
+          borderRadius: 10, // Adjust this value to make the doughnut more rounded
+        }
+      },
       plugins: {
         legend: {
           labels: {
@@ -133,6 +136,6 @@ export class CategoriesComponent {
           },
         },
       },
-    };
+    };    
   }
 }

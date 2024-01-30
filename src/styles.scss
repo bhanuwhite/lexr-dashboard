@@ -6,7 +6,7 @@
   }
   @font-face {
     font-family: 'RotaLight';
-    src: url('../src/fonts/Rota-ExtraLight.otf') format('opentype');
+    src: url('../src/fonts/Rota-Medium.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
   }
@@ -16,10 +16,13 @@ body {
   }
   .this_week{
     font-family: 'RotaLight', sans-serif;
-    font-weight: bold;
+    // font-weight: 600;
   }
   .title{
     font-size: 25px;
+  }
+  .rotameduim{
+    font-family: 'RotaLight', sans-serif;
   }
 .p-dropdown.p-component {
     border-radius: 30px !important;
@@ -50,6 +53,9 @@ canvas {
 .fs-17{
     font-size: 17px;
 }
+.fs-16{
+    font-size: 16px;
+  }
 .fw-600{
     font-weight: 600;
 }

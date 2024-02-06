@@ -31,8 +31,8 @@ export class DashboardComponent implements OnInit {
   negativeCount: number = 0;
   neutral: number = 0;
   meanSentimentScore: any = 0;
-  data1:any[]=[];
-  data2:any[]=[]
+  data1: any[] = [];
+  data2: any[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
       .get('assets/review_with_sentiments.csv', { responseType: 'text' })
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
-        console.log(this.csvData);
+
 
         let sum = 0;
         for (let i = 0; i < this.csvData.length - 1; i++) {
@@ -67,36 +67,28 @@ export class DashboardComponent implements OnInit {
             this.neutral++;
           }
 
-          if(this.csvData[i].date>'2023-12-31'){
-           this.data2.push( Number(this.csvData[i].sentiment_score));
-          }else if(this.csvData[i].date <'2023-12-31'){
-            this.data1.push(Number(this.csvData[i].sentiment_score))
+          if (this.csvData[i].date > '2023-12-31') {
+            this.data2.push(Number(this.csvData[i].sentiment_score));
+          } else if (this.csvData[i].date < '2023-12-31') {
+            this.data1.push(Number(this.csvData[i].sentiment_score));
           }
-
-
         }
-        console.log(this.data2);
-        console.log(this.data1);
-
-
       });
 
-
     this.data = {
-
       labels: ['01 Jan', '01 Feb', '01 Mar', '01 Apr', '01 May'],
       datasets: [
         {
           label: '2024',
           backgroundColor: ['#FF9F1C'],
-          data:this.data2,
+          data: this.data2,
           borderColor: '#FF9F1C',
           borderWidth: 1,
           lineTension: 0.5,
         },
         {
           label: '2023',
-          data:this.data1,
+          data: this.data1,
           backgroundColor: ['#c7bebe'],
           borderColor: '#c7bebe', // Grey color
           borderWidth: 1,
@@ -108,18 +100,18 @@ export class DashboardComponent implements OnInit {
     this.options = {
       scales: {
         y: {
-          min: 0, // Explicitly set the minimum value for the y-axis scale
+          min: 0,
           max: 1,
           ticks: {
             stepSize: 0.1,
             callback: function (value: any, index: number, values: any) {
-              return ((index+0)* 0.1).toFixed(1);
+              return ((index + 0) * 0.1).toFixed(1);
             },
           },
         },
         x: {
           grid: {
-            display: false, // Hide vertical grid lines
+            display: false,
           },
         },
       },
@@ -127,10 +119,8 @@ export class DashboardComponent implements OnInit {
         legend: {
           labels: {
             font: {
-              family: 'RotaBlack', // Specify your desired font family here
-              // weight: 100,
-              // size: 10 // Specify your desired font weight here
-            },
+              family: 'RotaBlack',
+                        },
           },
         },
       },

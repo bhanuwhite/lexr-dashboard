@@ -25,18 +25,18 @@ export class CategoriesComponent {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
       labels: [
-          'Best comment','Worst comment','Summary comment','Average sentiment score'
+        'Best comment',
+        'Worst comment',
+        'Summary comment',
+        'Average sentiment score',
       ],
       datasets: [
         {
           data: [200, 50, 100, 70],
           backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455', '#FFBF69'],
-
         },
       ],
     };
-
-
 
     this.data = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -81,7 +81,7 @@ export class CategoriesComponent {
       scales: {
         x: {
           grid: {
-            display: false, // Hide vertical grid lines
+            display: false,
           },
         },
       },
@@ -89,25 +89,19 @@ export class CategoriesComponent {
         legend: {
           labels: {
             font: {
-              family: 'RotaBlack', // Specify your desired font family here
-              // weight: 100,
-              // size: 10 // Specify your desired font weight here
+              family: 'RotaBlack',
             },
           },
         },
       },
-
     };
-
-
-
 
     this.baroptions = {
       scales: {
         x: {
           stacked: true,
           grid: {
-            display: false, // Hide vertical grid lines
+            display: false,
           },
         },
         y: {
@@ -118,42 +112,25 @@ export class CategoriesComponent {
         legend: {
           labels: {
             font: {
-              family: 'RotaBlack', // Specify your desired font family here
-              // weight: 100,
-              // size: 10 // Specify your desired font weight here
+              family: 'RotaBlack',
             },
           },
         },
       },
     };
     this.optionss = {
-      cutout: '85%', // Adjust this value to set the gap between the data points
+      cutout: '85%',
       elements: {
         arc: {
-          // borderWidth: 6,
-          borderRadius: 10, // Adjust this value to make the doughnut more rounded
-        }
+          borderRadius: 10,
+        },
       },
-      // plugins: {
-      //   legend: {
-      //     labels: {
-      //       font: {
-      //         family: 'RotaBlack', // Specify your desired font family here
-      //         // weight: 100,
-      //         // size: 10 // Specify your desired font weight here
-      //       },
-      //     },
-      //   },
-      // },
-
 
       plugins: {
         legend: {
-          display: false // Hide legend
+          display: false,
         },
-
-      }
-
+      },
     };
   }
 }

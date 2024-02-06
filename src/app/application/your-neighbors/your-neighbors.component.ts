@@ -29,22 +29,16 @@ export class YourNeighborsComponent {
     this.baroptions = {
       scales: {
         x: {
-          // stacked: true,
           grid: {
-            display: false, // Hide vertical grid lines
+            display: false,
           },
-        },
-        y: {
-          // stacked: true,
-        },
+        }
       },
       plugins: {
         legend: {
           labels: {
             font: {
-              family: 'RotaBlack', // Specify your desired font family here
-              // weight: 100,
-              // size: 10 // Specify your desired font weight here
+              family: 'RotaBlack',
             },
           },
         },

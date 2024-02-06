@@ -1,0 +1,93 @@
+[
+  {
+    "country":"France",
+    "date":"01 Jan 2023",
+    "traveler_type":"Voyageur individuel",
+    "review":"La magnifique piscine et la tranquillit Manque de personnel",
+    "rating":"80",
+    "sentiment_score":"0.65",
+    "categories":"{'swimming pool': 0.9, 'tranquility': 0.9, 'staff': 0.4}"
+  },
+  {
+    "country":"Italy",
+    "date":"01 Feb 2023",
+    "traveler_type":"Couple",
+    "review":"Clean and good facilities Near airport Breakfast only from  am",
+    "rating":"90",
+    "sentiment_score":"0.85",
+    "categories":"{'Cleanliness': 1.0, 'Facilities': 0.9, 'Location': 0.9, 'Breakfast': 0.7}"
+  },
+  {
+    "country":"China",
+    "date":"01 Mar 2023",
+    "traveler_type":"Couple",
+    "review":"Clean and quiet Staff are very helpful and responsive More breakfast options would be welcome",
+    "rating":"80",
+    "sentiment_score":"0.65",
+    "categories":"{'Cleanliness': 1.0, 'Staff': 0.9, 'Breakfast': 0.7}"
+  },
+  {
+    "country":"India",
+    "date":"01 April 2023",
+    "traveler_type":"Couple",
+    "review":"All Good Calm good food Very good location Nice staffs Simply enjoyed place this is not happening place who is looking for stay calm and peaceful",
+    "rating":"90",
+    "sentiment_score":"0.75",
+    "categories":"{'Location': 0.9, 'Food': 0.8, 'Staff': 0.85, 'Atmosphere': 0.9}"
+  },
+  {
+    "country":"Russia",
+    "date":"01 May 2023",
+    "traveler_type":"Voyageur individuel",
+    "review":"Very quite locationAnd all facilities were excellent Food was also good Good staff",
+    "rating":"90",
+    "sentiment_score":"0.65",
+    "categories":"{'location': 0.9, 'facilities': 0.9, 'food': 0.8, 'staff': 0.8}"
+  },
+  {
+    "country":"France",
+    "date":"01 Jan 2024",
+    "traveler_type":"Voyageur individuel",
+    "review":"La magnifique piscine et la tranquillit Manque de personnel",
+    "rating":"80",
+    "sentiment_score":"0.7",
+    "categories":"{'swimming pool': 0.9, 'tranquility': 0.9, 'staff': 0.4}"
+  },
+  {
+    "country":"Italy",
+    "date":"01 Feb 2024",
+    "traveler_type":"Couple",
+    "review":"Clean and good facilities Near airport Breakfast only from  am",
+    "rating":"90",
+    "sentiment_score":"0.8",
+    "categories":"{'Cleanliness': 1.0, 'Facilities': 0.9, 'Location': 0.9, 'Breakfast': 0.7}"
+  },
+  {
+    "country":"China",
+    "date":"01 Mar 2024",
+    "traveler_type":"Couple",
+    "review":"Clean and quiet Staff are very helpful and responsive More breakfast options would be welcome",
+    "rating":"80",
+    "sentiment_score":"0.75",
+    "categories":"{'Cleanliness': 1.0, 'Staff': 0.9, 'Breakfast': 0.7}"
+  },
+  {
+    "country":"India",
+    "date":"01 April 2024",
+    "traveler_type":"Couple",
+    "review":"All Good Calm good food Very good location Nice staffs Simply enjoyed place this is not happening place who is looking for stay calm and peaceful",
+    "rating":"90",
+    "sentiment_score":"0.7",
+    "categories":"{'Location': 0.9, 'Food': 0.8, 'Staff': 0.85, 'Atmosphere': 0.9}"
+  },
+  {
+    "country":"Russia",
+    "date":"01 May 2024",
+    "traveler_type":"Voyageur individuel",
+    "review":"Very quite locationAnd all facilities were excellent Food was also good Good staff",
+    "rating":"90",
+    "sentiment_score":"0.9",
+    "categories":"{'location': 0.9, 'facilities': 0.9, 'food': 0.8, 'staff': 0.8}"
+  }
+
+]

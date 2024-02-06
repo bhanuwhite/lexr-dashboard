@@ -25,16 +25,22 @@ export class CategoriesComponent {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
       labels: [
-        ' Number of reviews per category ', 
+        ' Number of reviews per category ',
+        'abc',
+        'pqr',
+        'xyz'
       ],
       datasets: [
         {
           data: [200, 50, 100, 70],
           backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455', '#FFBF69'],
-          
+
         },
       ],
     };
+
+
+
     this.data = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
@@ -93,7 +99,12 @@ export class CategoriesComponent {
           },
         },
       },
+
     };
+
+
+
+
     this.baroptions = {
       scales: {
         x: {
@@ -126,17 +137,26 @@ export class CategoriesComponent {
           borderRadius: 10, // Adjust this value to make the doughnut more rounded
         }
       },
+      // plugins: {
+      //   legend: {
+      //     labels: {
+      //       font: {
+      //         family: 'RotaBlack', // Specify your desired font family here
+      //         // weight: 100,
+      //         // size: 10 // Specify your desired font weight here
+      //       },
+      //     },
+      //   },
+      // },
+
+
       plugins: {
         legend: {
-          labels: {
-            font: {
-              family: 'RotaBlack', // Specify your desired font family here
-              // weight: 100,
-              // size: 10 // Specify your desired font weight here
-            },
-          },
+          display: false // Hide legend
         },
-      },
-    };    
+
+      }
+
+    };
   }
 }

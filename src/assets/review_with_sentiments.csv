@@ -1,0 +1,11 @@
+id,date,country,traveler_type,review,rating,sentiment_score,categories
+0,2023-01-01,France,Voyageur individuel,La magnifique piscine et la tranquillit Manque de personnel,80.0,0.5,"{'swimming pool': 0.9, 'tranquility': 0.9, 'staff': 0.4}"
+1,2023-02-01,Italie,Couple,Clean and good facilities Near airport Breakfast only from  am,90.0,0.85,"{'Cleanliness': 1.0, 'Facilities': 0.9, 'Location': 0.9, 'Breakfast': 0.7}"
+2,2023-03-01,Émirats arabes unis,Voyageur individuel,Very quite locationAnd all facilities were excellent Food was also good Good staff,90.0,0.3,"{'location': 0.9, 'facilities': 0.9, 'food': 0.8, 'staff': 0.8}"
+3,2023-04-01,Émirats arabes unis,Couple,Clean and quiet Staff are very helpful and responsive More breakfast options would be welcome,80.0,0.65,"{'Cleanliness': 1.0, 'Staff': 0.9, 'Breakfast': 0.7}"
+4,2023-05-01,Inde,Couple,All Good Calm good food Very good location Nice staffs Simply enjoyed place this is not happening place who is looking for stay calm and peaceful,90.0,0.9,"{'Location': 0.9, 'Food': 0.8, 'Staff': 0.85, 'Atmosphere': 0.9}"
+5,2024-01-01,France,Voyageur individuel,La magnifique piscine et la tranquillit Manque de personnel,80.0,0.76,"{'swimming pool': 0.9, 'tranquility': 0.9, 'staff': 0.4}"
+6,2024-02-01,Italie,Couple,Clean and good facilities Near airport Breakfast only from  am,90.0,0.9,"{'Cleanliness': 1.0, 'Facilities': 0.9, 'Location': 0.9, 'Breakfast': 0.7}"
+7,2024-03-01,Émirats arabes unis,Voyageur individuel,Very quite locationAnd all facilities were excellent Food was also good Good staff,90.0,0.5,"{'location': 0.9, 'facilities': 0.9, 'food': 0.8, 'staff': 0.8}"
+8,2024-04-01,Émirats arabes unis,Couple,Clean and quiet Staff are very helpful and responsive More breakfast options would be welcome,80.0,0.75,"{'Cleanliness': 1.0, 'Staff': 0.9, 'Breakfast': 0.7}"
+9,2024-05-01,Inde,Couple,All Good Calm good food Very good location Nice staffs Simply enjoyed place this is not happening place who is looking for stay calm and peaceful,90.0,0.8,"{'Location': 0.9, 'Food': 0.8, 'Staff': 0.85, 'Atmosphere': 0.9}"

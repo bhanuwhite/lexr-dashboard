@@ -13,6 +13,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
 import { OverlayModule } from 'primeng/overlay';
 import { LayoutModule } from './layout/layout.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import { LayoutModule } from './layout/layout.module';
     TagModule,
     LayoutModule,
     OverlayModule,
+    HttpClientModule
 
   ],
   providers: [],

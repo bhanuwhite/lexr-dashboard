@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { SharedService } from 'src/app/shared.service';
 
 @Component({
   selector: 'app-your-neighbors',
@@ -8,6 +10,17 @@ import { Component } from '@angular/core';
 export class YourNeighborsComponent {
   data: any;
   baroptions:  any;
+
+
+
+  constructor(private sharedservice:SharedService,private Route:ActivatedRoute){
+
+    this.Route.data.subscribe((res)=>{
+    this.sharedservice.recieveHeaderName(res['name'])
+    })
+
+      }
+
   ngOnInit() {
     this.data = {
       labels: ['Restaurant',],

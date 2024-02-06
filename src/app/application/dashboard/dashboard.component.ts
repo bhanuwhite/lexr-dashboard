@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 // import * as mapboxgl from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
 import * as coorddata from '../../../assets/coordinate.json';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import * as Papa from 'papaparse';
+import { SharedService } from 'src/app/shared.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,7 +35,15 @@ export class DashboardComponent implements OnInit {
   data1: any[] = [];
   data2: any[] = [];
 
-  constructor(private http: HttpClient) {}
+  // constructor() {}
+
+  constructor(private sharedservice:SharedService,private Route:ActivatedRoute,private http: HttpClient){
+
+    this.Route.data.subscribe((res)=>{
+    this.sharedservice.recieveHeaderName(res['name'])
+    })
+
+      }
 
   ngOnInit() {
     this.http

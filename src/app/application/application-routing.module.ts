@@ -11,22 +11,30 @@ const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
+    data:{name:'overView'}
   },
   {
     path: 'categories',
     component: CategoriesComponent,
+    data:{name:'Categories'}
   },
   {
     path: 'askanything',
     component: AskAnythingComponent,
+    data:{name:'Ask Anything'}
+
   },
   {
     path: 'worldmap',
     component: WorldMapComponent,
+    data:{name:'World Map'}
+
   },
   {
     path: 'neighbors',
     component: YourNeighborsComponent,
+    data:{name:'Your Neighbors'}
+
   },
 ];
 

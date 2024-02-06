@@ -4,6 +4,8 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { SharedService } from 'src/app/shared.service';
 declare var google: any;
 
 @Component({
@@ -13,7 +15,13 @@ declare var google: any;
   encapsulation: ViewEncapsulation.None,
 })
 export class WorldMapComponent implements OnInit {
-  constructor() {}
+  constructor(private sharedservice:SharedService,private Route:ActivatedRoute){
+
+    this.Route.data.subscribe((res)=>{
+    this.sharedservice.recieveHeaderName(res['name'])
+    })
+
+      }
 
   ngOnInit() {
     google.charts.load('current', {

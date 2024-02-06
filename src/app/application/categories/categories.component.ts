@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { LogarithmicScale } from 'chart.js';
 import { HeaderComponent } from 'src/app/layout/header/header.component';
+import { SharedService } from 'src/app/shared.service';
 
 @Component({
   selector: 'app-categories',
@@ -15,6 +18,14 @@ export class CategoriesComponent {
   optionss: any;
   optionsss: any;
   baroptions: any;
+
+  constructor(private sharedservice:SharedService,private Route:ActivatedRoute){
+
+this.Route.data.subscribe((res)=>{
+this.sharedservice.recieveHeaderName(res['name'])
+})
+
+  }
 
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);

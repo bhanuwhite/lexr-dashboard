@@ -25,10 +25,7 @@ export class CategoriesComponent {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     this.dataaa = {
       labels: [
-        ' Number of reviews per category ',
-        'abc',
-        'pqr',
-        'xyz'
+          'Best comment','Worst comment','Summary comment','Average sentiment score'
       ],
       datasets: [
         {

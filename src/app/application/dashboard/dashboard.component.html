@@ -24,9 +24,11 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
-              <div class="text-white mt-3 rotameduim fw-600 fs-25">{{meanSentimentScore *100}}/100</div>
+              <div class="text-white mt-3 rotameduim fw-600 fs-25">
+                {{ meanSentimentScore * 100 }}/100
+              </div>
               <div class="text-white mt-3 rotameduim fs-17 fw-600">
-                {{reviewsCount}} Reviews
+                {{ reviewsCount }} Reviews
               </div>
             </div>
 
@@ -36,8 +38,13 @@
               >
                 <i class="pi pi-thumbs-up-fill"></i>
                 <div class="mt-4">
-                  <span class="rotameduim fw-500 fs-17">{{(possitiveCount/reviewsCount)*100}}   %</span>
-                  <div>{{possitiveCount}}</div>
+                  <span class="rotameduim fw-500 fs-17"
+                    >{{
+                      ((possitiveCount / reviewsCount) * 100).toFixed(1)
+                    }}
+                    %</span
+                  >
+                  <div>{{ possitiveCount }}</div>
                 </div>
               </div>
 
@@ -46,8 +53,12 @@
               >
                 <i class="pi pi-thumbs-down-fill"></i>
                 <div class="mt-4">
-                  <span class="rotameduim fw-500 fs-17">{{(negativeCount/reviewsCount)*100}}%</span>
-                  <div>{{negativeCount}}</div>
+                  <span class="rotameduim fw-500 fs-17"
+                    >{{
+                      ((negativeCount / reviewsCount) * 100).toFixed(1)
+                    }}%</span
+                  >
+                  <div>{{ negativeCount }}</div>
                 </div>
               </div>
               <div
@@ -60,15 +71,15 @@
                   alt=""
                 />
                 <div class="mt-4">
-                  <span class="fw-500 rotameduim fs-17">{{(neutral/reviewsCount)*100}}%</span>
-                  <div>{{neutral}}</div>
+                  <span class="fw-500 rotameduim fs-17"
+                    >{{ ((neutral / reviewsCount) * 100).toFixed(1) }}%</span
+                  >
+                  <div>{{ neutral }}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-
 
         <div class="col-lg-4">
           <div
@@ -91,7 +102,9 @@
               </div>
               <div class="text-black fw-500 title">Countries</div>
             </div>
-            <div class="text-black mt-3 mb-2 rotameduim fw-600 fs-25">{{countryCount}}</div>
+            <div class="text-black mt-3 mb-2 rotameduim fw-600 fs-25">
+              {{ countryCount }}
+            </div>
 
             <div class="d-flex mt-2 justify-content-between">
               <div
@@ -111,7 +124,6 @@
                   ></span
                 >
               </div>
-
             </div>
           </div>
         </div>
@@ -263,7 +275,7 @@
                 <p-dropdown
                   placeholder="This year"
                   optionLabel="year"
-                  [options]="years"
+                  [options]="formattedYears"
                 ></p-dropdown>
               </div>
             </div>
@@ -280,21 +292,27 @@
             <div class="d-flex justify-content-between ms-2 mb-2 fw-600 title">
               Recommendations
             </div>
-            <div class=" this_week fs-16 mb-1">
-            <span class="mr-2"> <b class="text-black" style="font-size: 17px;"> 1.</b></span>It seems that several guests have mentioned the need for more
+            <div class="this_week fs-16 mb-1">
+              <span class="mr-2">
+                <b class="text-black" style="font-size: 17px"> 1.</b></span
+              >It seems that several guests have mentioned the need for more
               variety in the breakfast menu. It would be beneficial to consider
               expanding your breakfast options to cater to a wider range of
               tastes and dietary needs.
             </div>
-            <div class=" this_week fs-16 mb-1">
-              <span class="mr-2"> <b class="text-black" style="font-size: 17px;"> 2.</b></span>
-              Some guests have noted that the cleanliness of certain areas,
-              such as the bathroom and the floor carpet, could be improved.
-              Regular deep cleaning and maintenance of these areas could enhance
-              the overall guest experience.
+            <div class="this_week fs-16 mb-1">
+              <span class="mr-2">
+                <b class="text-black" style="font-size: 17px"> 2.</b></span
+              >
+              Some guests have noted that the cleanliness of certain areas, such
+              as the bathroom and the floor carpet, could be improved. Regular
+              deep cleaning and maintenance of these areas could enhance the
+              overall guest experience.
             </div>
-            <div class=" this_week fs-16 mb-1 pb-5">
-              <span class="mr-2"> <b class="text-black" style="font-size: 17px;"> 3.</b></span>A few guests have mentioned the lack of late-night meal options
+            <div class="this_week fs-16 mb-1 pb-5">
+              <span class="mr-2">
+                <b class="text-black" style="font-size: 17px"> 3.</b></span
+              >A few guests have mentioned the lack of late-night meal options
               and the difficulty in accessing the location. It might be helpful
               to consider offering a late-night room service menu and providing
               clearer directions or transportation services to and from the

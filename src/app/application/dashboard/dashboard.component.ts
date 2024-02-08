@@ -4,9 +4,10 @@ import { environment } from 'src/environments/environment';
 import * as coorddata from '../../../assets/coordinate.json';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { count, map } from 'rxjs/operators';
 import * as Papa from 'papaparse';
 import { SharedService } from 'src/app/shared.service';
+import { each } from 'chart.js/dist/helpers/helpers.core';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +24,7 @@ export class DashboardComponent implements OnInit {
   selectedCity: any;
   options: any;
   Categories: any[] = [];
-  years: any[] = [];
+  // years: any[] = [];
   csvData: any;
   reviewsCount: number = 0;
   uniqueCountries: Set<string> = new Set();
@@ -34,36 +35,140 @@ export class DashboardComponent implements OnInit {
   meanSentimentScore: any = 0;
   data1: any[] = [];
   data2: any[] = [];
+  formattedYears: any[] = [];
 
   // constructor() {}
 
-  constructor(private sharedservice:SharedService,private Route:ActivatedRoute,private http: HttpClient){
-
-    this.Route.data.subscribe((res)=>{
-    this.sharedservice.recieveHeaderName(res['name'])
-    })
-
-      }
+  constructor(
+    private sharedservice: SharedService,
+    private Route: ActivatedRoute,
+    private http: HttpClient
+  ) {
+    this.Route.data.subscribe((res) => {
+      this.sharedservice.recieveHeaderName(res['name']);
+    });
+  }
 
   ngOnInit() {
+    let YearGraphData: any = [];
+    let years: any = {};
+
+    let data2023: any = [];
+    let yearData: any = {};
+
     this.http
       .get('assets/review_with_sentiments.csv', { responseType: 'text' })
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
+        // console.log(this.csvData);
 
+        let requiredDataset: any = [];
+
+        this.csvData.forEach((each: any, index: number) => {
+          const year = new Date(each.date).getFullYear();
+          const date = new Date(each.date).getMonth() + 1;
+          // if (year === 2023) {
+          if (years[year]) {
+            if (years[year][date]) {
+              years[year][date] = [...years[year][date], each.sentiment_score];
+            } else {
+              years[year][date] = [each.sentiment_score];
+            }
+          } else {
+            years[year] = { [date]: [each.sentiment_score] };
+          }
+          // }
+        });
+
+        let zeroArray: any = [];
+
+        for (let i = 1; i <= 12; i++) {
+          zeroArray.push(0);
+        }
+        for (let year in years) {
+          YearGraphData.push(year);
+
+          for (let x in years[year]) {
+            // x is month ID
+
+            let sum = 0;
+            let count = 0;
+
+            years[year][x].forEach((each: any) => {
+              if (each !== 0) {
+                sum += Number(each);
+              } else {
+                count++;
+              }
+            });
+
+            zeroArray[Number(x) - 1] = (
+              sum /
+              (years[year][x].length - count)
+            ).toFixed(2);
+          }
+          yearData = { ...yearData, [year]: zeroArray };
+          zeroArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        }
+
+        let keys = Object.keys(yearData);
+
+        let lastKey = keys[keys.length - 1];
+
+        delete yearData[lastKey];
+
+        for (let i in yearData) {
+          let color = 'red';
+          if (Number(i) % 2 == 0) {
+            color = 'green';
+          }
+          requiredDataset.push({
+            label: i,
+            data: yearData[i],
+            backgroundColor: [color],
+            borderColor: color,
+            borderWidth: 1,
+            lineTension: 0.5,
+          });
+        }
+
+        this.data = {
+          labels: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'June',
+            'july',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+          ],
+
+          datasets: requiredDataset,
+        };
 
         let sum = 0;
+        let count = 0;
         for (let i = 0; i < this.csvData.length - 1; i++) {
           if (this.csvData[i].review && this.csvData[i].review.trim() !== '') {
             this.reviewsCount++;
           }
-
           const sentimentScore = parseFloat(this.csvData[i].sentiment_score);
-          if (!isNaN(sentimentScore)) {
+
+          if (!isNaN(sentimentScore) && sentimentScore !== 0) {
             sum += sentimentScore;
+          } else {
+            count++;
           }
 
-          this.meanSentimentScore = (sum / 10).toFixed(2);
+          this.meanSentimentScore = (
+            sum /
+            (this.csvData.length - count)
+          ).toFixed(2);
 
           this.uniqueCountries.add(this.csvData[i].country);
           this.countryCount = this.uniqueCountries.size;
@@ -75,36 +180,12 @@ export class DashboardComponent implements OnInit {
           } else {
             this.neutral++;
           }
-
-          if (this.csvData[i].date > '2023-12-31') {
-            this.data2.push(Number(this.csvData[i].sentiment_score));
-          } else if (this.csvData[i].date < '2023-12-31') {
-            this.data1.push(Number(this.csvData[i].sentiment_score));
-          }
         }
-      });
 
-    this.data = {
-      labels: ['01 Jan', '01 Feb', '01 Mar', '01 Apr', '01 May'],
-      datasets: [
-        {
-          label: '2024',
-          backgroundColor: ['#FF9F1C'],
-          data: this.data2,
-          borderColor: '#FF9F1C',
-          borderWidth: 1,
-          lineTension: 0.5,
-        },
-        {
-          label: '2023',
-          data: this.data1,
-          backgroundColor: ['#c7bebe'],
-          borderColor: '#c7bebe', // Grey color
-          borderWidth: 1,
-          lineTension: 0.5,
-        },
-      ],
-    };
+        YearGraphData.pop();
+
+        this.formattedYears = YearGraphData.map((year: any) => ({ year }));
+      });
 
     this.options = {
       scales: {
@@ -129,7 +210,7 @@ export class DashboardComponent implements OnInit {
           labels: {
             font: {
               family: 'RotaBlack',
-                        },
+            },
           },
         },
       },
@@ -153,13 +234,18 @@ export class DashboardComponent implements OnInit {
       { name: 'Atmosphere' },
     ];
 
-    this.years = [
-      { year: '2020' },
-      { year: '2021' },
-      { year: '2022' },
-      { year: '2023' },
-      { year: '2024' },
-    ];
+    // this.YearGraphData = [
+    //   { year: '2003' },
+    //   { year: '2006' },
+    //   { year: '2010' },
+    //   { year: '2011' },
+    //   { year: '2012' },
+    //   { year: '2013' },
+    //   { year: '2015' },
+    //   { year: '2017' },
+    //   { year: '2023' },
+    //   { year: '2024' },
+    // ];
   }
 }
 

@@ -44,7 +44,9 @@
                     }}
                     %</span
                   >
-                  <div>{{ possitiveCount }}</div>
+                  <div class="rotameduim fw-500 fs-17">
+                    {{ possitiveCount }}
+                  </div>
                 </div>
               </div>
 
@@ -58,7 +60,7 @@
                       ((negativeCount / reviewsCount) * 100).toFixed(1)
                     }}%</span
                   >
-                  <div>{{ negativeCount }}</div>
+                  <div class="rotameduim fw-500 fs-17">{{ negativeCount }}</div>
                 </div>
               </div>
               <div
@@ -74,7 +76,7 @@
                   <span class="fw-500 rotameduim fs-17"
                     >{{ ((neutral / reviewsCount) * 100).toFixed(1) }}%</span
                   >
-                  <div>{{ neutral }}</div>
+                  <div class="rotameduim fw-500 fs-17">{{ neutral }}</div>
                 </div>
               </div>
             </div>
@@ -276,6 +278,7 @@
                   placeholder="This year"
                   optionLabel="year"
                   [options]="formattedYears"
+                  (onChange)="onSelectingYear($event)"
                 ></p-dropdown>
               </div>
             </div>

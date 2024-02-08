@@ -2,11 +2,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ROUTES } from './menu-items';
 
-
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
   sidebarData: any = ROUTES;
@@ -16,19 +15,13 @@ export class SidebarComponent {
   public TechCat: any;
   data: any;
   cities: any[] = [];
-selectedCity: any;
+  selectedCity: any;
 
-constructor(private route: ActivatedRoute, ) {}
+  constructor(private route: ActivatedRoute) {}
 
-@Output() itemClicked: EventEmitter<any> = new EventEmitter<any>();
+  @Output() itemClicked: EventEmitter<any> = new EventEmitter<any>();
 
   ngOnInit() {
-
-
-console.log(this.sidebarData);
-
-
-
     this.data = {
       labels: ['January', 'February', 'March', 'April', 'May'],
       datasets: [
@@ -43,31 +36,18 @@ console.log(this.sidebarData);
           data: [40, 48, 62, 70, 45],
           borderColor: 'grey', // Grey color
           borderWidth: 2,
-      },
+        },
       ],
-
     };
     this.cities = [
       { name: 'All Category', code: 'NY' },
       { name: 'Los Angeles', code: 'LA' },
       { name: 'Chicago', code: 'CH' },
       // Add more cities as needed
-  ];
-
-
+    ];
   }
 
   toggleDropdown(item: any): void {
-  console.log(item);
-
-  this.itemClicked.emit(item);
-
-
-}
-
+    this.itemClicked.emit(item);
   }
-
-
-
-
-
+}

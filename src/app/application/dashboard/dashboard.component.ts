@@ -33,9 +33,8 @@ export class DashboardComponent implements OnInit {
   negativeCount: number = 0;
   neutral: number = 0;
   meanSentimentScore: any = 0;
-  data1: any[] = [];
-  data2: any[] = [];
   formattedYears: any[] = [];
+  allYearsData: any = {};
 
   // constructor() {}
 
@@ -53,14 +52,12 @@ export class DashboardComponent implements OnInit {
     let YearGraphData: any = [];
     let years: any = {};
 
-    let data2023: any = [];
     let yearData: any = {};
 
     this.http
       .get('assets/review_with_sentiments.csv', { responseType: 'text' })
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
-        // console.log(this.csvData);
 
         let requiredDataset: any = [];
 
@@ -107,10 +104,12 @@ export class DashboardComponent implements OnInit {
               (years[year][x].length - count)
             ).toFixed(2);
           }
+
           yearData = { ...yearData, [year]: zeroArray };
           zeroArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         }
 
+        this.allYearsData = yearData;
         let keys = Object.keys(yearData);
 
         let lastKey = keys[keys.length - 1];
@@ -119,8 +118,12 @@ export class DashboardComponent implements OnInit {
 
         for (let i in yearData) {
           let color = 'red';
-          if (Number(i) % 2 == 0) {
+          if (i <= '2010') {
             color = 'green';
+          } else if ('2010' < i && i <= '2015') {
+            color = 'black';
+          } else if ('2015' < i && i <= '2020') {
+            color = 'blue';
           }
           requiredDataset.push({
             label: i,
@@ -182,9 +185,12 @@ export class DashboardComponent implements OnInit {
           }
         }
 
+        YearGraphData.push('All');
+
         YearGraphData.pop();
 
         this.formattedYears = YearGraphData.map((year: any) => ({ year }));
+        this.formattedYears.pop();
       });
 
     this.options = {
@@ -234,21 +240,106 @@ export class DashboardComponent implements OnInit {
       { name: 'Atmosphere' },
     ];
 
-    // this.YearGraphData = [
-    //   { year: '2003' },
-    //   { year: '2006' },
-    //   { year: '2010' },
-    //   { year: '2011' },
-    //   { year: '2012' },
-    //   { year: '2013' },
-    //   { year: '2015' },
-    //   { year: '2017' },
-    //   { year: '2023' },
-    //   { year: '2024' },
-    // ];
+    YearGraphData = ['All'];
   }
-}
 
-function ElseIf() {
-  throw new Error('Function not implemented.');
+  onSelectingYear(event: any) {
+    let allYearsData: any = [];
+
+    if (event.value.year === 'All') {
+      for (let i in this.allYearsData) {
+        let color = 'red';
+        if (i <= '2010') {
+          color = 'green';
+        } else if ('2010' < i && i <= '2015') {
+          color = 'black';
+        } else if ('2015' < i && i <= '2020') {
+          color = 'blue';
+        }
+        allYearsData.push({
+          label: i,
+          data: this.allYearsData[i],
+          backgroundColor: [color],
+          borderColor: color,
+          borderWidth: 1,
+          lineTension: 0.5,
+        });
+      }
+
+      this.data = {
+        labels: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'June',
+          'july',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+
+        datasets: allYearsData,
+      };
+    } else {
+      this.data = {
+        labels: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'June',
+          'july',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+        datasets: [
+          {
+            label: event.value.year,
+            data: this.allYearsData[event.value.year],
+            backgroundColor: ['red'],
+            borderColor: 'red',
+            borderWidth: 1,
+            lineTension: 0.5,
+          },
+        ],
+      };
+    }
+
+    this.options = {
+      scales: {
+        y: {
+          min: 0,
+          max: 1,
+          ticks: {
+            stepSize: 0.1,
+            callback: function (value: any, index: number, values: any) {
+              return ((index + 0) * 0.1).toFixed(1);
+            },
+          },
+        },
+        x: {
+          grid: {
+            display: false,
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack',
+            },
+          },
+        },
+      },
+    };
+  }
 }

@@ -44,7 +44,6 @@ export class DashboardComponent implements OnInit {
       this.sharedservice.recieveHeaderName(res['name']);
     });
     this.currentYear = new Date().getFullYear();
-    console.log(this.currentYear);
   }
 
   ngOnInit() {
@@ -64,7 +63,7 @@ export class DashboardComponent implements OnInit {
           const year = new Date(each.date).getFullYear();
           const date = new Date(each.date).getMonth() + 1;
           const dateData = new Date(each.date).getDate();
-          // if (year === 2023) {
+
           if (years[year]) {
             if (years[year][date]) {
               years[year][date] = [...years[year][date], each.sentiment_score];
@@ -74,17 +73,13 @@ export class DashboardComponent implements OnInit {
           } else {
             years[year] = { [date]: [each.sentiment_score] };
           }
-          // }
         });
-        console.log(years);
 
         let zeroArray: any = [];
 
         for (let i = 1; i <= 12; i++) {
           zeroArray.push(0);
         }
-
-        // console.log(years);
 
         for (let year in years) {
           YearGraphData.push(year);
@@ -119,7 +114,6 @@ export class DashboardComponent implements OnInit {
         let lastKey = keys[keys.length - 1];
 
         delete yearData[lastKey];
-        // console.log(yearData);
 
         for (let i in yearData) {
           let color = '#FF9F1C';
@@ -252,8 +246,6 @@ export class DashboardComponent implements OnInit {
 
     if (event.value.year === 'This Year') {
       for (let i in this.allYearsData) {
-        // console.log(i);  year  ==i
-
         let color = '#FF9F1C';
         if (i === '2023') {
           color = '#c7bebe';
@@ -330,7 +322,6 @@ export class DashboardComponent implements OnInit {
           }
         });
       });
-      console.log(years);
 
       const monthsData: any[] = [];
 

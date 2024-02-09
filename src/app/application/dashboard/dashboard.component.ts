@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-// import * as mapboxgl from 'mapbox-gl';
-import { environment } from 'src/environments/environment';
-import * as coorddata from '../../../assets/coordinate.json';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { count, map } from 'rxjs/operators';
+
 import * as Papa from 'papaparse';
 import { SharedService } from 'src/app/shared.service';
-import { each } from 'chart.js/dist/helpers/helpers.core';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +32,7 @@ export class DashboardComponent implements OnInit {
   meanSentimentScore: any = 0;
   formattedYears: any[] = [];
   allYearsData: any = {};
-
+  currentYear: any = 0;
   // constructor() {}
 
   constructor(
@@ -46,6 +43,8 @@ export class DashboardComponent implements OnInit {
     this.Route.data.subscribe((res) => {
       this.sharedservice.recieveHeaderName(res['name']);
     });
+    this.currentYear = new Date().getFullYear();
+    console.log(this.currentYear);
   }
 
   ngOnInit() {
@@ -64,6 +63,7 @@ export class DashboardComponent implements OnInit {
         this.csvData.forEach((each: any, index: number) => {
           const year = new Date(each.date).getFullYear();
           const date = new Date(each.date).getMonth() + 1;
+          const dateData = new Date(each.date).getDate();
           // if (year === 2023) {
           if (years[year]) {
             if (years[year][date]) {
@@ -76,12 +76,16 @@ export class DashboardComponent implements OnInit {
           }
           // }
         });
+        console.log(years);
 
         let zeroArray: any = [];
 
         for (let i = 1; i <= 12; i++) {
           zeroArray.push(0);
         }
+
+        // console.log(years);
+
         for (let year in years) {
           YearGraphData.push(year);
 
@@ -115,24 +119,24 @@ export class DashboardComponent implements OnInit {
         let lastKey = keys[keys.length - 1];
 
         delete yearData[lastKey];
+        // console.log(yearData);
 
         for (let i in yearData) {
-          let color = 'red';
-          if (i <= '2010') {
-            color = 'green';
-          } else if ('2010' < i && i <= '2015') {
-            color = 'black';
-          } else if ('2015' < i && i <= '2020') {
-            color = 'blue';
+          let color = '#FF9F1C';
+          if (i === '2023') {
+            color = '#c7bebe';
           }
-          requiredDataset.push({
-            label: i,
-            data: yearData[i],
-            backgroundColor: [color],
-            borderColor: color,
-            borderWidth: 1,
-            lineTension: 0.5,
-          });
+
+          if (i === '2023' || i === '2024') {
+            requiredDataset.push({
+              label: i,
+              data: yearData[i],
+              backgroundColor: [color],
+              borderColor: color,
+              borderWidth: 1,
+              lineTension: 0.5,
+            });
+          }
         }
 
         this.data = {
@@ -188,9 +192,6 @@ export class DashboardComponent implements OnInit {
         YearGraphData.push('All');
 
         YearGraphData.pop();
-
-        this.formattedYears = YearGraphData.map((year: any) => ({ year }));
-        this.formattedYears.pop();
       });
 
     this.options = {
@@ -240,106 +241,154 @@ export class DashboardComponent implements OnInit {
       { name: 'Atmosphere' },
     ];
 
+    this.formattedYears = [{ year: 'This Year' }, { year: 'This Month' }];
+
     YearGraphData = ['All'];
   }
 
+  monthsData: any = [];
   onSelectingYear(event: any) {
     let allYearsData: any = [];
 
-    if (event.value.year === 'All') {
+    if (event.value.year === 'This Year') {
       for (let i in this.allYearsData) {
-        let color = 'red';
-        if (i <= '2010') {
-          color = 'green';
-        } else if ('2010' < i && i <= '2015') {
-          color = 'black';
-        } else if ('2015' < i && i <= '2020') {
-          color = 'blue';
+        // console.log(i);  year  ==i
+
+        let color = '#FF9F1C';
+        if (i === '2023') {
+          color = '#c7bebe';
         }
-        allYearsData.push({
-          label: i,
-          data: this.allYearsData[i],
-          backgroundColor: [color],
-          borderColor: color,
-          borderWidth: 1,
-          lineTension: 0.5,
-        });
-      }
-
-      this.data = {
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'June',
-          'july',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-
-        datasets: allYearsData,
-      };
-    } else {
-      this.data = {
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'June',
-          'july',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-        datasets: [
-          {
-            label: event.value.year,
-            data: this.allYearsData[event.value.year],
-            backgroundColor: ['red'],
-            borderColor: 'red',
+        if (
+          Number(i) === this.currentYear - 1 ||
+          Number(i) === this.currentYear
+        ) {
+          allYearsData.push({
+            label: i,
+            data: this.allYearsData[i],
+            backgroundColor: [color],
+            borderColor: color,
             borderWidth: 1,
             lineTension: 0.5,
-          },
-        ],
-      };
-    }
+          });
+        }
 
-    this.options = {
-      scales: {
-        y: {
-          min: 0,
-          max: 1,
-          ticks: {
-            stepSize: 0.1,
-            callback: function (value: any, index: number, values: any) {
-              return ((index + 0) * 0.1).toFixed(1);
-            },
-          },
-        },
-        x: {
-          grid: {
-            display: false,
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          labels: {
-            font: {
-              family: 'RotaBlack',
-            },
-          },
-        },
-      },
-    };
+        this.data = {
+          labels: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'June',
+            'july',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+          ],
+
+          datasets: allYearsData,
+        };
+      }
+    } else {
+      const years: any = {};
+
+      this.csvData.forEach((each: any) => {
+        const year = new Date(each.date).getFullYear();
+        const month = new Date(each.date).getMonth() + 1;
+        const date = new Date(each.date).getDate();
+
+        if (!years[year]) {
+          years[year] = {};
+        }
+
+        if (!years[year][month]) {
+          years[year][month] = {};
+        }
+
+        if (!years[year][month][date]) {
+          years[year][month][date] = [];
+        }
+
+        years[year][month][date].push(parseFloat(each.sentiment_score));
+      });
+
+      Object.keys(years).forEach((year: any) => {
+        Object.keys(years[year]).forEach((month: any) => {
+          const daysInMonth = new Date(year, month, 0).getDate();
+          for (let date = 1; date <= daysInMonth; date++) {
+            if (!years[year][month][date]) {
+              years[year][month][date] = 0;
+            } else {
+              const scores = years[year][month][date];
+              const averageScore =
+                scores.reduce((acc: any, curr: any) => acc + curr, 0) /
+                scores.length;
+              years[year][month][date] = averageScore.toFixed(2);
+            }
+          }
+        });
+      });
+      console.log(years);
+
+      const monthsData: any[] = [];
+
+      for (let month in years[this.currentYear]) {
+        const monthValues: any[] = [];
+
+        for (let day = 1; day <= 31; day++) {
+          if (years[this.currentYear][month][day]) {
+            monthValues.push(years[this.currentYear][month][day]);
+          } else {
+            monthValues.push(0);
+          }
+        }
+
+        monthsData.push(monthValues);
+      }
+      const daysOfMonth: number[] = Array.from(
+        { length: 31 },
+        (_, index) => index + 1
+      );
+
+      const currentMonthName = new Date().toLocaleString('default', {
+        month: 'long',
+      });
+      const previousMonth = new Date();
+      previousMonth.setMonth(previousMonth.getMonth() - 1);
+      const previousMonthName = previousMonth.toLocaleString('default', {
+        month: 'long',
+      });
+
+      let month: any;
+      for (let i in monthsData) {
+        let color = '#FF9F1C';
+        if (i === '0') {
+          color = '#c7bebe';
+        }
+        if (Number(i) === new Date().getMonth()) {
+          month = currentMonthName;
+        } else if (Number(i) === new Date().getMonth() - 1) {
+          month = previousMonthName;
+        }
+        {
+          allYearsData.push({
+            label: month,
+            data: monthsData[i],
+            backgroundColor: [color],
+            borderColor: color,
+            borderWidth: 1,
+            lineTension: 0.5,
+          });
+        }
+
+        this.data = {
+          labels: daysOfMonth,
+
+          datasets: allYearsData,
+        };
+      }
+    }
   }
 }

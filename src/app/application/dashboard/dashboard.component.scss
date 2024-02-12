@@ -16,9 +16,9 @@
     align-items: center;
   }
   @media only screen and (max-width: 760px) {
-    .sidebar {
-      display: none !important;
-    }
+    // .sidebar {
+    //   display: none !important;
+    // }
   }
   ::ng-deep .p-tieredmenu {
     border: none;
@@ -32,10 +32,19 @@
   .overview{
     .card{
       min-height: 190px;
+      @media only screen and (max-width: 760px) {
+        min-height: auto !important;
+        margin: 10px 0 !important;
+       }
+
     }
     .chart_card{
       min-height: 420px !important;
       position: relative;
+      @media only screen and (max-width: 760px) {
+       min-height: auto !important;
+       margin: 10px 0 !important;
+      }
     }
     .next_icon {
       position: absolute;
@@ -52,4 +61,13 @@
   canvas {
     height: 267px !important;
     width: 100% !important;
+}
+
+@media only screen and (max-width: 760px) {
+  .p-dropdown.p-component{
+    width: 100% !important;
+  }
+  .col-sm-6{
+    width: 50%;
+  }
 }

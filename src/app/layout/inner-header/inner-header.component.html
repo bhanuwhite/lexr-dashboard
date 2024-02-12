@@ -1,46 +1,28 @@
 <div *ngIf="selectedItem !== 'overView'">
-
   <div class="py-4 bg-white top_bar">
     <div class="container-fluid">
-        <div class="row align-items-center mx-3">
-            <div class="col-lg-3">
-                <h4 class="m-0">{{selectedItem}}</h4>
-            </div>
-            <div class="col-lg-5 text-center">
-            </div>
-            <div class="col-lg-4">
-                <div class="d-flex align-items-center gap-2 justify-content-end">
-                    <div class="img">
-                        <img src="assets/image/user.png" width="40px" height="40px" style="border-radius: 50%;"
-                            alt="">
-                    </div>
-                    <div style="font-size: 15px;font-weight: 500;">
-                        Valentin Garnier
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
-
-</div>
-<div *ngIf="selectedItem === 'overView'">
-  <div class="py-4 bg-white top_bar">
-    <div class="container-fluid">
+      <div class="d-flex mobile_menu">
+        <i class="pi pi-bars" style="font-size: 1.5rem;"></i>
+      </div>
       <div class="row align-items-center mx-3">
         <div class="col-lg-3">
-
+          <h4 class="m-0">{{ selectedItem }}</h4>
         </div>
-        <div class="col-lg-5 text-center">
-          <h4 class="m-0 fw-600">Welcome, Valentin</h4>
-          <span class="this_week" style="color: #93908D; ">Here are today's stats from your customers!</span>
-        </div>
+        <div class="col-lg-5 text-center"></div>
         <div class="col-lg-4">
-          <div class="d-flex align-items-center gap-2 justify-content-end">
+          <div
+            class="d-flex align-items-center user_img_wrapper gap-2 justify-content-end"
+          >
             <div class="img">
-              <img src="assets/image/user.png" width="40px" height="40px" style="border-radius: 50%;" alt="">
+              <img
+                src="assets/image/user.png"
+                width="40px"
+                height="40px"
+                style="border-radius: 50%"
+                alt=""
+              />
             </div>
-            <div style="font-size: 15px;font-weight: 500;">
+            <div style="font-size: 15px; font-weight: 500">
               Valentin Garnier
             </div>
           </div>
@@ -48,5 +30,40 @@
       </div>
     </div>
   </div>
-
+</div>
+<div *ngIf="selectedItem === 'overView'">
+  <div class="py-4 bg-white top_bar">
+    <div class="container-fluid">
+      <div class="d-flex mobile_menu">
+        <i class="pi pi-bars" style="font-size: 1.5rem;"></i>
+      </div>
+      <div class="row align-items-center mx-3">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-5 text-center">
+          <h4 class="m-0 fw-600">Welcome, Valentin</h4>
+          <span class="this_week" style="color: #93908d"
+            >Here are today's stats from your customers!</span
+          >
+        </div>
+        <div class="col-lg-4">
+          <div
+            class="d-flex align-items-center user_img_wrapper gap-2 justify-content-end"
+          >
+            <div class="img">
+              <img
+                src="assets/image/user.png"
+                width="40px"
+                height="40px"
+                style="border-radius: 50%"
+                alt=""
+              />
+            </div>
+            <div style="font-size: 15px; font-weight: 500">
+              Valentin Garnier
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

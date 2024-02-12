@@ -111,3 +111,8 @@ canvas {
       }
       
 }
+@media only screen and (max-width: 760px) {
+    p-dropdown{
+      width: 100% !important;
+    }
+  }

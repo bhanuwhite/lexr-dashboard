@@ -13,6 +13,7 @@ import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { InnerHeaderComponent } from './inner-header/inner-header.component';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [LayoutComponent, HeaderComponent, SidebarComponent, InnerHeaderComponent],
@@ -26,6 +27,7 @@ import { InnerHeaderComponent } from './inner-header/inner-header.component';
     DropdownModule,
     CardModule,
     SelectButtonModule,
+    SidebarModule
   ],
 })
 export class LayoutModule {}

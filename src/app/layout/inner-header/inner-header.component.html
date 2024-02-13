@@ -1,12 +1,12 @@
 <div *ngIf="selectedItem !== 'overView'">
   <div class="py-4 bg-white top_bar">
     <div class="container-fluid">
-      <div class="d-flex mobile_menu">
+      <div class="d-flex d-none mobile_menu">
         <i class="pi pi-bars" style="font-size: 1.5rem;"></i>
       </div>
       <div class="row align-items-center mx-3">
         <div class="col-lg-3">
-          <h4 class="m-0">{{ selectedItem }}</h4>
+          <h4 class="m-0 header_title">{{ selectedItem }}</h4>
         </div>
         <div class="col-lg-5 text-center"></div>
         <div class="col-lg-4">
@@ -34,7 +34,7 @@
 <div *ngIf="selectedItem === 'overView'">
   <div class="py-4 bg-white top_bar">
     <div class="container-fluid">
-      <div class="d-flex mobile_menu">
+      <div class="d-flex  d-none mobile_menu">
         <i class="pi pi-bars" style="font-size: 1.5rem;"></i>
       </div>
       <div class="row align-items-center mx-3">

@@ -36,7 +36,10 @@
         min-height: auto !important;
         margin: 10px 0 !important;
        }
-
+       @media only screen and (min-width: 768px) and (max-width: 1140px) {
+        min-height: auto !important;
+        margin: 10px 0 !important;
+    }
     }
     .chart_card{
       min-height: 420px !important;
@@ -45,6 +48,10 @@
        min-height: auto !important;
        margin: 10px 0 !important;
       }
+      @media only screen and (min-width: 768px) and (max-width: 1140px) {
+        min-height: auto !important;
+        margin: 10px 0 !important;
+    }
     }
     .next_icon {
       position: absolute;
@@ -70,4 +77,15 @@
   .col-sm-6{
     width: 50%;
   }
+}
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  //  .flex-wrap{
+  //   flex-wrap: nowrap !important;
+  //  } 
+}
+@media only screen and (min-width: 992px) and (max-width: 1140px) {
+ .overview_score_div{
+  flex: 0 0 auto;
+    width: 50%;
+ }
 }

@@ -2,8 +2,13 @@
   <div class="py-4 bg-white top_bar">
     <div class="container-fluid">
       <div class="d-flex d-none mobile_menu">
-        <i class="pi pi-bars" style="font-size: 1.5rem;"></i>
+        <i class="pi pi-bars" style="font-size: 1.5rem"></i>
       </div>
+      <!-- <a (click)="showMobileMenu = !showMobileMenu" class="nav-toggler waves-effect waves-light d-block d-lg-none"
+      href="javascript:void(0)">
+      <i [ngClass]="showMobileMenu ? 'bi bi-text-left fs-6' : 'bi bi-text-left fs-6'"></i>
+    </a> -->
+
       <div class="row align-items-center mx-3">
         <div class="col-lg-3">
           <h4 class="m-0 header_title">{{ selectedItem }}</h4>
@@ -34,8 +39,8 @@
 <div *ngIf="selectedItem === 'overView'">
   <div class="py-4 bg-white top_bar">
     <div class="container-fluid">
-      <div class="d-flex  d-none mobile_menu">
-        <i class="pi pi-bars" style="font-size: 1.5rem;"></i>
+      <div class="d-flex d-none mobile_menu">
+        <i class="pi pi-bars" style="font-size: 1.5rem"></i>
       </div>
       <div class="row align-items-center mx-3">
         <div class="col-lg-3"></div>

@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
           }
 
           yearData = { ...yearData, [year]: zeroArray };
-          zeroArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+          zeroArray = [, , , , , , , , , , ,];
         }
 
         this.allYearsData = yearData;
@@ -250,6 +250,7 @@ export class DashboardComponent implements OnInit {
         if (i === '2023') {
           color = '#c7bebe';
         }
+
         if (
           Number(i) === this.currentYear - 1 ||
           Number(i) === this.currentYear
@@ -324,15 +325,29 @@ export class DashboardComponent implements OnInit {
       });
 
       const monthsData: any[] = [];
+      const currentmonth = new Date().getMonth() + 1;
+      const today = new Date().getDate();
 
       for (let month in years[this.currentYear]) {
         const monthValues: any[] = [];
 
-        for (let day = 1; day <= 31; day++) {
-          if (years[this.currentYear][month][day]) {
-            monthValues.push(years[this.currentYear][month][day]);
-          } else {
-            monthValues.push(0);
+        if (Number(month) === currentmonth) {
+          for (let day = 1; day <= 31; day++) {
+            if (day < today) {
+              if (years[this.currentYear][month][day]) {
+                monthValues.push(years[this.currentYear][month][day]);
+              } else {
+                monthValues.push(0);
+              }
+            }
+          }
+        } else {
+          for (let day = 1; day <= 31; day++) {
+            if (years[this.currentYear][month][day]) {
+              monthValues.push(years[this.currentYear][month][day]);
+            } else {
+              monthValues.push(0);
+            }
           }
         }
 

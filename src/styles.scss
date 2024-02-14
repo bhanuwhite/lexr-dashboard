@@ -122,3 +122,14 @@ canvas {
       width: 100% !important;
     }
   }
+
+  // mobile sidebar
+  .p-sidebar{
+    background-color: #ff9f1c !important;
+}
+.p-sidebar .p-sidebar-footer {
+   padding: 0 !important; 
+}
+.p-sidebar .p-sidebar-content {
+  padding: 0.2rem !important;
+}

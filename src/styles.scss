@@ -133,3 +133,28 @@ canvas {
 .p-sidebar .p-sidebar-content {
   padding: 0.2rem !important;
 }
+.top_category{
+  p-chart{
+    width: 300px !important;
+    height: 330px !important;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1140px) {
+  .top_category{
+    p-chart{
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+}
+@media only screen and (min-width: 300px) and (max-width: 380px) {
+  .top_category{
+    p-chart{
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+}

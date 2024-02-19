@@ -84,6 +84,8 @@ export class DashboardComponent implements OnInit {
         for (let year in years) {
           YearGraphData.push(year);
 
+          console.log(years[year]);
+
           for (let x in years[year]) {
             // x is month ID
 

@@ -14,6 +14,8 @@ import { TagModule } from 'primeng/tag';
 import { OverlayModule } from 'primeng/overlay';
 import { LayoutModule } from './layout/layout.module';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { DashboardComponent } from './application/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,8 +33,21 @@ import { HttpClientModule } from '@angular/common/http';
     TagModule,
     LayoutModule,
     OverlayModule,
-    HttpClientModule
-
+    HttpClientModule,
+    RouterModule.forRoot(
+      [
+        { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        {
+          path: 'overview',
+          component: DashboardComponent,
+          data: { name: 'overView' },
+        },
+        { path: '**', component: DashboardComponent },
+      ],
+      {
+        useHash: true,
+      }
+    ),
   ],
   providers: [],
   bootstrap: [AppComponent],

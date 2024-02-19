@@ -11,30 +11,37 @@ const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    data:{name:'overView'}
+    data: { name: 'overView' },
+  },
+  {
+    path: 'overview',
+    component: DashboardComponent,
+    data: { name: 'overView' },
   },
   {
     path: 'categories',
     component: CategoriesComponent,
-    data:{name:'Categories'}
+    data: { name: 'Categories' },
   },
   {
     path: 'askanything',
     component: AskAnythingComponent,
-    data:{name:'Ask Anything'}
-
+    data: { name: 'Ask Anything' },
   },
   {
     path: 'worldmap',
     component: WorldMapComponent,
-    data:{name:'World Map'}
-
+    data: { name: 'World Map' },
   },
   {
     path: 'neighbors',
     component: YourNeighborsComponent,
-    data:{name:'Your Neighbors'}
-
+    data: { name: 'Your Neighbors' },
+  },
+  {
+    path: '**',
+    component: DashboardComponent,
+    data: { name: 'overView' },
   },
 ];
 

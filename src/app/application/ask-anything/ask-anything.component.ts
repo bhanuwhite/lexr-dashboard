@@ -28,8 +28,12 @@ export class AskAnythingComponent implements OnInit {
     };
 
     this.sharedservice.searchAskAnything(body).subscribe((res: any) => {
+      // console.log(res);
+
       if (res.status) {
         this.searchedDataResult = res.Answer;
+      } else {
+        this.searchedDataResult = '';
       }
     });
   }

@@ -21,6 +21,8 @@ import { WorldMapComponent } from './world-map/world-map.component';
 import { YourNeighborsComponent } from './your-neighbors/your-neighbors.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
+import { ScrollerModule } from 'primeng/scroller';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { ToastModule } from 'primeng/toast';
     ChartModule,
     ProgressSpinnerModule,
     ToastModule,
+    ScrollerModule,
+    DividerModule,
   ],
 })
 export class ApplicationModule {}

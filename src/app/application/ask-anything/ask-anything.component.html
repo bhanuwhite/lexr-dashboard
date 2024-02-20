@@ -11,7 +11,7 @@
             </span>
           </div>
 
-          <div class="card my-2 p-3 border-none" style="border-radius: 20px">
+          <div class="card my-2 p-4 border-none" style="border-radius: 20px">
             <div class="custom-search-bar justify-content-center mt-3">
               <i class="pi pi-search custom-search-icon"></i>
               <input
@@ -20,19 +20,70 @@
                 class="custom-search-input"
                 placeholder="Ask Anything"
                 (keyup.enter)="onSearch($event)"
+                [(ngModel)]="searchQuery"
               />
             </div>
             <div
+              class="card border-none question_card my-4 p-4"
+              style="border-radius: 20px"
+            >
+              <div *ngIf="loading && questionAnswerArray.length >= 0">
+                <div>
+                  <div class="d-flex justify-content-center">
+                    <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+                  </div>
+                  <div
+                    *ngFor="
+                      let item of questionAnswerArray.reverse();
+                      let i = index
+                    "
+                  >
+                    <hr class="text-black" *ngIf="i !== 0" />
+
+                    <p><b [innerHTML]="item.Question"></b></p>
+                    <p [innerHTML]="item.Answer"></p>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!loading && questionAnswerArray.length > 0">
+                <div
+                  *ngFor="
+                    let item of questionAnswerArray.reverse();
+                    let i = index
+                  "
+                >
+                  <hr class="text-black" *ngIf="i !== 0" />
+
+                  <p><b [innerHTML]="item.Question"></b></p>
+                  <p [innerHTML]="item.Answer"></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div
               class="card border-none question_card my-4 p-3"
               style="border-radius: 20px"
             >
-              <div *ngIf="loading" class="loader d-flex justify-content-center">
-                <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
-              </div>
-              <div *ngIf="!loading">
-                {{ searchedDataResult }}
-              </div>
-            </div>
+              <p-scroller scrollHeight="300px">
+                <div
+                  *ngIf="loading"
+                  class="loader d-flex justify-content-center"
+                >
+                  <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+                </div>
+                <div
+                  *ngIf="!loading && questionAnswerArray.length > 0"
+                  class=""
+                >
+
+                  <div *ngFor="let item of questionAnswerArray">
+                    <p>Que: {{ item.Question }}</p>
+                    <p>Ans: {{ item.Answer }}</p>
+                  </div>
+
+                </div>
+              </p-scroller>
+            </div> -->
           </div>
         </div>
       </div>

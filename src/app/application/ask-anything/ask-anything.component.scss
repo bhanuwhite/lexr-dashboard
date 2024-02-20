@@ -16,6 +16,7 @@
   width: 70%;
   margin: 0 auto;
   background-color: #efdfd7;
+  overflow-y: auto;
   @media only screen and (max-width: 760px) {
     width: 100%;
   }
@@ -27,4 +28,7 @@
   .wrap {
     flex-wrap: wrap;
   }
+}
+.custom-divider {
+  background-color: red;
 }

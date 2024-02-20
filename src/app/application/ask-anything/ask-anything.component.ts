@@ -11,9 +11,11 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class AskAnythingComponent implements OnInit {
+  questionAnswerArray: any[] = [];
+  question: string = '';
   loading = false;
   loadingSubject = new Subject<boolean>();
-
+  searchQuery: string = '';
   searchedDataResult: string = '';
   constructor(
     private sharedservice: SharedService,
@@ -31,6 +33,7 @@ export class AskAnythingComponent implements OnInit {
     this.loadingSubject.next(true);
 
     let searchData = event.target.value;
+    this.question = searchData;
 
     let body = {
       query: searchData,
@@ -40,12 +43,19 @@ export class AskAnythingComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           this.searchedDataResult = res.Answer;
+
+          this.questionAnswerArray.push({
+            Question: res.question,
+            Answer: res.Answer,
+          });
+          this.searchQuery = '';
         } else {
           this.searchedDataResult = '';
         }
         this.loading = false;
         this.loadingSubject.next(false);
       },
+
       (err: any) => {
         // alert(err.message);
         this.searchedDataResult = err.message;

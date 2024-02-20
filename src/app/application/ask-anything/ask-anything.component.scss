@@ -1,29 +1,30 @@
-.card{
-    height: 100vh;
-    @media only screen and (max-width: 760px) {
-      height: auto;
-    }  
-  }
-.top_bar{
-    height: 120px;
-    display: flex;
-    align-items: center;
-  }
-  .question_card{
-    min-height: 400px;
-    width: 70%;
-    margin: 0 auto;
-    background-color: #EFDFD7;
-    @media only screen and (max-width: 760px) {
-      width: 100%;
-    }  
-  }
+.card {
+  height: 100vh;
   @media only screen and (max-width: 760px) {
-    .w-50 {
-      width: 100% !important;
-     
-    }
-    .wrap{
-      flex-wrap: wrap;
-    }
+    height: auto;
   }
+}
+.top_bar {
+  height: 120px;
+  display: flex;
+  align-items: center;
+}
+.question_card {
+  min-height: 400px;
+  // font-weight: 100;
+  font-family: sans-serif;
+  width: 70%;
+  margin: 0 auto;
+  background-color: #efdfd7;
+  @media only screen and (max-width: 760px) {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 760px) {
+  .w-50 {
+    width: 100% !important;
+  }
+  .wrap {
+    flex-wrap: wrap;
+  }
+}

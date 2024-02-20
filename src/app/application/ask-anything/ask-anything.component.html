@@ -12,7 +12,7 @@
           </div>
 
           <div class="card my-2 p-3 border-none" style="border-radius: 20px">
-            <div class="custom-search-bar justify-content-center">
+            <div class="custom-search-bar justify-content-center mt-3">
               <i class="pi pi-search custom-search-icon"></i>
               <input
                 type="text"
@@ -26,11 +26,17 @@
               class="card border-none question_card my-4 p-3"
               style="border-radius: 20px"
             >
-              {{ searchedDataResult }}
+              <div *ngIf="loading" class="loader d-flex justify-content-center">
+                <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+              </div>
+              <div *ngIf="!loading">
+                {{ searchedDataResult }}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <p-toast></p-toast>
 </div>

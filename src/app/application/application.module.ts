@@ -23,6 +23,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { ScrollerModule } from 'primeng/scroller';
 import { DividerModule } from 'primeng/divider';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DividerModule } from 'primeng/divider';
     ToastModule,
     ScrollerModule,
     DividerModule,
+    ReactiveFormsModule,
   ],
 })
 export class ApplicationModule {}

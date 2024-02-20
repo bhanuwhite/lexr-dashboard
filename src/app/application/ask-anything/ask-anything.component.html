@@ -20,7 +20,7 @@
                 class="custom-search-input"
                 placeholder="Ask Anything"
                 (keyup.enter)="onSearch($event)"
-                [(ngModel)]="searchQuery"
+                [formControl]="searchControl"
               />
             </div>
             <div

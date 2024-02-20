@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
 import { SharedService } from 'src/app/shared.service';
 import { MessageService } from 'primeng/api';
+import { FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'app-ask-anything',
@@ -11,12 +12,14 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class AskAnythingComponent implements OnInit {
+  searchControl: FormControl = new FormControl('');
+
   questionAnswerArray: any[] = [];
   question: string = '';
   loading = false;
   loadingSubject = new Subject<boolean>();
-  searchQuery: string = '';
   searchedDataResult: string = '';
+
   constructor(
     private sharedservice: SharedService,
     private messageService: MessageService,
@@ -48,7 +51,7 @@ export class AskAnythingComponent implements OnInit {
             Question: res.question,
             Answer: res.Answer,
           });
-          this.searchQuery = '';
+          this.searchControl.reset();
         } else {
           this.searchedDataResult = '';
         }
@@ -66,6 +69,7 @@ export class AskAnythingComponent implements OnInit {
         });
         this.loading = false;
         this.loadingSubject.next(false);
+        this.searchControl.reset();
       }
     );
   }

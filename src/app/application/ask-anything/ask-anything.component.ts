@@ -51,6 +51,7 @@ export class AskAnythingComponent implements OnInit {
             Question: res.question,
             Answer: res.Answer,
           });
+          this.questionAnswerArray = this.questionAnswerArray.reverse();
           this.searchControl.reset();
         } else {
           this.searchedDataResult = '';

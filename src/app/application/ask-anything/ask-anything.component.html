@@ -19,7 +19,7 @@
                 pInputText
                 class="custom-search-input"
                 placeholder="Ask Anything"
-                (keyup.enter)="onSearch($event)"
+                (keydown.enter)="onSearch($event)"
                 [formControl]="searchControl"
               />
             </div>
@@ -27,14 +27,13 @@
               class="card border-none question_card my-4 p-4"
               style="border-radius: 20px"
             >
-              <div *ngIf="loading && questionAnswerArray.length >= 0">
-                <div>
-                  <div class="d-flex justify-content-center">
+              <div>
+                 <div class="d-flex justify-content-center" *ngIf="loading">
                     <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
                   </div>
                   <div
                     *ngFor="
-                      let item of questionAnswerArray.reverse();
+                      let item of questionAnswerArray;
                       let i = index
                     "
                   >
@@ -43,9 +42,8 @@
                     <p><b [innerHTML]="item.Question"></b></p>
                     <p [innerHTML]="item.Answer"></p>
                   </div>
-                </div>
               </div>
-              <div *ngIf="!loading && questionAnswerArray.length > 0">
+              <!-- <div *ngIf="!loading && questionAnswerArray.length > 0">
                 <div
                   *ngFor="
                     let item of questionAnswerArray.reverse();
@@ -57,7 +55,7 @@
                   <p><b [innerHTML]="item.Question"></b></p>
                   <p [innerHTML]="item.Answer"></p>
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <!-- <div

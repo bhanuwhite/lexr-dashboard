@@ -44,18 +44,18 @@ export class AskAnythingComponent implements OnInit {
 
     this.sharedservice.searchAskAnything(body).subscribe(
       (res: any) => {
-        if (res.status) {
-          this.searchedDataResult = res.Answer;
+        console.log(res);
 
-          this.questionAnswerArray.push({
-            Question: res.question,
-            Answer: res.Answer,
-          });
-          this.questionAnswerArray = this.questionAnswerArray.reverse();
-          this.searchControl.reset();
-        } else {
-          this.searchedDataResult = '';
-        }
+        // if (res.status) {
+        // this.searchedDataResult = res.Answer;
+
+        this.questionAnswerArray.push({
+          Question: res.question,
+          Answer: res.answer,
+        });
+        this.questionAnswerArray = this.questionAnswerArray.reverse();
+        this.searchControl.reset();
+
         this.loading = false;
         this.loadingSubject.next(false);
       },

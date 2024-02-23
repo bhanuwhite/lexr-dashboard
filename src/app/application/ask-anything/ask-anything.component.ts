@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, debounceTime } from 'rxjs';
+import { Subject } from 'rxjs';
 import { SharedService } from 'src/app/shared.service';
 import { MessageService } from 'primeng/api';
-import { FormControl, FormControlName } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-ask-anything',
@@ -44,16 +44,15 @@ export class AskAnythingComponent implements OnInit {
 
     this.sharedservice.searchAskAnything(body).subscribe(
       (res: any) => {
-        console.log(res);
-
-        // if (res.status) {
-        // this.searchedDataResult = res.Answer;
-
-        this.questionAnswerArray.push({
+        this.questionAnswerArray.unshift({
           Question: res.question,
-          Answer: res.answer,
+          Answer: res.answer
+            .replace(/<h2>/g, '<h5 class="custom-h2"">')
+            .replace(/<\/h2>/g, '</h5>'),
         });
-        this.questionAnswerArray = this.questionAnswerArray.reverse();
+        console.log(this.questionAnswerArray);
+
+        // this.questionAnswerArray = this.questionAnswerArray.reverse();
         this.searchControl.reset();
 
         this.loading = false;

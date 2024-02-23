@@ -25,6 +25,9 @@
             </div>
             <div
               class="card border-none question_card my-4 p-4"
+              [style.height]="
+                questionAnswerArray.length === 0 ? '200px' : 'auto'
+              "
               style="border-radius: 20px"
             >
               <div>
@@ -35,7 +38,7 @@
                   <hr class="text-black" *ngIf="i !== 0" />
 
                   <p><b [innerHTML]="item.Question"></b></p>
-                  <p [innerHTML]="item.Answer"></p>
+                  <p class="Answer_content" [innerHTML]="item.Answer"></p>
                 </div>
               </div>
             </div>

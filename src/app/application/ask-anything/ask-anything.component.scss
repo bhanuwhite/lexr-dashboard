@@ -1,5 +1,5 @@
 .card {
-  height: 100vh;
+  height: auto;
   @media only screen and (max-width: 760px) {
     height: auto;
   }
@@ -10,8 +10,7 @@
   align-items: center;
 }
 .question_card {
-  min-height: 400px;
-  // font-weight: 100;
+  max-height: 500px;
   font-family: sans-serif;
   width: 70%;
   margin: 0 auto;
@@ -21,8 +20,8 @@
     width: 100%;
   }
 }
-h2 {
-  font-size: 16px;
+.custom-h2 {
+  font-size: 16px !important;
 }
 @media only screen and (max-width: 760px) {
   .w-50 {

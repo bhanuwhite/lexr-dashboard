@@ -171,8 +171,6 @@ export class DashboardComponent implements OnInit {
             (this.csvData.length - count)
           ).toFixed(2);
 
-          // console.log(this.csvData);
-
           if (this.csvData[i].country) {
             this.uniqueCountries.add(this.csvData[i].country.toLowerCase());
           }
@@ -187,7 +185,6 @@ export class DashboardComponent implements OnInit {
             this.neutral++;
           }
         }
-        console.log(this.uniqueCountries);
 
         YearGraphData.push('All');
 

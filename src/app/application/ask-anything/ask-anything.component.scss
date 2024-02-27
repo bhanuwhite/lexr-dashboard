@@ -12,7 +12,8 @@
 .question_card {
   max-height: 200px;
   font-family: sans-serif;
-  width: 70%;
+
+  max-width: 70%;
   margin: 0 auto;
   background-color: #f3a439;
   margin-bottom: 10px;
@@ -24,7 +25,9 @@
 .answer_card {
   max-height: auto;
   font-family: sans-serif;
-  width: 70%;
+
+  max-width: 70%;
+
   margin: 0 auto;
   background-color: #efce9b;
   // overflow-y: auto;

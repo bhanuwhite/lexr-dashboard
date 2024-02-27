@@ -35,8 +35,10 @@
                   <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
                 </div>
                 <div *ngFor="let item of questionAnswerArray; let i = index">
-                  <div class="question_card d-flex align-items-center p-1 mt-2">
-                    <p class="pt-3 pl-2"><b [innerHTML]="item.Question"></b></p>
+                  <div class="question_card p-1 mt-2">
+                    <p class="pt-3 pl-2 d-flex align-items-center">
+                      <b [innerHTML]="item.Question"></b>
+                    </p>
                   </div>
 
                   <div class="answer_card p-3">

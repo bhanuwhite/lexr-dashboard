@@ -19,12 +19,13 @@ export class CategoriesComponent {
   optionsss: any;
   baroptions: any;
 
-  constructor(private sharedservice:SharedService,private Route:ActivatedRoute){
-
-this.Route.data.subscribe((res)=>{
-this.sharedservice.recieveHeaderName(res['name'])
-})
-
+  constructor(
+    private sharedservice: SharedService,
+    private Route: ActivatedRoute
+  ) {
+    this.Route.data.subscribe((res) => {
+      this.sharedservice.recieveHeaderName(res['name']);
+    });
   }
 
   ngOnInit() {
@@ -129,12 +130,16 @@ this.sharedservice.recieveHeaderName(res['name'])
         },
       },
     };
+
     this.optionss = {
       cutout: '85%',
       elements: {
         arc: {
           borderRadius: 10,
         },
+      },
+      label: {
+        position: 'center',
       },
 
       plugins: {

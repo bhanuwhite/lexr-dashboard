@@ -24,21 +24,24 @@
               />
             </div>
             <div
-              class="card border-none question_card my-4 p-4"
+              class="card w-100 p-4 mt-4"
               [style.height]="
                 questionAnswerArray.length === 0 ? '200px' : 'auto'
               "
               style="border-radius: 20px"
             >
               <div>
-                <div class="d-flex justify-content-center" *ngIf="loading">
+                <div class="d-flex justify-content-center mt-2" *ngIf="loading">
                   <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
                 </div>
                 <div *ngFor="let item of questionAnswerArray; let i = index">
-                  <hr class="text-black" *ngIf="i !== 0" />
+                  <div class="question_card d-flex align-items-center p-1 mt-2">
+                    <p class="pt-3 pl-2"><b [innerHTML]="item.Question"></b></p>
+                  </div>
 
-                  <p><b [innerHTML]="item.Question"></b></p>
-                  <p class="Answer_content" [innerHTML]="item.Answer"></p>
+                  <div class="answer_card p-3">
+                    <p class="Answer_content" [innerHTML]="item.Answer"></p>
+                  </div>
                 </div>
               </div>
             </div>

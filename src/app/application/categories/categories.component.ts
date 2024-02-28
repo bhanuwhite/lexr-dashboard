@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
 import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
+import { each } from 'chart.js/dist/helpers/helpers.core';
 
 @Component({
   selector: 'app-categories',
@@ -24,6 +25,9 @@ export class CategoriesComponent implements OnInit {
   neutralReview: number = 0;
   yearData: any = {};
   allCategories: any[] = [];
+  summaryRecomendations: string = '';
+  loading!: boolean;
+  // allCSVData: any = {};
 
   constructor(
     private sharedservice: SharedService,
@@ -41,17 +45,13 @@ export class CategoriesComponent implements OnInit {
     const textColorSecondary = documentStyle.getPropertyValue(
       '--text-color-secondary'
     );
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-    let YearGraphData: any = [];
+    const surfaceBorder = document;
     let years: any = {};
 
     this.http
       .get('assets/review_with_sentiments.csv', { responseType: 'text' })
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
-
-        console.log(this.csvData);
 
         this.csvData.forEach((each: any) => {
           const year = new Date(each.date).getFullYear();
@@ -168,7 +168,7 @@ export class CategoriesComponent implements OnInit {
 
     this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
-        this.allCategories = res.answer;
+        this.allCategories = res.answer.sort();
       },
       (error: any) => {
         alert(error.message);
@@ -176,33 +176,50 @@ export class CategoriesComponent implements OnInit {
     );
 
     this.dataa = {
-      labels: ['January', 'February', 'March', 'April', 'May'],
+      labels: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'july',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ],
       datasets: [
         {
           label: 'Current Year',
           backgroundColor: ['#FF9F1C'],
-          data: [65, 80, 55, 75, 56, 90, 40],
+          data: [10, 30, 40, 20, 55, 30, 60, 30, 35, 45, 40, 80],
           borderColor: '#FF9F1C',
-          borderWidth: 2,
+          borderWidth: 1,
           lineTension: 0.5,
         },
         {
           label: 'Last Year',
-          data: [40, 65, 30, 70, 20, 80, 16],
+          data: [40, 65, 30, 70, 20, 30, 16, 50, 40, 30, 26, 35],
           backgroundColor: ['#c7bebe'],
           borderColor: '#c7bebe', // Grey color
-          borderWidth: 2,
+          borderWidth: 1,
           lineTension: 0.5,
         },
       ],
     };
 
-    this.optionsss = {
+    this.options = {
       scales: {
         x: {
+          stacked: true,
           grid: {
             display: false,
           },
+        },
+        y: {
+          stacked: true,
         },
       },
       plugins: {
@@ -245,10 +262,12 @@ export class CategoriesComponent implements OnInit {
       },
       tooltip: {
         trigger: 'item',
+        position: 'center',
       },
       legend: {
         top: '5%',
         left: 'center',
+        position: 'center',
       },
       plugins: {
         legend: {
@@ -259,20 +278,83 @@ export class CategoriesComponent implements OnInit {
 
     // Summary And recommenadations
 
-    this.getsummaryAndRecommendations();
+    this.getsummaryAndRecomendations();
+    this.loading = true;
+  }
+
+  onDataSelect(event: any) {
+    console.log('hii');
+
+    console.log(event.element);
+
+    console.log(this.doughnutDataaa.labels[event.element._index]);
   }
 
   onSelectingCategory(event: any) {
     console.log(event.value);
+    let value = event.value;
+    console.log(this.csvData);
+    let years: any = {};
+
+    this.csvData.forEach((each: any, index: number) => {
+      const year = new Date(each.date).getFullYear();
+      const date = new Date(each.date).getMonth() + 1;
+      const dateData = new Date(each.date).getDate();
+
+      if (years[year]) {
+        if (years[year][date]) {
+          if (each.categories && each.categories.length > 0) {
+            years[year][date] = [...years[year][date], each.categories];
+          }
+        } else {
+          if (each.categories && each.categories.length > 0) {
+            years[year][date] = [each.categories];
+          }
+        }
+      } else {
+        if (each.categories && each.categories.length > 0) {
+          years[year] = { [date]: [each.categories] };
+        }
+      }
+    });
+
+    console.log(years[2024]);
+
+    // for (let month in years[2024]) {
+    //   // Parse each string into a JavaScript object
+    //   const objects = years[2024][month]
+    //     .map((str: string) => {
+    //       try {
+    //         // Use eval to evaluate the string as JavaScript code
+    //         return eval(`(${str})`);
+    //       } catch (error) {
+    //         // Handle parsing errors
+    //         console.error(`Error parsing object: ${error}`);
+    //         return null; // or handle the error in another way
+    //       }
+    //     })
+    //     .filter((obj: any) => obj !== null); // Remove any null objects
+
+    //   // Iterate over each object
+    //   objects.forEach((obj: any) => {
+    //     // console.log(obj);
+
+    //     // Get the keys of the object and print them
+    //     const keys = Object.keys(obj);
+    //     console.log(keys);
+    //   });
+    // }
   }
 
-  getsummaryAndRecommendations() {
-    this.sharedservice.getsummaryAndRecommendations().subscribe(
+  getsummaryAndRecomendations() {
+    this.sharedservice.getsummaryAndRecomendations().subscribe(
       (res: any) => {
-        console.log(res);
+        this.loading = false;
+        this.summaryRecomendations = res.answer;
       },
       (error: any) => {
         alert(error.message);
+        this.loading = false;
       }
     );
   }

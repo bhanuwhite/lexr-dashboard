@@ -74,6 +74,7 @@ export class DashboardComponent implements OnInit {
             years[year] = { [date]: [each.sentiment_score] };
           }
         });
+        console.log(years);
 
         let zeroArray: any = [];
 

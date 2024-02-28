@@ -51,6 +51,8 @@ export class CategoriesComponent implements OnInit {
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
 
+        console.log(this.csvData);
+
         this.csvData.forEach((each: any) => {
           const year = new Date(each.date).getFullYear();
           const date = new Date(each.date).getMonth() + 1;
@@ -164,9 +166,14 @@ export class CategoriesComponent implements OnInit {
 
     // this.allCategories=;
 
-    this.sharedservice.getAllCategories().subscribe((res: any) => {
-      this.allCategories = res.answer;
-    });
+    this.sharedservice.getAllCategories().subscribe(
+      (res: any) => {
+        this.allCategories = res.answer;
+      },
+      (error: any) => {
+        alert(error.message);
+      }
+    );
 
     this.dataa = {
       labels: ['January', 'February', 'March', 'April', 'May'],
@@ -209,6 +216,7 @@ export class CategoriesComponent implements OnInit {
       },
     };
 
+    //doughnutDataaa
     this.doughnutDataaa = {
       labels: [
         'Best comment',
@@ -248,9 +256,24 @@ export class CategoriesComponent implements OnInit {
         },
       },
     };
+
+    // Summary And recommenadations
+
+    this.getsummaryAndRecommendations();
   }
 
   onSelectingCategory(event: any) {
     console.log(event.value);
+  }
+
+  getsummaryAndRecommendations() {
+    this.sharedservice.getsummaryAndRecommendations().subscribe(
+      (res: any) => {
+        console.log(res);
+      },
+      (error: any) => {
+        alert(error.message);
+      }
+    );
   }
 }

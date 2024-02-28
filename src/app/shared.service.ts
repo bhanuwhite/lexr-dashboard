@@ -29,4 +29,9 @@ export class SharedService {
     const url = `${this.base_url}/${endPoint}`;
     return this.http.get(url);
   }
+  public getsummaryAndRecommendations() {
+    let endPoint = 'category_recomendations/hotel';
+    const url = `${this.base_url}/${endPoint}`;
+    return this.http.get(url);
+  }
 }

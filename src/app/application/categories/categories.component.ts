@@ -14,7 +14,7 @@ export class CategoriesComponent implements OnInit {
 
   options: any;
   dataa: any;
-  dataaa: any;
+  doughnutDataaa: any;
   doughnutOptions: any;
   optionsss: any;
   bargraphData: any;
@@ -23,6 +23,7 @@ export class CategoriesComponent implements OnInit {
   negativeReviewData: number[] = [];
   neutralReview: number = 0;
   yearData: any = {};
+  allCategories: any[] = [];
 
   constructor(
     private sharedservice: SharedService,
@@ -93,24 +94,27 @@ export class CategoriesComponent implements OnInit {
             }
           }
         }
-
-        for (let i in this.yearData['2023']) {
-          console.log(this.yearData['2023'][i]);
-          if (i === 'possitiveReviewData') {
-            requiredData.push({
-              type: 'bar',
-              label: 'Positive Review',
-              backgroundColor: ['#FF9F1C'],
-              data: this.yearData[2023][i],
-            });
-          }
-          if (i === 'negativeReviewData') {
-            requiredData.push({
-              type: 'bar',
-              label: 'Negative Review',
-              backgroundColor: ['#CB997E'],
-              data: this.yearData[2023][i],
-            });
+        let currentYear = new Date().getFullYear();
+        for (let year in this.yearData) {
+          if (Number(year) === currentYear) {
+            for (let i in this.yearData[currentYear]) {
+              if (i === 'possitiveReviewData') {
+                requiredData.push({
+                  type: 'bar',
+                  label: 'Positive Review',
+                  backgroundColor: ['#FF9F1C'],
+                  data: this.yearData[currentYear][i],
+                });
+              }
+              if (i === 'negativeReviewData') {
+                requiredData.push({
+                  type: 'bar',
+                  label: 'Negative Review',
+                  backgroundColor: ['#CB997E'],
+                  data: this.yearData[currentYear][i],
+                });
+              }
+            }
           }
         }
 
@@ -134,57 +138,35 @@ export class CategoriesComponent implements OnInit {
       });
 
     this.bargraphData = {
-      maintainAspectRatio: false,
-      aspectRatio: 2,
-      plugins: {
-        tooltip: {
-          mode: 'index',
-          intersect: false,
-        },
-        legend: {
-          labels: {
-            color: textColor,
-          },
-        },
-      },
       scales: {
         x: {
           stacked: true,
-          ticks: {
-            color: textColorSecondary,
-          },
           grid: {
-            color: surfaceBorder,
-            drawBorder: false,
+            display: false,
           },
         },
         y: {
           stacked: true,
-          ticks: {
-            color: textColorSecondary,
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false,
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack',
+            },
           },
         },
       },
     };
 
-    this.dataaa = {
-      labels: [
-        'Best comment',
-        'Worst comment',
-        'Summary comment',
-        'Average sentiment score',
-      ],
-      datasets: [
-        {
-          data: [200, 50, 100, 70],
-          backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455', '#FFBF69'],
-        },
-      ],
-    };
+    //Category
+
+    // this.allCategories=;
+
+    this.sharedservice.getAllCategories().subscribe((res: any) => {
+      this.allCategories = res.answer;
+    });
 
     this.dataa = {
       labels: ['January', 'February', 'March', 'April', 'May'],
@@ -227,6 +209,25 @@ export class CategoriesComponent implements OnInit {
       },
     };
 
+    this.doughnutDataaa = {
+      labels: [
+        'Best comment',
+        'Worst comment',
+        'Summary comment',
+        'Average sentiment score',
+      ],
+      label: {
+        show: false,
+        position: 'center',
+      },
+      datasets: [
+        {
+          data: [200, 50, 100, 70],
+          backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455', '#FFBF69'],
+        },
+      ],
+    };
+
     this.doughnutOptions = {
       cutout: '85%',
       elements: {
@@ -234,15 +235,22 @@ export class CategoriesComponent implements OnInit {
           borderRadius: 10,
         },
       },
-      label: {
-        position: 'center',
+      tooltip: {
+        trigger: 'item',
       },
-
+      legend: {
+        top: '5%',
+        left: 'center',
+      },
       plugins: {
         legend: {
           display: false,
         },
       },
     };
+  }
+
+  onSelectingCategory(event: any) {
+    console.log(event.value);
   }
 }

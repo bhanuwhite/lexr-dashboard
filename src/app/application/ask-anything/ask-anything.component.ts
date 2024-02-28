@@ -70,8 +70,6 @@ export class AskAnythingComponent implements OnInit {
   }
 
   private searchAskAnything(body: any) {
-    console.log(body);
-
     this.sharedservice.searchAskAnything(body).subscribe(
       (res: any) => {
         this.questionAnswerArray.unshift({

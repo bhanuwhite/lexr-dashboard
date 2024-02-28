@@ -134,8 +134,6 @@ export class DashboardComponent implements OnInit {
           }
         }
 
-        console.log(requiredDataset);
-
         this.data = {
           labels: [
             'Jan',
@@ -250,7 +248,6 @@ export class DashboardComponent implements OnInit {
 
   onSelectingYear(event: any) {
     let allYearsData: any = [];
-    console.log(this.allYearsData);
 
     if (event.value.year === 'This Year') {
       for (let i in this.allYearsData) {
@@ -294,7 +291,6 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       const years: any = {};
-      console.log(this.csvData);
 
       this.csvData.forEach((each: any) => {
         const year = new Date(each.date).getFullYear();
@@ -316,8 +312,6 @@ export class DashboardComponent implements OnInit {
         years[year][month][date].push(parseFloat(each.sentiment_score));
       });
 
-      console.log(years);
-
       Object.keys(years).forEach((year: any) => {
         Object.keys(years[year]).forEach((month: any) => {
           const daysInMonth = new Date(year, month, 0).getDate();
@@ -334,7 +328,6 @@ export class DashboardComponent implements OnInit {
           }
         });
       });
-      console.log(years);
 
       const monthsData: any[] = [];
       const currentmonth = new Date().getMonth() + 1;
@@ -380,11 +373,8 @@ export class DashboardComponent implements OnInit {
       });
 
       let month: any;
-      console.log(monthsData);
 
       for (let i in monthsData) {
-        console.log(i);
-
         let color = '#FF9F1C';
         if (i === '0') {
           color = '#c7bebe';

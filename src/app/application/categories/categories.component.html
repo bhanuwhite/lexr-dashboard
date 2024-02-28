@@ -61,7 +61,8 @@
               <div class="d-flex gap-2 dropdown-div">
                 <p-dropdown
                   placeholder="All Categories"
-                  optionLabel="name"
+                  [options]="allCategories"
+                  (onChange)="onSelectingCategory($event)"
                 ></p-dropdown>
               </div>
             </div>
@@ -82,7 +83,7 @@
             <p-chart
               style="margin: 0 auto"
               type="doughnut"
-              [data]="dataaa"
+              [data]="doughnutDataaa"
               [options]="doughnutOptions"
               [responsive]="true"
             ></p-chart>

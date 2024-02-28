@@ -23,4 +23,10 @@ export class SharedService {
     const url = `${this.base_url}/${endPoint}`;
     return this.http.post(url, body);
   }
+
+  public getAllCategories() {
+    let endPoint = 'allcategories';
+    const url = `${this.base_url}/${endPoint}`;
+    return this.http.get(url);
+  }
 }

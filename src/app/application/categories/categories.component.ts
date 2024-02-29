@@ -25,8 +25,14 @@ export class CategoriesComponent implements OnInit {
   neutralReview: number = 0;
   yearData: any = {};
   allCategories: any[] = [];
-  summaryRecomendations: string = '';
-  loading!: boolean;
+  summaryRecomendations: any = {};
+  loading: boolean = true;
+  selectedValue: any;
+  formattedYears: any[] = [];
+  allYearsData: any = {};
+  allCategoriesOverTime: any[] = [];
+  categorieMonthwise: any[] = [];
+
   // allCSVData: any = {};
 
   constructor(
@@ -75,6 +81,8 @@ export class CategoriesComponent implements OnInit {
         });
 
         let requiredData: any[] = [];
+
+        this.allYearsData = years;
 
         for (let year in years) {
           this.yearData[year] = {
@@ -162,18 +170,7 @@ export class CategoriesComponent implements OnInit {
       },
     };
 
-    //Category
-
-    // this.allCategories=;
-
-    this.sharedservice.getAllCategories().subscribe(
-      (res: any) => {
-        this.allCategories = res.answer.sort();
-      },
-      (error: any) => {
-        alert(error.message);
-      }
-    );
+    // Category
 
     this.dataa = {
       labels: [
@@ -276,86 +273,403 @@ export class CategoriesComponent implements OnInit {
       },
     };
 
-    // Summary And recommenadations
+    this.formattedYears = [
+      { year: 'This Year' },
+      { year: 'Last Year' },
+      { year: 'Last 3 months' },
+    ];
 
-    this.getsummaryAndRecomendations();
-    this.loading = true;
+    this.getAllcatogryData();
+    this.getsummaryAndRecomendations('hotel quality');
+
+    this.csvallData();
   }
 
-  onDataSelect(event: any) {
-    console.log('hii');
+  getByYearData(event: any) {
+    let Selectedyear;
+    if (event.value.year === 'This Year') {
+      Selectedyear = new Date().getFullYear();
+    } else if (event.value.year === 'Last Year') {
+      Selectedyear = new Date().getFullYear() - 1;
+    } else {
+      Selectedyear = new Date().getMonth() - 1;
+    }
 
-    console.log(event.element);
-
-    console.log(this.doughnutDataaa.labels[event.element._index]);
-  }
-
-  onSelectingCategory(event: any) {
-    console.log(event.value);
-    let value = event.value;
-    console.log(this.csvData);
-    let years: any = {};
-
-    this.csvData.forEach((each: any, index: number) => {
-      const year = new Date(each.date).getFullYear();
-      const date = new Date(each.date).getMonth() + 1;
-      const dateData = new Date(each.date).getDate();
-
-      if (years[year]) {
-        if (years[year][date]) {
-          if (each.categories && each.categories.length > 0) {
-            years[year][date] = [...years[year][date], each.categories];
+    if (
+      Selectedyear === new Date().getFullYear() - 1 ||
+      Selectedyear === new Date().getFullYear()
+    ) {
+      let requiredData: any[] = [];
+      for (let year in this.yearData) {
+        if (Number(year) === Selectedyear) {
+          for (let i in this.yearData[Selectedyear]) {
+            if (i === 'possitiveReviewData') {
+              requiredData.push({
+                type: 'bar',
+                label: 'Positive Review',
+                backgroundColor: ['#FF9F1C'],
+                data: this.yearData[Selectedyear][i],
+              });
+            }
+            if (i === 'negativeReviewData') {
+              requiredData.push({
+                type: 'bar',
+                label: 'Negative Review',
+                backgroundColor: ['#CB997E'],
+                data: this.yearData[Selectedyear][i],
+              });
+            }
           }
-        } else {
-          if (each.categories && each.categories.length > 0) {
-            years[year][date] = [each.categories];
-          }
-        }
-      } else {
-        if (each.categories && each.categories.length > 0) {
-          years[year] = { [date]: [each.categories] };
         }
       }
-    });
 
-    console.log(years[2024]);
+      this.data = {
+        labels: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'June',
+          'july',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+        datasets: requiredData,
+      };
 
-    // for (let month in years[2024]) {
-    //   // Parse each string into a JavaScript object
-    //   const objects = years[2024][month]
-    //     .map((str: string) => {
-    //       try {
-    //         // Use eval to evaluate the string as JavaScript code
-    //         return eval(`(${str})`);
-    //       } catch (error) {
-    //         // Handle parsing errors
-    //         console.error(`Error parsing object: ${error}`);
-    //         return null; // or handle the error in another way
-    //       }
-    //     })
-    //     .filter((obj: any) => obj !== null); // Remove any null objects
+      this.bargraphData = {
+        scales: {
+          x: {
+            stacked: true,
+            grid: {
+              display: false,
+            },
+          },
+          y: {
+            stacked: true,
+          },
+        },
+        plugins: {
+          legend: {
+            labels: {
+              font: {
+                family: 'RotaBlack',
+              },
+            },
+          },
+        },
+      };
+    } else {
+      let requiredData: any[] = [];
 
-    //   // Iterate over each object
-    //   objects.forEach((obj: any) => {
-    //     // console.log(obj);
+      for (let year in this.yearData) {
+        if (Number(year) === Selectedyear) {
+          for (let i in this.yearData[Selectedyear]) {
+            if (i === 'possitiveReviewData') {
+              requiredData.push({
+                type: 'bar',
+                label: 'Positive Review',
+                backgroundColor: ['#FF9F1C'],
+                data: this.yearData[Selectedyear][i],
+              });
+            }
+            if (i === 'negativeReviewData') {
+              requiredData.push({
+                type: 'bar',
+                label: 'Negative Review',
+                backgroundColor: ['#CB997E'],
+                data: this.yearData[Selectedyear][i],
+              });
+            }
+          }
+        }
+      }
 
-    //     // Get the keys of the object and print them
-    //     const keys = Object.keys(obj);
-    //     console.log(keys);
-    //   });
-    // }
+      this.data = {
+        labels: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'June',
+          'july',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+        datasets: requiredData,
+      };
+
+      this.bargraphData = {
+        scales: {
+          x: {
+            stacked: true,
+            grid: {
+              display: false,
+            },
+          },
+          y: {
+            stacked: true,
+          },
+        },
+        plugins: {
+          legend: {
+            labels: {
+              font: {
+                family: 'RotaBlack',
+              },
+            },
+          },
+        },
+      };
+    }
   }
 
-  getsummaryAndRecomendations() {
-    this.sharedservice.getsummaryAndRecomendations().subscribe(
+  /**get getAllcatogryData data */
+  getAllcatogryData() {
+    this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
-        this.loading = false;
-        this.summaryRecomendations = res.answer;
+        this.allCategories = res.answer;
+        this.allCategoriesOverTime = [...this.allCategories].sort();
+
+        this.allCategoriesOverTime.unshift('all');
       },
       (error: any) => {
         alert(error.message);
-        this.loading = false;
       }
     );
   }
+
+  yearCheck(date: any) {
+    const year = new Date(date).getFullYear();
+    const currentYear = new Date().getFullYear();
+    if (Number(year) == currentYear) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  monthCheck(date: any) {
+    const month = new Date(date).getMonth() + 1;
+    switch (month) {
+      case 1:
+        return '1';
+
+      case 2:
+        return '2';
+
+      case 3:
+        return '3';
+      case 4:
+        return '4';
+
+      case 5:
+        return '5';
+
+      case 6:
+        return '6';
+      case 7:
+        return '7';
+
+      case 8:
+        return '8';
+
+      case 9:
+        return '9';
+      case 10:
+        return '10';
+
+      case 11:
+        return '11';
+
+      case 12:
+        return '12';
+
+      default:
+        return '';
+    }
+  }
+
+  csvallData() {
+    let data2024 = this.csvData.filter((x: any) => this.yearCheck(x.date));
+    let monthWiseData = data2024.map((x: any) => {
+      return {
+        month: this.monthCheck(x?.date),
+        categories: JSON.parse(x?.categories.replace(/'/g, '"')),
+      };
+    });
+
+    let properData: any[] = [];
+    let jsonMonth: any = {};
+
+    for (let i = 0; i < monthWiseData.length; i++) {
+      const month = monthWiseData[i].month;
+
+      const categories = monthWiseData[i].categories;
+      let modifyObjectKey = Object.entries(categories);
+      modifyObjectKey.map((x: any) => (x[0] = x[0].toUpperCase()));
+
+      let modify = Object.fromEntries(modifyObjectKey);
+      if (!jsonMonth[month]) {
+        jsonMonth[month] = { month, categories: [modify] };
+      } else {
+        jsonMonth[month].categories.push(modify);
+      }
+    }
+
+    for (let month in jsonMonth) {
+      properData.push(jsonMonth[month]);
+    }
+    let jsonObjectData = Object.values(properData);
+
+    return jsonObjectData;
+  }
+
+  average(data: any) {
+    let sum = 0;
+    let count = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (typeof data[i] === 'number' && !isNaN(data[i])) {
+        sum += data[i];
+        count++;
+      }
+    }
+
+    if (count === 0) {
+      return 0;
+    }
+
+    return Number((sum / count).toFixed(1));
+  }
+  chartData(event: string) {
+    const data: any[] = this.csvallData();
+    this.categorieMonthwise = data.map((x) => {
+      return {
+        month: x.month,
+        categories: x.categories.map((y: any) => y[event]),
+        avgValue: this.average(x.categories.map((y: any) => y[event])),
+      };
+    });
+  }
+
+  onSelectingCategory(event: any) {
+    this.selectedValue = event.value.toUpperCase();
+    if (this.selectedValue === 'ALL') {
+      this.allCategories.forEach((element) => {
+        this.chartData(element);
+      });
+    } else {
+      this.chartData(this.selectedValue);
+    }
+
+    let month = new Date().getMonth();
+
+    let requiredData: any[] = new Array(month).fill(0);
+
+    this.categorieMonthwise.forEach((x: any) => {
+      const monthIndex = x.month - 1;
+      if (x.avgValue) {
+        requiredData[monthIndex] = Number(x.avgValue);
+      }
+    });
+    for (let i = 0; i <= month; i++) {
+      if (requiredData[i] === undefined) {
+        requiredData[i] = 0;
+      }
+    }
+
+    this.dataa = {
+      labels: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'july',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ],
+      datasets: [
+        {
+          label: this.selectedValue,
+          backgroundColor: ['#FF9F1C'],
+          data: requiredData,
+          borderColor: '#FF9F1C',
+          borderWidth: 1,
+          lineTension: 0.5,
+        },
+      ],
+    };
+
+    this.options = {
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          min: 0,
+          max: 1,
+          ticks: {
+            stepSize: 0.1,
+            callback: function (value: any, index: number, values: any) {
+              return ((index + 0) * 0.1).toFixed(1);
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack',
+            },
+          },
+        },
+      },
+    };
+  }
+
+  getsummaryAndRecomendations(event: any) {
+    this.loading = true;
+
+    if (event == 'hotel quality') {
+      this.sharedservice.getsummaryAndRecomendations(event).subscribe(
+        (res: any) => {
+          this.loading = false;
+          this.summaryRecomendations = res.answer;
+        },
+        (error: any) => {
+          alert(error.message);
+          this.loading = false;
+        }
+      );
+    }
+    if (event.value) {
+      this.sharedservice.getsummaryAndRecomendations(event.value).subscribe(
+        (res: any) => {
+          this.loading = false;
+          this.summaryRecomendations = res.answer;
+        },
+        (error: any) => {
+          alert(error.message);
+          this.loading = false;
+        }
+      );
+    }
+  }
+  // onSelectingCategoryRecomandation(event: any) {}
 }

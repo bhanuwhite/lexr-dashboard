@@ -36,7 +36,17 @@
   display: flex;
   align-items: center;
 }
+.getsummary_details_drpdn ::ng-deep .p-overlay {
+  width: 156px;
+  word-break: break-all;
+}
 
+.getsummary_details_drpdn ::ng-deep .p-dropdown-item {
+  white-space: wrap;
+}
+.getsummary_details_drpdn ::ng-deep .p-dropdown .p-dropdown-label {
+  width: calc(150px - 3rem);
+}
 @media only screen and (max-width: 767px) {
   .dropdown-div {
     width: 100% !important;

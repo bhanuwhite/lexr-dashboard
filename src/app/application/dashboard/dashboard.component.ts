@@ -21,7 +21,6 @@ export class DashboardComponent implements OnInit {
   selectedCity: any;
   options: any;
   Categories: any[] = [];
-  // years: any[] = [];
   csvData: any;
   reviewsCount: number = 0;
   uniqueCountries: Set<string> = new Set();
@@ -33,7 +32,6 @@ export class DashboardComponent implements OnInit {
   formattedYears: any[] = [];
   allYearsData: any = {};
   currentYear: any = 0;
-  // constructor() {}
 
   constructor(
     private sharedservice: SharedService,
@@ -85,8 +83,6 @@ export class DashboardComponent implements OnInit {
           YearGraphData.push(year);
 
           for (let x in years[year]) {
-            // x is month ID
-
             let sum = 0;
             let count = 0;
 
@@ -357,36 +353,22 @@ export class DashboardComponent implements OnInit {
         }
 
         monthsData.push(monthValues);
+        console.log(monthsData);
       }
       const daysOfMonth: number[] = Array.from(
         { length: 31 },
         (_, index) => index + 1
       );
 
-      const currentMonthName = new Date().toLocaleString('default', {
-        month: 'long',
-      });
-      const previousMonth = new Date();
-      previousMonth.setMonth(previousMonth.getMonth() - 1);
-      const previousMonthName = previousMonth.toLocaleString('default', {
-        month: 'long',
-      });
-
-      let month: any;
-
       for (let i in monthsData) {
         let color = '#FF9F1C';
         if (i === '0') {
           color = '#c7bebe';
         }
-        if (Number(i) === new Date().getMonth()) {
-          month = currentMonthName;
-        } else if (Number(i) === new Date().getMonth() - 1) {
-          month = previousMonthName;
-        }
+
         {
           allYearsData.push({
-            label: month,
+            label: this.monthsCheck(Number(i)),
             data: monthsData[i],
             backgroundColor: [color],
             borderColor: color,
@@ -394,6 +376,7 @@ export class DashboardComponent implements OnInit {
             lineTension: 0.5,
           });
         }
+        console.log(allYearsData);
 
         this.data = {
           labels: daysOfMonth,
@@ -401,6 +384,48 @@ export class DashboardComponent implements OnInit {
           datasets: allYearsData,
         };
       }
+    }
+  }
+
+  monthsCheck(month: any) {
+    console.log(month);
+
+    switch (month + 1) {
+      case 1:
+        return 'Jan';
+
+      case 2:
+        return 'Feb';
+
+      case 3:
+        return 'Mar';
+      case 4:
+        return 'April';
+
+      case 5:
+        return 'May';
+
+      case 6:
+        return 'June';
+      case 7:
+        return 'July';
+
+      case 8:
+        return 'Aug';
+
+      case 9:
+        return 'sep';
+      case 10:
+        return 'Oct';
+
+      case 11:
+        return 'Nov';
+
+      case 12:
+        return 'Dec';
+
+      default:
+        return '';
     }
   }
 }

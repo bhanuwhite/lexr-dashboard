@@ -37,8 +37,6 @@ export class CategoriesComponent implements OnInit {
   dataSet: any[] = [];
   statusTrue: any;
 
-  // allCSVData: any = {};
-
   constructor(
     private sharedservice: SharedService,
     private Route: ActivatedRoute,
@@ -546,8 +544,8 @@ export class CategoriesComponent implements OnInit {
   }
 
   csvallData() {
-    let data2024 = this.csvData.filter((x: any) => this.yearCheck(x.date));
-    let monthWiseData = data2024.map((x: any) => {
+    let data2024 = this.csvData?.filter((x: any) => this.yearCheck(x.date));
+    let monthWiseData = data2024?.map((x: any) => {
       return {
         month: this.monthCheck(x?.date),
         categories: JSON.parse(x?.categories.replace(/'/g, '"')),
@@ -557,7 +555,7 @@ export class CategoriesComponent implements OnInit {
     let properData: any[] = [];
     let jsonMonth: any = {};
 
-    for (let i = 0; i < monthWiseData.length; i++) {
+    for (let i = 0; i < monthWiseData?.length; i++) {
       const month = monthWiseData[i].month;
 
       const categories = monthWiseData[i].categories;
@@ -647,6 +645,8 @@ export class CategoriesComponent implements OnInit {
   }
   /**graph ploting for all */
   graphPloting(dataset: any) {
+    console.log(dataset);
+
     let datasetArr: any[] = [];
     for (let i = 0; i < dataset.length; i++) {
       let jsonData: any = {
@@ -657,7 +657,11 @@ export class CategoriesComponent implements OnInit {
       let data: any[] = [];
       for (let j = 0; j < dataset[i].length; j++) {
         jsonData['label'] = dataset[i][0]['label'];
-        data.push(dataset[i][j]['avgValue']);
+        if (!Number.isNaN(dataset[i][j]['avgValue'])) {
+          data.push(dataset[i][j]['avgValue']);
+        } else {
+          data.push(0);
+        }
         jsonData['data'] = data;
       }
       datasetArr.push(jsonData);
@@ -709,7 +713,7 @@ export class CategoriesComponent implements OnInit {
   }
   /**graph ploting */
   categoriGraphData() {
-    let month = new Date().getMonth();
+    let month = new Date().getMonth() - 1;
 
     let requiredData: any[] = new Array(month).fill(0);
 

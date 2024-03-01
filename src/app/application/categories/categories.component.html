@@ -31,6 +31,7 @@
                 <p-dropdown
                   [options]="allCategories"
                   (onChange)="getsummaryAndRecomendations($event)"
+                  class="getsummary_details_drpdn"
                 ></p-dropdown>
               </div>
             </div>
@@ -79,6 +80,7 @@
                 <p-dropdown
                   [options]="allCategoriesOverTime"
                   (onChange)="onSelectingCategory($event)"
+                  class="getsummary_details_drpdn"
                 ></p-dropdown>
               </div>
             </div>

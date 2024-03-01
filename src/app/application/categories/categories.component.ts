@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
 import { each } from 'chart.js/dist/helpers/helpers.core';
 import { last } from 'rxjs';
-
+import * as echarts from 'echarts';
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
@@ -36,6 +36,7 @@ export class CategoriesComponent implements OnInit {
   categorieMonthwise: any[] = [];
   dataSet: any[] = [];
   statusTrue: any;
+  private myChart: any = null;
 
   constructor(
     private sharedservice: SharedService,
@@ -172,61 +173,18 @@ export class CategoriesComponent implements OnInit {
       },
     };
 
-    //doughnutDataaa
-    this.doughnutDataaa = {
-      labels: [
-        'Best comment',
-        'Worst comment',
-        'Summary comment',
-        'Average sentiment score',
-      ],
-      label: {
-        show: false,
-        position: 'center',
-      },
-      datasets: [
-        {
-          data: [200, 50, 100, 70],
-          backgroundColor: ['#FF9F1C', '#CB997E', '#AF9455', '#FFBF69'],
-        },
-      ],
-    };
-
-    this.doughnutOptions = {
-      cutout: '85%',
-      elements: {
-        arc: {
-          borderRadius: 10,
-        },
-      },
-      tooltip: {
-        trigger: 'item',
-        position: 'center',
-      },
-      legend: {
-        top: '5%',
-        left: 'center',
-        position: 'center',
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-    };
-
     this.formattedYears = [
       { year: 'This Year' },
       { year: 'Last Year' },
       { year: 'Last 3 months' },
     ];
 
-    // this.onSelectingCategory('All CATEGORIES');
     this.getAllcatogryData();
 
     this.getsummaryAndRecomendations('hotel quality');
 
     this.csvallData();
+    this.InitPipe();
   }
 
   getByYearData(event: any) {
@@ -816,5 +774,74 @@ export class CategoriesComponent implements OnInit {
         }
       );
     }
+  }
+
+  private InitPipe(): void {
+    this.myChart = echarts.init(document.getElementById('pipe') as any);
+
+    const option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: function (params: any) {
+          return `${params.name}: ${params.value} (${params.percent}%)`;
+        },
+      },
+      legend: {
+        show: false, // Remove legend
+      },
+      color: [
+        '#FF9F1C',
+        '#CB997E',
+        '#AF9455',
+        '#FFBF69',
+        '#FF9F1C',
+        '#CB997E',
+        '#AF9455',
+        '#FFBF69',
+      ],
+      series: [
+        {
+          name: 'Number of reviews per category',
+          type: 'pie',
+          radius: ['45%', '52%'],
+          avoidLabelOverlap: false,
+          padAngle: 5,
+          itemStyle: {
+            borderRadius: 15,
+          },
+          label: {
+            normal: {
+              show: false,
+              position: 'center',
+            },
+            emphasis: {
+              show: true,
+              formatter: '{c}',
+              textStyle: {
+                fontSize: '30',
+                fontWeight: 'bold',
+              },
+            },
+          },
+          labelLine: {
+            normal: {
+              show: false,
+            },
+          },
+          data: [
+            { value: 200, name: 'Best comment' },
+            { value: 50, name: 'Worst comment' },
+            { value: 100, name: 'Summary comment' },
+            { value: 70, name: 'Location' },
+            { value: 150, name: 'Staff' },
+            { value: 75, name: 'access' },
+            { value: 90, name: 'Accessbility' },
+            { value: 160, name: 'Accommodation' },
+          ],
+        },
+      ],
+    };
+
+    this.myChart.setOption(option);
   }
 }

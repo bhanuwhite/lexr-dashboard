@@ -645,8 +645,6 @@ export class CategoriesComponent implements OnInit {
   }
   /**graph ploting for all */
   graphPloting(dataset: any) {
-    console.log(dataset);
-
     let datasetArr: any[] = [];
     for (let i = 0; i < dataset.length; i++) {
       let jsonData: any = {

@@ -353,7 +353,6 @@ export class DashboardComponent implements OnInit {
         }
 
         monthsData.push(monthValues);
-        console.log(monthsData);
       }
       const daysOfMonth: number[] = Array.from(
         { length: 31 },
@@ -376,7 +375,6 @@ export class DashboardComponent implements OnInit {
             lineTension: 0.5,
           });
         }
-        console.log(allYearsData);
 
         this.data = {
           labels: daysOfMonth,
@@ -388,8 +386,6 @@ export class DashboardComponent implements OnInit {
   }
 
   monthsCheck(month: any) {
-    console.log(month);
-
     switch (month + 1) {
       case 1:
         return 'Jan';

@@ -42,7 +42,7 @@
             </div>
             <div
               class="fs-15 this_week"
-              *ngIf="summaryRecomendations && !loading"
+              *ngIf="summaryRecomendations && !loading && statusTrue === true"
             >
               <div class="my-3" style="font-size: 15px">
                 <span class="this_week">{{
@@ -57,6 +57,12 @@
                   </li>
                 </ul>
               </div>
+            </div>
+            <div
+              class="fs-15 this_week d-flex justify-content-center mt-5"
+              *ngIf="!loading && statusTrue === 404"
+            >
+              No Data Available to this Recommendation
             </div>
           </div>
         </div>
@@ -76,7 +82,12 @@
                 ></p-dropdown>
               </div>
             </div>
-            <p-chart type="line" [data]="dataa" [options]="options"></p-chart>
+            <div *ngIf="categoryLoding" class="d-flex justify-content-center">
+              <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+            </div>
+            <div *ngIf="allCategories">
+              <p-chart type="line" [data]="dataa" [options]="options"></p-chart>
+            </div>
           </div>
         </div>
         <div class="col-lg-5">

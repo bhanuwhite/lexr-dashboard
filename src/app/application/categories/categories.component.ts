@@ -4,6 +4,7 @@ import { SharedService } from 'src/app/shared.service';
 import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
 import { each } from 'chart.js/dist/helpers/helpers.core';
+import { last } from 'rxjs';
 
 @Component({
   selector: 'app-categories',
@@ -27,11 +28,14 @@ export class CategoriesComponent implements OnInit {
   allCategories: any[] = [];
   summaryRecomendations: any = {};
   loading: boolean = true;
+  categoryLoding!: boolean;
   selectedValue: any;
   formattedYears: any[] = [];
   allYearsData: any = {};
   allCategoriesOverTime: any[] = [];
   categorieMonthwise: any[] = [];
+  dataSet: any[] = [];
+  statusTrue: any;
 
   // allCSVData: any = {};
 
@@ -170,66 +174,6 @@ export class CategoriesComponent implements OnInit {
       },
     };
 
-    // Category
-
-    this.dataa = {
-      labels: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'June',
-        'july',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ],
-      datasets: [
-        {
-          label: 'Current Year',
-          backgroundColor: ['#FF9F1C'],
-          data: [10, 30, 40, 20, 55, 30, 60, 30, 35, 45, 40, 80],
-          borderColor: '#FF9F1C',
-          borderWidth: 1,
-          lineTension: 0.5,
-        },
-        {
-          label: 'Last Year',
-          data: [40, 65, 30, 70, 20, 30, 16, 50, 40, 30, 26, 35],
-          backgroundColor: ['#c7bebe'],
-          borderColor: '#c7bebe', // Grey color
-          borderWidth: 1,
-          lineTension: 0.5,
-        },
-      ],
-    };
-
-    this.options = {
-      scales: {
-        x: {
-          stacked: true,
-          grid: {
-            display: false,
-          },
-        },
-        y: {
-          stacked: true,
-        },
-      },
-      plugins: {
-        legend: {
-          labels: {
-            font: {
-              family: 'RotaBlack',
-            },
-          },
-        },
-      },
-    };
-
     //doughnutDataaa
     this.doughnutDataaa = {
       labels: [
@@ -279,7 +223,9 @@ export class CategoriesComponent implements OnInit {
       { year: 'Last 3 months' },
     ];
 
+    // this.onSelectingCategory('All CATEGORIES');
     this.getAllcatogryData();
+
     this.getsummaryAndRecomendations('hotel quality');
 
     this.csvallData();
@@ -302,6 +248,8 @@ export class CategoriesComponent implements OnInit {
       let requiredData: any[] = [];
       for (let year in this.yearData) {
         if (Number(year) === Selectedyear) {
+          //(this.yearData);
+
           for (let i in this.yearData[Selectedyear]) {
             if (i === 'possitiveReviewData') {
               requiredData.push({
@@ -322,6 +270,7 @@ export class CategoriesComponent implements OnInit {
           }
         }
       }
+      //(requiredData);
 
       this.data = {
         labels: [
@@ -365,45 +314,103 @@ export class CategoriesComponent implements OnInit {
       };
     } else {
       let requiredData: any[] = [];
-
-      for (let year in this.yearData) {
-        if (Number(year) === Selectedyear) {
-          for (let i in this.yearData[Selectedyear]) {
-            if (i === 'possitiveReviewData') {
-              requiredData.push({
-                type: 'bar',
-                label: 'Positive Review',
-                backgroundColor: ['#FF9F1C'],
-                data: this.yearData[Selectedyear][i],
+      let currentYear = new Date().getFullYear();
+      let currentmonth = new Date().getMonth();
+      let LastThreeMonthsData: any[] = [];
+      // let
+      for (let year in this.allYearsData) {
+        if (Number(year) === currentYear) {
+          let monthsAdded = 0;
+          for (let x = currentmonth + 1; x > 0 && monthsAdded < 3; x--) {
+            if (
+              this.allYearsData[currentYear] &&
+              this.allYearsData[currentYear][x] !== undefined
+            ) {
+              LastThreeMonthsData.unshift({
+                month: x,
+                possitiveReviewData:
+                  this.allYearsData[currentYear][x].positiveReview,
+                negativeReviewData:
+                  this.allYearsData[currentYear][x].negativeReview,
               });
+              monthsAdded++;
             }
-            if (i === 'negativeReviewData') {
-              requiredData.push({
-                type: 'bar',
-                label: 'Negative Review',
-                backgroundColor: ['#CB997E'],
-                data: this.yearData[Selectedyear][i],
-              });
+          }
+
+          // If necessary, loop through the previous year
+          if (monthsAdded < 3) {
+            for (let x = 12; x > 0 && monthsAdded < 3; x--) {
+              if (
+                this.allYearsData[currentYear - 1] &&
+                this.allYearsData[currentYear - 1][x] !== undefined
+              ) {
+                LastThreeMonthsData.unshift({
+                  month: x,
+                  possitiveReviewData:
+                    this.allYearsData[currentYear - 1][x].positiveReview,
+                  negativeReviewData:
+                    this.allYearsData[currentYear - 1][x].negativeReview,
+                });
+                monthsAdded++;
+              }
             }
           }
         }
       }
 
+      let positiveData = [];
+      let negativeData = [];
+      let months = [];
+
+      for (let i = 0; i < LastThreeMonthsData.length; i++) {
+        for (let item in LastThreeMonthsData[i]) {
+          if (item === 'negativeReviewData') {
+            negativeData.push(LastThreeMonthsData[i][item]);
+          } else if (item === 'possitiveReviewData') {
+            positiveData.push(LastThreeMonthsData[i][item]);
+          } else {
+            months.push(this.monthsCheck(LastThreeMonthsData[i][item]));
+          }
+        }
+      }
+
+      let dataArray = {
+        positiveReview: positiveData,
+        negativeReview: negativeData,
+      };
+      //(months);
+
+      // //(dataArray);
+
+      // for (let i in LastThreeMonthsData) {
+
+      for (let item in dataArray) {
+        // //(item);
+
+        if (item === 'positiveReview') {
+          requiredData.push({
+            type: 'bar',
+            label: 'Positive Review',
+            backgroundColor: ['#FF9F1C'],
+            data: dataArray[item],
+            borderWidth: 0.2,
+          });
+        }
+        if (item === 'negativeReview') {
+          requiredData.push({
+            type: 'bar',
+            label: 'Negative Review',
+            backgroundColor: ['#CB997E'],
+            data: dataArray[item],
+            borderWidth: 0.2,
+          });
+        }
+      }
+
+      //(requiredData);
+
       this.data = {
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'June',
-          'july',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
+        labels: months,
         datasets: requiredData,
       };
 
@@ -439,7 +446,8 @@ export class CategoriesComponent implements OnInit {
         this.allCategories = res.answer;
         this.allCategoriesOverTime = [...this.allCategories].sort();
 
-        this.allCategoriesOverTime.unshift('all');
+        this.allCategoriesOverTime.unshift('All Categories');
+        this.onSelectingCategory('All CATEGORIES');
       },
       (error: any) => {
         alert(error.message);
@@ -456,6 +464,7 @@ export class CategoriesComponent implements OnInit {
       return false;
     }
   }
+
   monthCheck(date: any) {
     const month = new Date(date).getMonth() + 1;
     switch (month) {
@@ -491,6 +500,45 @@ export class CategoriesComponent implements OnInit {
 
       case 12:
         return '12';
+
+      default:
+        return '';
+    }
+  }
+  monthsCheck(month: any) {
+    switch (month) {
+      case 1:
+        return 'Jan';
+
+      case 2:
+        return 'Feb';
+
+      case 3:
+        return 'Mar';
+      case 4:
+        return 'April';
+
+      case 5:
+        return 'May';
+
+      case 6:
+        return 'June';
+      case 7:
+        return 'July';
+
+      case 8:
+        return 'Aug';
+
+      case 9:
+        return 'sep';
+      case 10:
+        return 'Oct';
+
+      case 11:
+        return 'Nov';
+
+      case 12:
+        return 'Dec';
 
       default:
         return '';
@@ -534,41 +582,133 @@ export class CategoriesComponent implements OnInit {
 
   average(data: any) {
     let sum = 0;
-    let count = 0;
-    for (let i = 0; i < data.length; i++) {
-      if (typeof data[i] === 'number' && !isNaN(data[i])) {
-        sum += data[i];
-        count++;
-      }
+
+    let removedUndefinedData: any[] = data.filter((x: any) => x !== undefined);
+
+    for (let i = 0; i < removedUndefinedData.length; i++) {
+      sum += removedUndefinedData[i];
     }
 
-    if (count === 0) {
-      return 0;
-    }
-
-    return Number((sum / count).toFixed(1));
+    return Number((sum / removedUndefinedData.length).toFixed(1));
   }
   chartData(event: string) {
     const data: any[] = this.csvallData();
+
     this.categorieMonthwise = data.map((x) => {
       return {
         month: x.month,
         categories: x.categories.map((y: any) => y[event]),
-        avgValue: this.average(x.categories.map((y: any) => y[event])),
+        avgValue: this.average(x.categories.map((y: any) => y?.[event])),
+        label: event,
       };
     });
   }
+  allDataset(event: any) {
+    const data: any[] = this.csvallData();
 
+    this.categorieMonthwise = data.map((x) => {
+      return {
+        month: x.month,
+        categories: x.categories.map((y: any) => y[event]),
+        avgValue: this.average(x.categories.map((y: any) => y?.[event])),
+        label: event,
+      };
+    });
+
+    const daTa = this.categorieMonthwise.map((x) => {
+      return {
+        label: x?.label,
+        month: x?.month,
+        avgValue: x?.avgValue,
+      };
+    });
+    this.dataSet.push(daTa);
+  }
+  /**selecting value */
   onSelectingCategory(event: any) {
-    this.selectedValue = event.value.toUpperCase();
-    if (this.selectedValue === 'ALL') {
-      this.allCategories.forEach((element) => {
-        this.chartData(element);
-      });
+    this.categoryLoding = false;
+
+    if (event.value) {
+      this.selectedValue = event.value.toUpperCase();
     } else {
-      this.chartData(this.selectedValue);
+      this.selectedValue = event.toUpperCase();
     }
 
+    if (this.selectedValue === 'ALL CATEGORIES') {
+      this.allCategories.forEach((element) => {
+        this.allDataset(element.toUpperCase());
+      });
+
+      this.graphPloting(this.dataSet);
+    } else {
+      this.chartData(this.selectedValue);
+      this.categoriGraphData();
+    }
+  }
+  /**graph ploting for all */
+  graphPloting(dataset: any) {
+    let datasetArr: any[] = [];
+    for (let i = 0; i < dataset.length; i++) {
+      let jsonData: any = {
+        fill: false,
+        tension: 0.4,
+        borderColor: ['#FF9F1C'],
+      };
+      let data: any[] = [];
+      for (let j = 0; j < dataset[i].length; j++) {
+        jsonData['label'] = dataset[i][0]['label'];
+        data.push(dataset[i][j]['avgValue']);
+        jsonData['data'] = data;
+      }
+      datasetArr.push(jsonData);
+    }
+    // //(datasetArr);
+    this.dataa = {
+      labels: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'july',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ],
+      datasets: datasetArr,
+    };
+
+    this.options = {
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          min: 0,
+          max: 1,
+          ticks: {
+            stepSize: 0.1,
+            callback: function (value: any, index: number, values: any) {
+              return ((index + 0) * 0.1).toFixed(1);
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    };
+  }
+  /**graph ploting */
+  categoriGraphData() {
     let month = new Date().getMonth();
 
     let requiredData: any[] = new Array(month).fill(0);
@@ -650,10 +790,13 @@ export class CategoriesComponent implements OnInit {
       this.sharedservice.getsummaryAndRecomendations(event).subscribe(
         (res: any) => {
           this.loading = false;
+          this.statusTrue = res.status;
           this.summaryRecomendations = res.answer;
         },
         (error: any) => {
-          alert(error.message);
+          // alert(error.message);
+          this.statusTrue = error.status;
+
           this.loading = false;
         }
       );
@@ -661,15 +804,15 @@ export class CategoriesComponent implements OnInit {
     if (event.value) {
       this.sharedservice.getsummaryAndRecomendations(event.value).subscribe(
         (res: any) => {
+          this.statusTrue = res.status;
           this.loading = false;
           this.summaryRecomendations = res.answer;
         },
         (error: any) => {
-          alert(error.message);
+          this.statusTrue = error.status;
           this.loading = false;
         }
       );
     }
   }
-  // onSelectingCategoryRecomandation(event: any) {}
 }

@@ -16,8 +16,6 @@ export class CategoriesComponent implements OnInit {
 
   options: any;
   dataa: any;
-  doughnutDataaa: any;
-  doughnutOptions: any;
   optionsss: any;
   bargraphData: any;
   csvData: any;
@@ -204,8 +202,6 @@ export class CategoriesComponent implements OnInit {
       let requiredData: any[] = [];
       for (let year in this.yearData) {
         if (Number(year) === Selectedyear) {
-          //(this.yearData);
-
           for (let i in this.yearData[Selectedyear]) {
             if (i === 'possitiveReviewData') {
               requiredData.push({
@@ -226,7 +222,6 @@ export class CategoriesComponent implements OnInit {
           }
         }
       }
-      //(requiredData);
 
       this.data = {
         labels: [
@@ -273,7 +268,7 @@ export class CategoriesComponent implements OnInit {
       let currentYear = new Date().getFullYear();
       let currentmonth = new Date().getMonth();
       let LastThreeMonthsData: any[] = [];
-      // let
+
       for (let year in this.allYearsData) {
         if (Number(year) === currentYear) {
           let monthsAdded = 0;
@@ -334,15 +329,8 @@ export class CategoriesComponent implements OnInit {
         positiveReview: positiveData,
         negativeReview: negativeData,
       };
-      //(months);
-
-      // //(dataArray);
-
-      // for (let i in LastThreeMonthsData) {
 
       for (let item in dataArray) {
-        // //(item);
-
         if (item === 'positiveReview') {
           requiredData.push({
             type: 'bar',
@@ -362,8 +350,6 @@ export class CategoriesComponent implements OnInit {
           });
         }
       }
-
-      //(requiredData);
 
       this.data = {
         labels: months,
@@ -559,7 +545,7 @@ export class CategoriesComponent implements OnInit {
       };
     });
   }
-  allDataset(event: any) {
+  allCategoriesDataset(event: any) {
     const data: any[] = this.csvallData();
 
     this.categorieMonthwise = data.map((x) => {
@@ -592,17 +578,17 @@ export class CategoriesComponent implements OnInit {
 
     if (this.selectedValue === 'ALL CATEGORIES') {
       this.allCategories.forEach((element) => {
-        this.allDataset(element.toUpperCase());
+        this.allCategoriesDataset(element.toUpperCase());
       });
 
-      this.graphPloting(this.dataSet);
+      this.graphPlotingForAllCategories(this.dataSet);
     } else {
       this.chartData(this.selectedValue);
       this.categoriGraphData();
     }
   }
   /**graph ploting for all */
-  graphPloting(dataset: any) {
+  graphPlotingForAllCategories(dataset: any) {
     let datasetArr: any[] = [];
     for (let i = 0; i < dataset.length; i++) {
       let jsonData: any = {

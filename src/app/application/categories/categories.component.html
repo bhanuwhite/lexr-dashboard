@@ -36,22 +36,22 @@
               </div>
             </div>
             <div
-              class="fs-15 this_week d-flex justify-content-center"
+              class="this_week d-flex justify-content-center"
               *ngIf="loading"
             >
               <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
             </div>
             <div
-              class="fs-15 this_week"
+              class="this_week"
               *ngIf="summaryRecomendations && !loading && statusTrue === true"
             >
-              <div class="my-3" style="font-size: 15px">
+              <div class="my-3">
                 <span class="this_week">{{
                   summaryRecomendations?.summary
                 }}</span>
               </div>
               <hr />
-              <div class="fs-15 this_week">
+              <div class="this_week">
                 <ul>
                   <li *ngFor="let item of summaryRecomendations.recommendation">
                     {{ item.point }}
@@ -60,7 +60,7 @@
               </div>
             </div>
             <div
-              class="fs-15 this_week d-flex justify-content-center mt-5"
+              class="this_week d-flex justify-content-center mt-5"
               *ngIf="!loading && statusTrue === 404"
             >
               No Data Available to this Recommendation
@@ -93,7 +93,7 @@
           </div>
         </div>
         <div class="col-lg-5">
-          <div class="card p-3 top_category">
+          <div class="card p-3 my-0 top_category border-none" style="border-radius: 20px">
             <div class="d-flex justify-content-between mb-2">
               <div class="text-black fw-500 title">Top Category</div>
             </div>
@@ -103,7 +103,7 @@
 
             <div
               id="pipe"
-              style="height: 400px; display: flex; text-align: center"
+              style="height: 600px; display: flex; text-align: center"
             ></div>
           </div>
         </div>

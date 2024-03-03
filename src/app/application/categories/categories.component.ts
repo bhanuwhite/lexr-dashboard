@@ -795,11 +795,11 @@ export class CategoriesComponent implements OnInit {
         {
           name: 'Number of reviews per category',
           type: 'pie',
-          radius: ['80%', '87%'],
+          radius: ['80%', '88%'],
           avoidLabelOverlap: false,
-          padAngle: 5,
+          padAngle: 1,
           itemStyle: {
-            borderRadius: 10,
+            borderRadius: 7,
           },
           label: {
             normal: {

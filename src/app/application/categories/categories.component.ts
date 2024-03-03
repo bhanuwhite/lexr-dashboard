@@ -3,8 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
 import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
-import { each } from 'chart.js/dist/helpers/helpers.core';
-import { last } from 'rxjs';
 import * as echarts from 'echarts';
 @Component({
   selector: 'app-categories',
@@ -329,7 +327,6 @@ export class CategoriesComponent implements OnInit {
         positiveReview: positiveData,
         negativeReview: negativeData,
       };
-
       for (let item in dataArray) {
         if (item === 'positiveReview') {
           requiredData.push({
@@ -789,11 +786,11 @@ export class CategoriesComponent implements OnInit {
         {
           name: 'Number of reviews per category',
           type: 'pie',
-          radius: ['45%', '52%'],
+          radius: ['80%', '88%'],
           avoidLabelOverlap: false,
-          padAngle: 5,
+          padAngle: 1,
           itemStyle: {
-            borderRadius: 15,
+            borderRadius: 7,
           },
           label: {
             normal: {
@@ -804,7 +801,7 @@ export class CategoriesComponent implements OnInit {
               show: true,
               formatter: '{c}',
               textStyle: {
-                fontSize: '30',
+                fontSize: '40',
                 fontWeight: 'bold',
               },
             },

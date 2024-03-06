@@ -1,0 +1,6 @@
+{
+  "/": {
+    "target": "https://api.feedback.dataisland.ai/",
+    "secure": false
+  }
+}

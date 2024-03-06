@@ -434,7 +434,8 @@ export class CategoriesComponent implements OnInit {
       }
     );
   }
-  getsummaryAndRecomendations(event: summaryEvent) {
+
+  getsummaryAndRecomendations(event: any) {
     this.loading = true;
     let selectedValue: string = '';
     if (event.value) {
@@ -443,13 +444,11 @@ export class CategoriesComponent implements OnInit {
 
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {
-        // const summaryResponce = res as ResponseData;
-
         this.statusTrue = res.status;
         this.loading = false;
-        if (res.answer.length > 0) {
-          this.summaryRecomendations = res.answer;
-        }
+        // if (res.answer.length > 0) {
+        this.summaryRecomendations = res.answer;
+        // }
       },
       (error: any) => {
         this.statusTrue = error.status;
@@ -611,6 +610,7 @@ export class CategoriesComponent implements OnInit {
     }
     return Number((sum / removedUndefinedData.length).toFixed(1));
   }
+
   selectedDataFilter(event: string, selectedYear1: number) {
     const data: any[] = this.csvallData();
 
@@ -639,6 +639,7 @@ export class CategoriesComponent implements OnInit {
       };
     });
   }
+
   /**selecting value */
   onSelectingCategory(event: summaryEvent) {
     this.categoryLoding = false;
@@ -819,6 +820,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   private InitPipe(): void {
+    console.log(this.csvData);
     this.myChart = echarts.init(document.getElementById('pipe') as any);
 
     const option = {
@@ -871,14 +873,31 @@ export class CategoriesComponent implements OnInit {
             },
           },
           data: [
-            { value: 200, name: 'Best comment' },
-            { value: 50, name: 'Worst comment' },
-            { value: 100, name: 'Summary comment' },
-            { value: 70, name: 'Location' },
-            { value: 150, name: 'Staff' },
-            { value: 75, name: 'access' },
-            { value: 90, name: 'Accessbility' },
-            { value: 160, name: 'Accommodation' },
+            { value: 31, name: 'Service Quality' },
+            { value: 32, name: 'Cleanliness' },
+            { value: 19, name: 'Room Comfort' },
+            { value: 40, name: 'Amenities' },
+            { value: 23, name: 'Food and Dining' },
+            { value: 15, name: 'Location' },
+            { value: 19, name: 'Wi-Fi/Internet Quality' },
+            { value: 21, name: 'Value for Money' },
+            { value: 10, name: 'FamilyFriendliness' },
+            { value: 11, name: 'Accessibility Features' },
+            { value: 9, name: 'Business Facilities' },
+            { value: 21, name: 'Safety and Security' },
+            { value: 10, name: 'Pet-Friendly Policies' },
+            { value: 6, name: 'Noise Level' },
+            { value: 10, name: 'Environmental Practices' },
+            { value: 6, name: 'Check-in/Check-out Process' },
+            { value: 5, name: 'Bathroom Quality' },
+            { value: 9, name: 'Views and Scenery' },
+            { value: 21, name: 'Parking and Transportation Options' },
+            { value: 25, name: 'Cultural and Local Experiences' },
+            { value: 18, name: 'Health and Wellness Facilities' },
+            { value: 10, name: 'In-Room Amenities and Technology' },
+            { value: 11, name: 'Social and Common Spaces' },
+            { value: 12, name: 'Personalization and Guest Services' },
+            { value: 11, name: 'Meeting and Event Facilities' },
           ],
         },
       ],

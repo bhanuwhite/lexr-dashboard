@@ -43,7 +43,7 @@
             </div>
             <div
               class="this_week"
-              *ngIf="summaryRecomendations && !loading && statusTrue === true"
+              *ngIf="summaryRecomendations && !loading"
             >
               <div class="my-3">
                 <span class="this_week">{{
@@ -64,8 +64,7 @@
               *ngIf="
                 !summaryRecomendations.summary &&
                 !loading &&
-                statusTrue === true
-              "
+                statusTrue === true"
             >
               No Data Available to this Recommendation
             </div>

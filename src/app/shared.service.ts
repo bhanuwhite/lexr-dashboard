@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
-  // headerName: any;
 
-  base_url: String = 'http://139.59.39.115:5000';
+  base_url: String = 'https://api.feedback.dataisland.ai';
 
   constructor(private http: HttpClient) {}
 

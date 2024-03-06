@@ -4,35 +4,52 @@ import { SharedService } from 'src/app/shared.service';
 import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
 import * as echarts from 'echarts';
+import { ECharts } from 'echarts';
+import {
+  DropdownChangeEvent,
+  Options,
+  categorieMonthwise,
+  graphData,
+  summaryRecomendations,
+  yearData,
+  years,
+  yearsData,
+} from '../interfaces/categories';
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
 })
 export class CategoriesComponent implements OnInit {
-  data: any;
-
-  options: any;
-  dataa: any;
-  optionsss: any;
-  bargraphData: any;
+  data!: graphData;
+  options!: Options;
+  dataa!: graphData;
+  optionsss!: Options;
+  bargraphData!: Options;
   csvData: any;
   possitiveReviewData: number[] = [];
   negativeReviewData: number[] = [];
   neutralReview: number = 0;
-  yearData: any = {};
-  allCategories: any[] = [];
-  summaryRecomendations: any = {};
+  yearData: yearData = {};
+  allCategories: string[] = [];
+  summaryRecomendations: summaryRecomendations = {
+    summary: '',
+    recomendation: [],
+  };
   loading: boolean = true;
   categoryLoding!: boolean;
-  selectedValue: any;
-  formattedYears: any[] = [];
-  allYearsData: any = {};
-  allCategoriesOverTime: any[] = [];
-  categorieMonthwise: any[] = [];
-  dataSet: any[] = [];
-  statusTrue: any;
-  private myChart: any = null;
+  selectedValue!: string;
+  formattedYears: years[] = [];
+  allYearsData: yearsData = {};
+  allCategoriesOverTime: string[] = [];
+  categorieMonthwise: categorieMonthwise[] = [];
+  threeMonthsDataSet: categorieMonthwise[] = [];
+  statusTrue!: string | number | boolean;
+  private myChart: ECharts | null = null;
+
+  selectedYear: years = {
+    year: '',
+  };
 
   constructor(
     private sharedservice: SharedService,
@@ -103,6 +120,7 @@ export class CategoriesComponent implements OnInit {
             }
           }
         }
+
         let currentYear = new Date().getFullYear();
         for (let year in this.yearData) {
           if (Number(year) === currentYear) {
@@ -177,8 +195,6 @@ export class CategoriesComponent implements OnInit {
 
     this.getAllcatogryData();
 
-    this.getsummaryAndRecomendations('hotel quality');
-
     this.csvallData();
     this.InitPipe();
   }
@@ -198,6 +214,7 @@ export class CategoriesComponent implements OnInit {
       Selectedyear === new Date().getFullYear()
     ) {
       let requiredData: any[] = [];
+
       for (let year in this.yearData) {
         if (Number(year) === Selectedyear) {
           for (let i in this.yearData[Selectedyear]) {
@@ -382,26 +399,48 @@ export class CategoriesComponent implements OnInit {
   getAllcatogryData() {
     this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
-        this.allCategories = res.answer;
-        this.allCategoriesOverTime = [...this.allCategories].sort();
+        // this.allCategories = res.answer;
+        this.allCategoriesOverTime = res.answer.sort();
 
-        this.allCategoriesOverTime.unshift('All Categories');
-        this.onSelectingCategory('All CATEGORIES');
+        let firstElement = this.allCategoriesOverTime[0];
+
+        this.onSelectingCategory(firstElement);
+        this.getsummaryAndRecomendations(firstElement);
+      },
+      (error: Error) => {
+        alert(error.message);
+      }
+    );
+  }
+  getsummaryAndRecomendations(event: any) {
+    this.loading = true;
+    let selectedValue: string = '';
+    if (event.value) {
+      selectedValue = event.value;
+    } else {
+      selectedValue = event;
+    }
+
+    this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
+      (res: any) => {
+        console.log(res);
+
+        this.statusTrue = res.status;
+        this.loading = false;
+        if (res.answer.length > 0) {
+          this.summaryRecomendations = res.answer;
+        }
       },
       (error: any) => {
-        alert(error.message);
+        this.statusTrue = error.status;
+        this.loading = false;
       }
     );
   }
 
   yearCheck(date: any) {
     const year = new Date(date).getFullYear();
-    const currentYear = new Date().getFullYear();
-    if (Number(year) == currentYear) {
-      return true;
-    } else {
-      return false;
-    }
+    return year;
   }
 
   monthCheck(date: any) {
@@ -444,7 +483,7 @@ export class CategoriesComponent implements OnInit {
         return '';
     }
   }
-  monthsCheck(month: any) {
+  monthsCheck(month: number) {
     switch (month) {
       case 1:
         return 'Jan';
@@ -485,67 +524,87 @@ export class CategoriesComponent implements OnInit {
   }
 
   csvallData() {
-    let data2024 = this.csvData?.filter((x: any) => this.yearCheck(x.date));
-    let monthWiseData = data2024?.map((x: any) => {
+    let allYearsData = this.csvData?.map((x: any) => {
+      const year = this.yearCheck(x.date);
+      const month = this.monthCheck(x.date);
+      const categories = x.categories
+        ? JSON.parse(x.categories.replace(/'/g, '"'))
+        : {};
+
       return {
-        month: this.monthCheck(x?.date),
-        categories: JSON.parse(x?.categories.replace(/'/g, '"')),
+        year: year,
+        month: month,
+        categories: categories,
       };
     });
-
     let properData: any[] = [];
-    let jsonMonth: any = {};
+    let jsonYearMonth: any = {};
 
-    for (let i = 0; i < monthWiseData?.length; i++) {
-      const month = monthWiseData[i].month;
+    for (let i = 0; i < allYearsData?.length; i++) {
+      const year = allYearsData[i].year;
+      const month = allYearsData[i].month;
+      const categories = allYearsData[i].categories;
 
-      const categories = monthWiseData[i].categories;
       let modifyObjectKey = Object.entries(categories);
       modifyObjectKey.map((x: any) => (x[0] = x[0].toUpperCase()));
 
-      let modify = Object.fromEntries(modifyObjectKey);
-      if (!jsonMonth[month]) {
-        jsonMonth[month] = { month, categories: [modify] };
+      let modifyCategories = Object.fromEntries(modifyObjectKey);
+
+      if (!jsonYearMonth[year]) {
+        jsonYearMonth[year] = {};
+      }
+
+      if (!jsonYearMonth[year][month]) {
+        jsonYearMonth[year][month] = {
+          year,
+          month,
+          categories: [modifyCategories],
+        };
       } else {
-        jsonMonth[month].categories.push(modify);
+        jsonYearMonth[year][month].categories.push(modifyCategories);
       }
     }
 
-    for (let month in jsonMonth) {
-      properData.push(jsonMonth[month]);
+    for (let year in jsonYearMonth) {
+      for (let month in jsonYearMonth[year]) {
+        properData.push(jsonYearMonth[year][month]);
+      }
     }
-    let jsonObjectData = Object.values(properData);
 
+    let jsonObjectData = Object.values(properData);
     return jsonObjectData;
   }
 
   average(data: any) {
     let sum = 0;
-
     let removedUndefinedData: any[] = data.filter((x: any) => x !== undefined);
 
-    for (let i = 0; i < removedUndefinedData.length; i++) {
-      sum += removedUndefinedData[i];
+    if (removedUndefinedData) {
+      for (let i = 0; i < removedUndefinedData.length; i++) {
+        sum += removedUndefinedData[i];
+      }
     }
-
     return Number((sum / removedUndefinedData.length).toFixed(1));
   }
-  chartData(event: string) {
+  selectedDataFilter(event: string, selectedYear1: number) {
     const data: any[] = this.csvallData();
 
-    this.categorieMonthwise = data.map((x) => {
-      return {
+    this.categorieMonthwise = data
+      .filter((x) => x.year === selectedYear1)
+      .map((x) => ({
         month: x.month,
         categories: x.categories.map((y: any) => y[event]),
         avgValue: this.average(x.categories.map((y: any) => y?.[event])),
         label: event,
-      };
-    });
+      }));
   }
-  allCategoriesDataset(event: any) {
-    const data: any[] = this.csvallData();
 
-    this.categorieMonthwise = data.map((x) => {
+  LastThreeMonthsData(event: string) {
+    const data = this.csvallData();
+
+    let last12Objects = data.splice(-4);
+
+    this.threeMonthsDataSet = last12Objects.map((x: any) => {
       return {
         month: x.month,
         categories: x.categories.map((y: any) => y[event]),
@@ -553,15 +612,7 @@ export class CategoriesComponent implements OnInit {
         label: event,
       };
     });
-
-    const daTa = this.categorieMonthwise.map((x) => {
-      return {
-        label: x?.label,
-        month: x?.month,
-        avgValue: x?.avgValue,
-      };
-    });
-    this.dataSet.push(daTa);
+    console.log(this.threeMonthsDataSet);
   }
   /**selecting value */
   onSelectingCategory(event: any) {
@@ -572,55 +623,66 @@ export class CategoriesComponent implements OnInit {
     } else {
       this.selectedValue = event.toUpperCase();
     }
-
-    if (this.selectedValue === 'ALL CATEGORIES') {
-      this.allCategories.forEach((element) => {
-        this.allCategoriesDataset(element.toUpperCase());
-      });
-
-      this.graphPlotingForAllCategories(this.dataSet);
+    if (this.selectedYear.year === 'This Year') {
+      const currentYear = new Date().getFullYear();
+      this.selectedDataFilter(this.selectedValue, currentYear);
+      this.selectedCategoriGraphData();
+    } else if (this.selectedYear.year === 'Last Year') {
+      const year = new Date().getFullYear() - 1;
+      this.selectedDataFilter(this.selectedValue, year);
+      this.selectedCategoriGraphData();
     } else {
-      this.chartData(this.selectedValue);
-      this.categoriGraphData();
+      this.LastThreeMonthsData(this.selectedValue);
+      this.graphPlotingForLast3Months(this.threeMonthsDataSet);
     }
   }
-  /**graph ploting for all */
-  graphPlotingForAllCategories(dataset: any) {
+
+  /**Getting data based on years */
+  getCategoriesByYear(event: DropdownChangeEvent) {
+    if (event.value.year === 'This Year') {
+      let currentYear = new Date().getFullYear();
+      this.selectedDataFilter(this.selectedValue, currentYear);
+      this.selectedCategoriGraphData();
+    } else if (event.value.year === 'Last Year') {
+      let previousYear = new Date().getFullYear() - 1;
+      this.selectedDataFilter(this.selectedValue, previousYear);
+      this.selectedCategoriGraphData();
+    } else {
+      this.LastThreeMonthsData(this.selectedValue);
+      this.graphPlotingForLast3Months(this.threeMonthsDataSet);
+    }
+  }
+
+  /**graph ploting for Last 12 month  */
+  graphPlotingForLast3Months(dataset: categorieMonthwise[]) {
     let datasetArr: any[] = [];
-    for (let i = 0; i < dataset.length; i++) {
-      let jsonData: any = {
+    let month: any[] = [];
+
+    let label = dataset[0]['label'];
+    let data: any[] = [];
+    let jsonData: any = {};
+    for (let i = 0; i < dataset.length - 1; i++) {
+      jsonData = {
         fill: false,
         tension: 0.4,
         borderColor: ['#FF9F1C'],
+        label: label,
       };
-      let data: any[] = [];
-      for (let j = 0; j < dataset[i].length; j++) {
-        jsonData['label'] = dataset[i][0]['label'];
-        if (!Number.isNaN(dataset[i][j]['avgValue'])) {
-          data.push(dataset[i][j]['avgValue']);
-        } else {
-          data.push(0);
-        }
-        jsonData['data'] = data;
+
+      if (!Number.isNaN(dataset[i]['avgValue'])) {
+        data.push(dataset[i]['avgValue']);
+      } else {
+        data.push(0);
       }
-      datasetArr.push(jsonData);
+
+      month.push(this.monthsCheck(Number(dataset[i]['month'])));
     }
-    // //(datasetArr);
+    jsonData['data'] = data;
+    datasetArr.push(jsonData);
+    console.log(datasetArr);
+
     this.dataa = {
-      labels: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'June',
-        'july',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ],
+      labels: month,
       datasets: datasetArr,
     };
 
@@ -650,8 +712,9 @@ export class CategoriesComponent implements OnInit {
       },
     };
   }
+
   /**graph ploting */
-  categoriGraphData() {
+  selectedCategoriGraphData() {
     let month = new Date().getMonth() - 1;
 
     let requiredData: any[] = new Array(month).fill(0);
@@ -660,6 +723,8 @@ export class CategoriesComponent implements OnInit {
       const monthIndex = x.month - 1;
       if (x.avgValue) {
         requiredData[monthIndex] = Number(x.avgValue);
+      } else {
+        requiredData[monthIndex] = 0;
       }
     });
     for (let i = 0; i <= month; i++) {
@@ -724,39 +789,6 @@ export class CategoriesComponent implements OnInit {
         },
       },
     };
-  }
-
-  getsummaryAndRecomendations(event: any) {
-    this.loading = true;
-
-    if (event == 'hotel quality') {
-      this.sharedservice.getsummaryAndRecomendations(event).subscribe(
-        (res: any) => {
-          this.loading = false;
-          this.statusTrue = res.status;
-          this.summaryRecomendations = res.answer;
-        },
-        (error: any) => {
-          // alert(error.message);
-          this.statusTrue = error.status;
-
-          this.loading = false;
-        }
-      );
-    }
-    if (event.value) {
-      this.sharedservice.getsummaryAndRecomendations(event.value).subscribe(
-        (res: any) => {
-          this.statusTrue = res.status;
-          this.loading = false;
-          this.summaryRecomendations = res.answer;
-        },
-        (error: any) => {
-          this.statusTrue = error.status;
-          this.loading = false;
-        }
-      );
-    }
   }
 
   private InitPipe(): void {

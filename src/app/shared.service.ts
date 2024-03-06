@@ -30,8 +30,7 @@ export class SharedService {
     return this.http.get(url);
   }
   public getsummaryAndRecomendations(item: string) {
-    // let
-    let endPoint = `category_recomendations/${item}`;
+    let endPoint = `category_recomendations/?input_category=${item}`;
     const url = `${this.base_url}/${endPoint}`;
     return this.http.get(url);
   }

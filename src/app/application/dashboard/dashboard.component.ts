@@ -6,32 +6,42 @@ import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
 import { SharedService } from 'src/app/shared.service';
 
+import {
+  Options,
+  Review,
+  allYearsData,
+  categoryData,
+  dataset,
+  graphData,
+  yearsAllData,
+  yearsArray,
+  DropdownChangeEvent,
+  yearsAllDataFormonth,
+  YearData,
+} from '../interfaces/dashboard';
+import { number } from 'echarts';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  step: number = 2;
   visibleSidebar1!: boolean;
-  items: any;
-  public TechCat: any;
-  data: any;
-  cities: any[] = [];
-  selectedCity: any;
-  options: any;
-  Categories: any[] = [];
-  csvData: any;
+  data!: graphData;
+  options!: Options;
+  allCategories: string[] = [];
+  csvData: any[] = [];
   reviewsCount: number = 0;
   uniqueCountries: Set<string> = new Set();
   countryCount: number = 0;
   possitiveCount: number = 0;
   negativeCount: number = 0;
   neutral: number = 0;
-  meanSentimentScore: any = 0;
-  formattedYears: any[] = [];
-  allYearsData: any = {};
-  currentYear: any = 0;
+  meanSentimentScore: number = 0;
+  formattedYears: yearsArray[] = [];
+  allYearsData: allYearsData = {};
+  currentYear: number = 0;
 
   constructor(
     private sharedservice: SharedService,
@@ -45,8 +55,8 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    let YearGraphData: any = [];
-    let years: any = {};
+    let YearGraphData: string[] = [];
+    let years: yearsAllData = {};
 
     let yearData: any = {};
 
@@ -54,26 +64,32 @@ export class DashboardComponent implements OnInit {
       .get('assets/review_with_sentiments.csv', { responseType: 'text' })
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
+        console.log(this.csvData);
 
-        let requiredDataset: any = [];
+        let requiredDataset: dataset[] = [];
 
-        this.csvData.forEach((each: any, index: number) => {
+        this.csvData.forEach((each: Review) => {
           const year = new Date(each.date).getFullYear();
           const date = new Date(each.date).getMonth() + 1;
           const dateData = new Date(each.date).getDate();
 
           if (years[year]) {
             if (years[year][date]) {
-              years[year][date] = [...years[year][date], each.sentiment_score];
+              years[year][date] = [
+                ...years[year][date],
+                Number(each.sentiment_score),
+              ];
             } else {
-              years[year][date] = [each.sentiment_score];
+              years[year][date] = [Number(each.sentiment_score)];
             }
           } else {
             years[year] = { [date]: [each.sentiment_score] };
           }
         });
 
-        let zeroArray: any = [];
+        interface NumericArray extends Array<number | undefined | string> {}
+
+        let zeroArray: NumericArray = [];
 
         for (let i = 1; i <= 12; i++) {
           zeroArray.push(0);
@@ -86,7 +102,7 @@ export class DashboardComponent implements OnInit {
             let sum = 0;
             let count = 0;
 
-            years[year][x].forEach((each: any) => {
+            years[year][x].forEach((each: number | string) => {
               if (each !== 0) {
                 sum += Number(each);
               } else {
@@ -155,7 +171,9 @@ export class DashboardComponent implements OnInit {
           if (this.csvData[i].review && this.csvData[i].review.trim() !== '') {
             this.reviewsCount++;
           }
-          const sentimentScore = parseFloat(this.csvData[i].sentiment_score);
+          const sentimentScore = parseFloat(
+            String(this.csvData[i].sentiment_score)
+          );
 
           if (!isNaN(sentimentScore) && sentimentScore !== 0) {
             sum += sentimentScore;
@@ -163,10 +181,9 @@ export class DashboardComponent implements OnInit {
             count++;
           }
 
-          this.meanSentimentScore = (
-            sum /
-            (this.csvData.length - count)
-          ).toFixed(2);
+          this.meanSentimentScore = Number(
+            (sum / (this.csvData.length - count)).toFixed(2)
+          );
 
           if (this.csvData[i].country) {
             this.uniqueCountries.add(this.csvData[i].country.toLowerCase());
@@ -195,7 +212,7 @@ export class DashboardComponent implements OnInit {
           max: 1,
           ticks: {
             stepSize: 0.1,
-            callback: function (value: any, index: number, values: any) {
+            callback: function (value: number, index: number, values: number) {
               return ((index + 0) * 0.1).toFixed(1);
             },
           },
@@ -217,33 +234,28 @@ export class DashboardComponent implements OnInit {
       },
     };
 
-    this.cities = [
-      { name: 'All Category', code: 'NY' },
-      { name: 'Los Angeles', code: 'LA' },
-      { name: 'Chicago', code: 'CH' },
-    ];
-
-    this.Categories = [
-      { name: 'swimming pool' },
-      { name: 'tranquility' },
-      { name: 'staff' },
-      { name: 'Cleanliness' },
-      { name: 'Facilities' },
-      { name: 'Location' },
-      { name: 'Breakfast' },
-      { name: 'food' },
-      { name: 'Atmosphere' },
-    ];
+    this.getAllcatogryData();
 
     this.formattedYears = [{ year: 'This Year' }, { year: 'This Month' }];
 
     YearGraphData = ['All'];
   }
 
-  monthsData: any = [];
+  getAllcatogryData() {
+    this.sharedservice.getAllCategories().subscribe(
+      (res: any) => {
+        console.log(res);
+        // Sort the answer array if it exists, or assign an empty array otherwise
+        this.allCategories = res?.answer?.sort() || [];
+      },
+      (error: Error) => {
+        alert(error.message);
+      }
+    );
+  }
 
-  onSelectingYear(event: any) {
-    let allYearsData: any = [];
+  onSelectingYear(event: DropdownChangeEvent) {
+    let allYearsData: dataset[] = [];
 
     if (event.value.year === 'This Year') {
       for (let i in this.allYearsData) {
@@ -286,7 +298,7 @@ export class DashboardComponent implements OnInit {
         };
       }
     } else {
-      const years: any = {};
+      let years: any = {};
 
       this.csvData.forEach((each: any) => {
         const year = new Date(each.date).getFullYear();
@@ -310,6 +322,8 @@ export class DashboardComponent implements OnInit {
 
       Object.keys(years).forEach((year: any) => {
         Object.keys(years[year]).forEach((month: any) => {
+          console.log(month);
+
           const daysInMonth = new Date(year, month, 0).getDate();
           for (let date = 1; date <= daysInMonth; date++) {
             if (!years[year][month][date]) {
@@ -317,7 +331,7 @@ export class DashboardComponent implements OnInit {
             } else {
               const scores = years[year][month][date];
               const averageScore =
-                scores.reduce((acc: any, curr: any) => acc + curr, 0) /
+                scores.reduce((acc: number, curr: number) => acc + curr, 0) /
                 scores.length;
               years[year][month][date] = averageScore.toFixed(2);
             }
@@ -325,12 +339,12 @@ export class DashboardComponent implements OnInit {
         });
       });
 
-      const monthsData: any[] = [];
+      const monthsData: number[][] = [];
       const currentmonth = new Date().getMonth() + 1;
       const today = new Date().getDate();
 
       for (let month in years[this.currentYear]) {
-        const monthValues: any[] = [];
+        const monthValues: number[] = [];
 
         if (Number(month) === currentmonth) {
           for (let day = 1; day <= 31; day++) {
@@ -351,7 +365,6 @@ export class DashboardComponent implements OnInit {
             }
           }
         }
-
         monthsData.push(monthValues);
       }
       const daysOfMonth: number[] = Array.from(
@@ -385,7 +398,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  monthsCheck(month: any) {
+  monthsCheck(month: number) {
     switch (month + 1) {
       case 1:
         return 'Jan';

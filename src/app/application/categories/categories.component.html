@@ -29,7 +29,7 @@
               </div>
               <div class="d-flex gap-2 dropdown-div">
                 <p-dropdown
-                  [options]="allCategories"
+                  [options]="allCategoriesOverTime"
                   (onChange)="getsummaryAndRecomendations($event)"
                   class="getsummary_details_drpdn"
                 ></p-dropdown>
@@ -47,13 +47,13 @@
             >
               <div class="my-3">
                 <span class="this_week">{{
-                  summaryRecomendations?.summary
+                  summaryRecomendations.summary
                 }}</span>
               </div>
               <hr />
               <div class="this_week">
                 <ul>
-                  <li *ngFor="let item of summaryRecomendations.recommendation">
+                  <li *ngFor="let item of summaryRecomendations?.recomendation">
                     {{ item.point }}
                   </li>
                 </ul>
@@ -61,7 +61,11 @@
             </div>
             <div
               class="this_week d-flex justify-content-center mt-5"
-              *ngIf="!loading && statusTrue === 404"
+              *ngIf="
+                !summaryRecomendations.summary &&
+                !loading &&
+                statusTrue === true
+              "
             >
               No Data Available to this Recommendation
             </div>
@@ -76,24 +80,33 @@
           >
             <div class="d-flex flex-wrap justify-content-between mb-3">
               <div class="text-black fw-500 title">Category over Time</div>
-              <div class="d-flex gap-2 dropdown-div">
+              <div class="d-flex gap-3 dropdown-div">
                 <p-dropdown
                   [options]="allCategoriesOverTime"
                   (onChange)="onSelectingCategory($event)"
                   class="getsummary_details_drpdn"
+                ></p-dropdown>
+                <p-dropdown
+                  optionLabel="year"
+                  [options]="formattedYears"
+                  (onChange)="getCategoriesByYear($event)"
+                  [(ngModel)]="selectedYear"
                 ></p-dropdown>
               </div>
             </div>
             <div *ngIf="categoryLoding" class="d-flex justify-content-center">
               <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
             </div>
-            <div *ngIf="allCategories">
+            <div *ngIf="allCategoriesOverTime">
               <p-chart type="line" [data]="dataa" [options]="options"></p-chart>
             </div>
           </div>
         </div>
         <div class="col-lg-5">
-          <div class="card p-3 my-0 top_category border-none" style="border-radius: 20px">
+          <div
+            class="card p-3 my-0 top_category border-none"
+            style="border-radius: 20px"
+          >
             <div class="d-flex justify-content-between mb-2">
               <div class="text-black fw-500 title">Top Category</div>
             </div>

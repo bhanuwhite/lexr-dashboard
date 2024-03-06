@@ -7,13 +7,22 @@ import * as echarts from 'echarts';
 import { ECharts } from 'echarts';
 import {
   DropdownChangeEvent,
+  LastThreeMonthsForReview,
   Options,
+  ResponseData,
+  DataForAllYears,
+  ReviewData,
   categorieMonthwise,
+  categoryResponce,
+  datasetData,
   graphData,
+  summaryEvent,
   summaryRecomendations,
   yearData,
+  yearDataForSentimentGraph,
   years,
   yearsData,
+  avgDataForCategories,
 } from '../interfaces/categories';
 @Component({
   selector: 'app-categories',
@@ -75,6 +84,8 @@ export class CategoriesComponent implements OnInit {
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
 
+        console.log(this.csvData);
+
         this.csvData.forEach((each: any) => {
           const year = new Date(each.date).getFullYear();
           const date = new Date(each.date).getMonth() + 1;
@@ -96,7 +107,7 @@ export class CategoriesComponent implements OnInit {
           }
         });
 
-        let requiredData: any[] = [];
+        let requiredData: datasetData[] = [];
 
         this.allYearsData = years;
 
@@ -199,7 +210,7 @@ export class CategoriesComponent implements OnInit {
     this.InitPipe();
   }
 
-  getByYearData(event: any) {
+  getByYearData(event: yearDataForSentimentGraph) {
     let Selectedyear;
     if (event.value.year === 'This Year') {
       Selectedyear = new Date().getFullYear();
@@ -213,7 +224,7 @@ export class CategoriesComponent implements OnInit {
       Selectedyear === new Date().getFullYear() - 1 ||
       Selectedyear === new Date().getFullYear()
     ) {
-      let requiredData: any[] = [];
+      let requiredData: datasetData[] = [];
 
       for (let year in this.yearData) {
         if (Number(year) === Selectedyear) {
@@ -279,10 +290,10 @@ export class CategoriesComponent implements OnInit {
         },
       };
     } else {
-      let requiredData: any[] = [];
+      let requiredData: datasetData[] = [];
       let currentYear = new Date().getFullYear();
       let currentmonth = new Date().getMonth();
-      let LastThreeMonthsData: any[] = [];
+      let LastThreeMonthsDataForReview: LastThreeMonthsForReview[] = [];
 
       for (let year in this.allYearsData) {
         if (Number(year) === currentYear) {
@@ -292,12 +303,13 @@ export class CategoriesComponent implements OnInit {
               this.allYearsData[currentYear] &&
               this.allYearsData[currentYear][x] !== undefined
             ) {
-              LastThreeMonthsData.unshift({
+              LastThreeMonthsDataForReview.unshift({
                 month: x,
                 possitiveReviewData:
                   this.allYearsData[currentYear][x].positiveReview,
                 negativeReviewData:
                   this.allYearsData[currentYear][x].negativeReview,
+                positiveReviewData: 0,
               });
               monthsAdded++;
             }
@@ -310,12 +322,13 @@ export class CategoriesComponent implements OnInit {
                 this.allYearsData[currentYear - 1] &&
                 this.allYearsData[currentYear - 1][x] !== undefined
               ) {
-                LastThreeMonthsData.unshift({
+                LastThreeMonthsDataForReview.unshift({
                   month: x,
                   possitiveReviewData:
                     this.allYearsData[currentYear - 1][x].positiveReview,
                   negativeReviewData:
                     this.allYearsData[currentYear - 1][x].negativeReview,
+                  positiveReviewData: 0,
                 });
                 monthsAdded++;
               }
@@ -324,18 +337,22 @@ export class CategoriesComponent implements OnInit {
         }
       }
 
+      console.log(LastThreeMonthsDataForReview);
+
       let positiveData = [];
       let negativeData = [];
       let months = [];
 
-      for (let i = 0; i < LastThreeMonthsData.length; i++) {
-        for (let item in LastThreeMonthsData[i]) {
+      for (let i = 0; i < LastThreeMonthsDataForReview.length; i++) {
+        for (let item in LastThreeMonthsDataForReview[i]) {
           if (item === 'negativeReviewData') {
-            negativeData.push(LastThreeMonthsData[i][item]);
+            negativeData.push(LastThreeMonthsDataForReview[i][item]);
           } else if (item === 'possitiveReviewData') {
-            positiveData.push(LastThreeMonthsData[i][item]);
+            positiveData.push(LastThreeMonthsDataForReview[i][item]);
           } else {
-            months.push(this.monthsCheck(LastThreeMonthsData[i][item]));
+            months.push(
+              this.monthsCheck(LastThreeMonthsDataForReview[i][item])
+            );
           }
         }
       }
@@ -399,31 +416,34 @@ export class CategoriesComponent implements OnInit {
   getAllcatogryData() {
     this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
-        // this.allCategories = res.answer;
-        this.allCategoriesOverTime = res.answer.sort();
+        const categoryResponce = res as categoryResponce;
+
+        this.allCategoriesOverTime = categoryResponce.answer.sort();
 
         let firstElement = this.allCategoriesOverTime[0];
 
-        this.onSelectingCategory(firstElement);
-        this.getsummaryAndRecomendations(firstElement);
+        let firstElementBody = {
+          value: firstElement,
+        };
+
+        this.onSelectingCategory(firstElementBody);
+        this.getsummaryAndRecomendations(firstElementBody);
       },
       (error: Error) => {
         alert(error.message);
       }
     );
   }
-  getsummaryAndRecomendations(event: any) {
+  getsummaryAndRecomendations(event: summaryEvent) {
     this.loading = true;
     let selectedValue: string = '';
     if (event.value) {
       selectedValue = event.value;
-    } else {
-      selectedValue = event;
     }
 
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {
-        console.log(res);
+        // const summaryResponce = res as ResponseData;
 
         this.statusTrue = res.status;
         this.loading = false;
@@ -438,12 +458,12 @@ export class CategoriesComponent implements OnInit {
     );
   }
 
-  yearCheck(date: any) {
+  yearCheck(date: Date) {
     const year = new Date(date).getFullYear();
     return year;
   }
 
-  monthCheck(date: any) {
+  monthCheck(date: Date) {
     const month = new Date(date).getMonth() + 1;
     switch (month) {
       case 1:
@@ -524,11 +544,11 @@ export class CategoriesComponent implements OnInit {
   }
 
   csvallData() {
-    let allYearsData = this.csvData?.map((x: any) => {
+    let allYearsData = this.csvData?.map((x: ReviewData) => {
       const year = this.yearCheck(x.date);
       const month = this.monthCheck(x.date);
       const categories = x.categories
-        ? JSON.parse(x.categories.replace(/'/g, '"'))
+        ? JSON.parse(String(x.categories).replace(/'/g, '"'))
         : {};
 
       return {
@@ -537,8 +557,9 @@ export class CategoriesComponent implements OnInit {
         categories: categories,
       };
     });
-    let properData: any[] = [];
-    let jsonYearMonth: any = {};
+
+    let DataForCategories: avgDataForCategories[] = [];
+    let allYearsDataForCategories: any = {};
 
     for (let i = 0; i < allYearsData?.length; i++) {
       const year = allYearsData[i].year;
@@ -550,34 +571,38 @@ export class CategoriesComponent implements OnInit {
 
       let modifyCategories = Object.fromEntries(modifyObjectKey);
 
-      if (!jsonYearMonth[year]) {
-        jsonYearMonth[year] = {};
+      if (!allYearsDataForCategories[year]) {
+        allYearsDataForCategories[year] = {};
       }
 
-      if (!jsonYearMonth[year][month]) {
-        jsonYearMonth[year][month] = {
+      if (!allYearsDataForCategories[year][month]) {
+        allYearsDataForCategories[year][month] = {
           year,
           month,
           categories: [modifyCategories],
         };
       } else {
-        jsonYearMonth[year][month].categories.push(modifyCategories);
+        allYearsDataForCategories[year][month].categories.push(
+          modifyCategories
+        );
       }
     }
 
-    for (let year in jsonYearMonth) {
-      for (let month in jsonYearMonth[year]) {
-        properData.push(jsonYearMonth[year][month]);
+    for (let year in allYearsDataForCategories) {
+      for (let month in allYearsDataForCategories[year]) {
+        DataForCategories.push(allYearsDataForCategories[year][month]);
       }
     }
 
-    let jsonObjectData = Object.values(properData);
+    let jsonObjectData = Object.values(DataForCategories);
     return jsonObjectData;
   }
 
-  average(data: any) {
+  average(data: number[]) {
     let sum = 0;
-    let removedUndefinedData: any[] = data.filter((x: any) => x !== undefined);
+    let removedUndefinedData: number[] = data.filter(
+      (x: number | undefined) => x !== undefined
+    );
 
     if (removedUndefinedData) {
       for (let i = 0; i < removedUndefinedData.length; i++) {
@@ -601,10 +626,11 @@ export class CategoriesComponent implements OnInit {
 
   LastThreeMonthsData(event: string) {
     const data = this.csvallData();
+    console.log(data);
 
-    let last12Objects = data.splice(-4);
+    let last3Objects = data.splice(-4);
 
-    this.threeMonthsDataSet = last12Objects.map((x: any) => {
+    this.threeMonthsDataSet = last3Objects.map((x: any) => {
       return {
         month: x.month,
         categories: x.categories.map((y: any) => y[event]),
@@ -612,17 +638,15 @@ export class CategoriesComponent implements OnInit {
         label: event,
       };
     });
-    console.log(this.threeMonthsDataSet);
   }
   /**selecting value */
-  onSelectingCategory(event: any) {
+  onSelectingCategory(event: summaryEvent) {
     this.categoryLoding = false;
 
     if (event.value) {
       this.selectedValue = event.value.toUpperCase();
-    } else {
-      this.selectedValue = event.toUpperCase();
     }
+
     if (this.selectedYear.year === 'This Year') {
       const currentYear = new Date().getFullYear();
       this.selectedDataFilter(this.selectedValue, currentYear);
@@ -655,19 +679,22 @@ export class CategoriesComponent implements OnInit {
 
   /**graph ploting for Last 12 month  */
   graphPlotingForLast3Months(dataset: categorieMonthwise[]) {
-    let datasetArr: any[] = [];
-    let month: any[] = [];
+    let datasetArr: datasetData[] = [];
+    let month: string[] = [];
 
     let label = dataset[0]['label'];
-    let data: any[] = [];
-    let jsonData: any = {};
+    let data: number[] = [];
+    let jsonData: datasetData = {
+      label: '',
+      data: [],
+    };
     for (let i = 0; i < dataset.length - 1; i++) {
-      jsonData = {
-        fill: false,
-        tension: 0.4,
-        borderColor: ['#FF9F1C'],
-        label: label,
-      };
+      {
+        (jsonData.fill = false),
+          (jsonData.tension = 0.4),
+          (jsonData.borderColor = '#FF9F1C'),
+          (jsonData.label = label);
+      }
 
       if (!Number.isNaN(dataset[i]['avgValue'])) {
         data.push(dataset[i]['avgValue']);
@@ -678,8 +705,8 @@ export class CategoriesComponent implements OnInit {
       month.push(this.monthsCheck(Number(dataset[i]['month'])));
     }
     jsonData['data'] = data;
+
     datasetArr.push(jsonData);
-    console.log(datasetArr);
 
     this.dataa = {
       labels: month,
@@ -717,10 +744,10 @@ export class CategoriesComponent implements OnInit {
   selectedCategoriGraphData() {
     let month = new Date().getMonth() - 1;
 
-    let requiredData: any[] = new Array(month).fill(0);
+    let requiredData: number[] = new Array(month).fill(0);
 
-    this.categorieMonthwise.forEach((x: any) => {
-      const monthIndex = x.month - 1;
+    this.categorieMonthwise.forEach((x: categorieMonthwise) => {
+      const monthIndex: number = Number(x.month) - 1;
       if (x.avgValue) {
         requiredData[monthIndex] = Number(x.avgValue);
       } else {
@@ -773,7 +800,7 @@ export class CategoriesComponent implements OnInit {
           max: 1,
           ticks: {
             stepSize: 0.1,
-            callback: function (value: any, index: number, values: any) {
+            callback: function (value: number, index: number, values: number) {
               return ((index + 0) * 0.1).toFixed(1);
             },
           },

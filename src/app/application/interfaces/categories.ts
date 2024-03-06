@@ -1,5 +1,60 @@
-export interface categorieMonthwise {
+export interface ReviewData {
+  id: string;
+  date: Date;
+  country: string;
+  traveler_type: string;
+  review: string;
+  rating: string;
+  sentiment_score: number | string;
+  categories: { [key: string]: string };
+}
+export interface DataForAllYears {
+  [year: number]: {
+    [month: number]: {
+      year: number;
+      month: number;
+      categories: { [category: string]: number }[];
+    };
+  };
+}
+
+export interface avgDataForCategories {
+  categories: { [category: string]: number };
   month: string;
+  year: number;
+}
+export interface LastThreeMonthsForReview {
+  month: number;
+  negativeReviewData: number;
+  positiveReviewData: number;
+  [key: string]: number;
+}
+export interface ResponseData {
+  status: string | number | boolean;
+  answer: string;
+  recommendation: Recommendation[];
+  summary: string;
+}
+
+export interface Recommendation {
+  point: string;
+}
+export interface summaryEvent {
+  value: string;
+}
+export interface categoryResponce {
+  answer: string[];
+  message: string;
+  status: boolean;
+}
+
+export interface yearDataForSentimentGraph {
+  value: {
+    year: string;
+  };
+}
+export interface categorieMonthwise {
+  month: string | number;
   categories: number[];
   avgValue: number;
   label: string;
@@ -10,10 +65,13 @@ export interface DropdownChangeEvent {
 export interface datasetData {
   label: string;
   data: number[];
-  backgroundColor: string[];
-  borderColor: string;
-  borderWidth: number;
-  lineTension: number;
+  backgroundColor?: string[];
+  borderColor?: string;
+  borderWidth?: number;
+  lineTension?: number;
+  type?: string;
+  fill?: boolean;
+  tension?: number;
 }
 export interface graphData {
   labels: Array<string | number>;

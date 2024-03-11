@@ -219,28 +219,33 @@ export class CategoriesComponent implements OnInit {
           },
         },
         tooltip: {
+          bodyFont: {
+            size: 12,
+            padding: 15,
+          },
+          padding: 15,
           callbacks: {
             label: function (context: any) {
-              const datasetIndex = context.datasetIndex;
               const dataIndex = context.dataIndex;
+              const datasetIndex = context.datasetIndex;
+              const value = context.parsed.y;
               const chartData = context.chart.data.datasets[datasetIndex];
-
               const label = chartData.label;
 
-              let reviewType = '';
-              if (label === 'Positive Review') {
-                reviewType = 'Positive Review';
-              } else if (label === 'Negative Review') {
-                reviewType = 'Negative Review';
-              }
+              return label + ': ' + value;
+            },
+            afterLabel: function (context: any) {
+              const dataIndex = context.dataIndex;
+              const datasetIndex = context.datasetIndex;
+              const bestReviews = context.dataset.bestReviews[dataIndex];
+              const worstReviews = context.dataset.worstReviews[dataIndex];
 
-              const value = context.parsed.y;
-              const bestReview = context.dataset.bestReviews[dataIndex];
-              const worstReview = context.dataset.worstReviews[dataIndex];
-
-              return `${reviewType}: ${value}
-                  Best Review: ${bestReview}
-                  Least Review: ${worstReview}`;
+              return (
+                'Best Review: ' +
+                bestReviews +
+                '\nLeast Review: ' +
+                worstReviews
+              );
             },
           },
         },
@@ -369,28 +374,33 @@ export class CategoriesComponent implements OnInit {
             },
           },
           tooltip: {
+            bodyFont: {
+              size: 12,
+              padding: 15,
+            },
+            padding: 15,
             callbacks: {
               label: function (context: any) {
-                const datasetIndex = context.datasetIndex;
                 const dataIndex = context.dataIndex;
+                const datasetIndex = context.datasetIndex;
+                const value = context.parsed.y;
                 const chartData = context.chart.data.datasets[datasetIndex];
-
                 const label = chartData.label;
 
-                let reviewType = '';
-                if (label === 'Positive Review') {
-                  reviewType = 'Positive Review';
-                } else if (label === 'Negative Review') {
-                  reviewType = 'Negative Review';
-                }
+                return label + ': ' + value;
+              },
+              afterLabel: function (context: any) {
+                const dataIndex = context.dataIndex;
+                const datasetIndex = context.datasetIndex;
+                const bestReviews = context.dataset.bestReviews[dataIndex];
+                const worstReviews = context.dataset.worstReviews[dataIndex];
 
-                const value = context.parsed.y;
-                const bestReview = context.dataset.bestReviews[dataIndex];
-                const worstReview = context.dataset.worstReviews[dataIndex];
-
-                return `${reviewType}: ${value}
-                    Best Review: ${bestReview}
-                    Least Review: ${worstReview}`;
+                return (
+                  'Best Review: ' +
+                  bestReviews +
+                  '\nLeast Review: ' +
+                  worstReviews
+                );
               },
             },
           },
@@ -524,28 +534,33 @@ export class CategoriesComponent implements OnInit {
             },
           },
           tooltip: {
+            bodyFont: {
+              size: 12,
+              padding: 15,
+            },
+            padding: 15,
             callbacks: {
               label: function (context: any) {
-                const datasetIndex = context.datasetIndex;
                 const dataIndex = context.dataIndex;
+                const datasetIndex = context.datasetIndex;
+                const value = context.parsed.y;
                 const chartData = context.chart.data.datasets[datasetIndex];
-
                 const label = chartData.label;
 
-                let reviewType = '';
-                if (label === 'Positive Review') {
-                  reviewType = 'Positive Review';
-                } else if (label === 'Negative Review') {
-                  reviewType = 'Negative Review';
-                }
+                return label + ': ' + value;
+              },
+              afterLabel: function (context: any) {
+                const dataIndex = context.dataIndex;
+                const datasetIndex = context.datasetIndex;
+                const bestReviews = context.dataset.bestReviews[dataIndex];
+                const worstReviews = context.dataset.worstReviews[dataIndex];
 
-                const value = context.parsed.y;
-                const bestReview = context.dataset.bestReviews[dataIndex];
-                const worstReview = context.dataset.worstReviews[dataIndex];
-
-                return `${reviewType}: ${value}
-                    Best Review: ${bestReview}
-                    Least Review: ${worstReview}`;
+                return (
+                  'Best Review: ' +
+                  bestReviews +
+                  '\nLeast Review: ' +
+                  worstReviews
+                );
               },
             },
           },
@@ -871,11 +886,16 @@ export class CategoriesComponent implements OnInit {
       let LeastValue: number = 1;
 
       dataset[i].categories.forEach((x) => {
-        if (bestValue < x) {
-          bestValue = x;
-        }
-        if (LeastValue > x) {
-          LeastValue = x;
+        if (dataset[i].avgValue) {
+          if (bestValue < x) {
+            bestValue = x;
+          }
+          if (LeastValue > x) {
+            LeastValue = x;
+          }
+        } else {
+          bestValue = 0;
+          LeastValue = 0;
         }
       });
       bestValueArray.push(bestValue);
@@ -917,6 +937,10 @@ export class CategoriesComponent implements OnInit {
           display: false,
         },
         tooltip: {
+          bodyFont: {
+            size: 12, // Adjust the font size
+          },
+
           callbacks: {
             label: function (context: any) {
               const dataIndex = context.dataIndex;
@@ -928,9 +952,20 @@ export class CategoriesComponent implements OnInit {
 
               const label = chartData.label;
 
-              return `${label}: ${value}
-                  Best Review: ${bestReviews}
-                  Least Review: ${worstReviews}`;
+              return `${label}: ${value}`;
+            },
+            afterLabel: function (context: any) {
+              const dataIndex = context.dataIndex;
+              const datasetIndex = context.datasetIndex;
+              const bestReviews = context.dataset.bestReviews[dataIndex];
+              const worstReviews = context.dataset.worstReviews[dataIndex];
+
+              return (
+                'Best Review: ' +
+                bestReviews +
+                '\nLeast Review: ' +
+                worstReviews
+              );
             },
           },
         },
@@ -1039,6 +1074,10 @@ export class CategoriesComponent implements OnInit {
         },
 
         tooltip: {
+          bodyFont: {
+            size: 12,
+          },
+          padding: 8,
           callbacks: {
             label: function (context: any) {
               const datasetIndex = context.datasetIndex;
@@ -1050,9 +1089,20 @@ export class CategoriesComponent implements OnInit {
 
               const label = chartData.label;
 
-              return `${label}: ${value}
-                  Best Review: ${bestReview}
-                  Least Review: ${worstReview}`;
+              return `${label}: ${value}`;
+            },
+            afterLabel: function (context: any) {
+              const dataIndex = context.dataIndex;
+              const datasetIndex = context.datasetIndex;
+              const bestReviews = context.dataset.bestReviews[dataIndex];
+              const worstReviews = context.dataset.worstReviews[dataIndex];
+
+              return (
+                'Best Review: ' +
+                bestReviews +
+                '\nLeast Review: ' +
+                worstReviews
+              );
             },
           },
         },
@@ -1065,7 +1115,7 @@ export class CategoriesComponent implements OnInit {
 
     let result: any[] = [];
     let year = new Date().getFullYear();
-    this.categories.forEach((element) => {
+    this.allCategoriesOverTime.forEach((element) => {
       let count = 0;
       let bestReview = 0;
       let worstReview = 1;
@@ -1109,9 +1159,15 @@ export class CategoriesComponent implements OnInit {
       tooltip: {
         trigger: 'item',
         formatter: function (params: any) {
-          return `${params.name}: ${params.value} (${params.percent}%)
-          Best Review: ${params.data.BestReview}
-          Least Review: ${params.data.WorstReview}`;
+          const { name, value, percent, data } = params;
+          const bestReview = data.BestReview;
+          const worstReview = data.WorstReview;
+
+          return [
+            `${name}: ${value} (${percent}%)`,
+            `Best Review: ${bestReview}`,
+            `Least Review: ${worstReview}`,
+          ].join('\n');
         },
       },
       legend: {

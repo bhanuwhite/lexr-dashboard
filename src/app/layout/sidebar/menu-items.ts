@@ -1,44 +1,42 @@
 export const ROUTES: any[] = [
-
   {
-    id: "overview",
-    title: "Overview",
+    id: 'overview',
+    title: 'Overview',
     type: 'item',
     icon: 'pi pi-th-large',
     url: '/',
- header : 'Overview'
+    header: 'Overview',
   },
   {
-    id: "categories",
-    title: "Categories",
+    id: 'categories',
+    title: 'Categories',
     type: 'item',
-    icon: 'pi pi-map',
+    icon: 'pi pi-th-large',
     url: 'categories',
-  header : 'Categories'
+    header: 'Categories',
   },
   {
-    id: "yourNeighbors",
-    title: "Your neighbors",
+    id: 'yourNeighbors',
+    title: 'Your Neighbours',
     type: 'item',
-    icon: 'pi pi pi-slack',
+    icon: 'pi pi-home',
     url: 'neighbors',
-  header : 'Your Neighbors'
+    header: 'Your Neighbors',
   },
   {
-    id: "askAnything",
-    title: "Ask anything",
+    id: 'askAnything',
+    title: 'Ask Anything',
     type: 'item',
     icon: 'pi pi-comments',
     url: 'askanything',
-  header : 'Ask Anything'
+    header: 'Ask Anything',
   },
   {
-    id: "worldMap",
-    title: "World Map",
+    id: 'worldMap',
+    title: 'World Map',
     type: 'item',
     icon: 'pi pi-globe',
     url: 'worldmap',
-  header : 'World Map'
+    header: 'World Map',
   },
-
-    ]
+];

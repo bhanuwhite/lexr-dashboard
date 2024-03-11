@@ -34,8 +34,8 @@
             class="sidebar_nav hover-class"
             [routerLink]="['neighbors']"
           >
-            <i class="pi pi pi-slack me-3"></i>
-            <span class="me-3">Your neighbors</span>
+            <i class="pi pi pi-home me-3"></i>
+            <span class="me-3">Your Neighbours</span>
             <i class="pi pi-lock me-3" *ngIf="step !== 1"></i>
           </li>
         </ng-container>
@@ -60,7 +60,7 @@
     <li class="sidebar_nav text-white" *ngIf="step === 1">
       <i class="pi pi-sign-out me-3"></i> <span>Logout</span>
     </li>
-    <h4 class="fw-bold text-white mb-1" *ngIf="step !== 1">Feedback</h4>
+    <h4 class="fw-bold text-white mb-1" *ngIf="step !== 1">Feedback.</h4>
     <span class="text-white fw-bold fs-15" *ngIf="step !== 1"
       >By Data Island</span
     >

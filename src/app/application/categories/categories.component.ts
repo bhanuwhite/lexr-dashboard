@@ -40,7 +40,6 @@ export class CategoriesComponent implements OnInit {
   negativeReviewData: number[] = [];
   neutralReview: number = 0;
   yearData: yearData = {};
-  allCategories: string[] = [];
   summaryRecomendations: summaryRecomendations = {
     summary: '',
     recomendation: [],
@@ -59,6 +58,7 @@ export class CategoriesComponent implements OnInit {
   selectedYear: years = {
     year: '',
   };
+  categories: string[] = [];
 
   constructor(
     private sharedservice: SharedService,
@@ -84,26 +84,35 @@ export class CategoriesComponent implements OnInit {
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
 
-        console.log(this.csvData);
-
         this.csvData.forEach((each: any) => {
           const year = new Date(each.date).getFullYear();
-          const date = new Date(each.date).getMonth() + 1;
+          const month = new Date(each.date).getMonth() + 1;
+          const sentimentScore = parseFloat(each.sentiment_score);
 
           // Check if the year exists in the years object
-          if (!years[year]) {
-            years[year] = {};
-          }
-          if (!years[year][date]) {
-            years[year][date] = { positiveReview: 0, negativeReview: 0 };
-          }
-          if (parseFloat(each.sentiment_score) > 0.6) {
-            years[year][date].positiveReview++;
-          } else if (
-            parseFloat(each.sentiment_score) > 0 &&
-            parseFloat(each.sentiment_score) < 0.4
-          ) {
-            years[year][date].negativeReview++;
+          if (sentimentScore !== 0) {
+            if (!years[year]) {
+              years[year] = {};
+            }
+            if (!years[year][month]) {
+              years[year][month] = {
+                positiveReview: 0,
+                negativeReview: 0,
+                bestReview: 0,
+                worstReview: 1,
+              };
+            }
+            if (sentimentScore > 0.6) {
+              years[year][month].positiveReview++;
+            } else if (sentimentScore < 0.4) {
+              years[year][month].negativeReview++;
+            }
+            if (years[year][month].bestReview < sentimentScore) {
+              years[year][month].bestReview = sentimentScore;
+            }
+            if (years[year][month].worstReview > sentimentScore) {
+              years[year][month].worstReview = sentimentScore;
+            }
           }
         });
 
@@ -115,6 +124,8 @@ export class CategoriesComponent implements OnInit {
           this.yearData[year] = {
             possitiveReviewData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             negativeReviewData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            BestReview: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            LeastReview: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           };
 
           for (let month in years[year]) {
@@ -127,6 +138,14 @@ export class CategoriesComponent implements OnInit {
               if (years[year][month].negativeReview) {
                 this.yearData[year].negativeReviewData[parseInt(month) - 1] =
                   years[year][month].negativeReview;
+              }
+              if (years[year][month].bestReview) {
+                this.yearData[year].BestReview[parseInt(month) - 1] =
+                  years[year][month].bestReview;
+              }
+              if (years[year][month].worstReview) {
+                this.yearData[year].LeastReview[parseInt(month) - 1] =
+                  years[year][month].worstReview;
               }
             }
           }
@@ -142,6 +161,8 @@ export class CategoriesComponent implements OnInit {
                   label: 'Positive Review',
                   backgroundColor: ['#FF9F1C'],
                   data: this.yearData[currentYear][i],
+                  worstReviews: this.yearData[currentYear].LeastReview,
+                  bestReviews: this.yearData[currentYear].BestReview,
                 });
               }
               if (i === 'negativeReviewData') {
@@ -150,6 +171,8 @@ export class CategoriesComponent implements OnInit {
                   label: 'Negative Review',
                   backgroundColor: ['#CB997E'],
                   data: this.yearData[currentYear][i],
+                  worstReviews: this.yearData[currentYear].LeastReview,
+                  bestReviews: this.yearData[currentYear].BestReview,
                 });
               }
             }
@@ -195,6 +218,32 @@ export class CategoriesComponent implements OnInit {
             },
           },
         },
+        tooltip: {
+          callbacks: {
+            label: function (context: any) {
+              const datasetIndex = context.datasetIndex;
+              const dataIndex = context.dataIndex;
+              const chartData = context.chart.data.datasets[datasetIndex];
+
+              const label = chartData.label;
+
+              let reviewType = '';
+              if (label === 'Positive Review') {
+                reviewType = 'Positive Review';
+              } else if (label === 'Negative Review') {
+                reviewType = 'Negative Review';
+              }
+
+              const value = context.parsed.y;
+              const bestReview = context.dataset.bestReviews[dataIndex];
+              const worstReview = context.dataset.worstReviews[dataIndex];
+
+              return `${reviewType}: ${value}
+                  Best Review: ${bestReview}
+                  Least Review: ${worstReview}`;
+            },
+          },
+        },
       },
     };
 
@@ -204,10 +253,38 @@ export class CategoriesComponent implements OnInit {
       { year: 'Last 3 months' },
     ];
 
+    this.categories = [
+      'Service Quality',
+      'Cleanliness',
+      'Room Comfort',
+      'Amenities',
+      'Food and Dining',
+      'Location',
+      'Value for Money',
+      'Wi-Fi/Internet Quality',
+      'FamilyFriendliness',
+      'Accessibility Features',
+      'Business Facilities',
+      'Safety and Security',
+      'Pet-Friendly Policies',
+      'Noise Level',
+      'Environmental Practices',
+      'Check-in/Check-out Process',
+      'Bathroom Quality',
+      'Views and Scenery',
+      'Parking and Transportation Options',
+      'Cultural and Local Experiences',
+      'Health and Wellness Facilities',
+      'In-Room Amenities and Technology',
+      'Social and Common Spaces',
+      'Personalization and Guest Services',
+      'Meeting and Event Facilities',
+    ];
+
     this.getAllcatogryData();
 
     this.csvallData();
-    this.InitPipe();
+    // this.InitPipe();
   }
 
   getByYearData(event: yearDataForSentimentGraph) {
@@ -235,6 +312,8 @@ export class CategoriesComponent implements OnInit {
                 label: 'Positive Review',
                 backgroundColor: ['#FF9F1C'],
                 data: this.yearData[Selectedyear][i],
+                worstReviews: this.yearData[Selectedyear].LeastReview,
+                bestReviews: this.yearData[Selectedyear].BestReview,
               });
             }
             if (i === 'negativeReviewData') {
@@ -243,6 +322,8 @@ export class CategoriesComponent implements OnInit {
                 label: 'Negative Review',
                 backgroundColor: ['#CB997E'],
                 data: this.yearData[Selectedyear][i],
+                worstReviews: this.yearData[Selectedyear].LeastReview,
+                bestReviews: this.yearData[Selectedyear].BestReview,
               });
             }
           }
@@ -287,13 +368,39 @@ export class CategoriesComponent implements OnInit {
               },
             },
           },
+          tooltip: {
+            callbacks: {
+              label: function (context: any) {
+                const datasetIndex = context.datasetIndex;
+                const dataIndex = context.dataIndex;
+                const chartData = context.chart.data.datasets[datasetIndex];
+
+                const label = chartData.label;
+
+                let reviewType = '';
+                if (label === 'Positive Review') {
+                  reviewType = 'Positive Review';
+                } else if (label === 'Negative Review') {
+                  reviewType = 'Negative Review';
+                }
+
+                const value = context.parsed.y;
+                const bestReview = context.dataset.bestReviews[dataIndex];
+                const worstReview = context.dataset.worstReviews[dataIndex];
+
+                return `${reviewType}: ${value}
+                    Best Review: ${bestReview}
+                    Least Review: ${worstReview}`;
+              },
+            },
+          },
         },
       };
     } else {
-      let requiredData: datasetData[] = [];
+      let requiredData: any[] = [];
       let currentYear = new Date().getFullYear();
       let currentmonth = new Date().getMonth();
-      let LastThreeMonthsDataForReview: LastThreeMonthsForReview[] = [];
+      let LastThreeMonthsDataForReview: any[] = [];
 
       for (let year in this.allYearsData) {
         if (Number(year) === currentYear) {
@@ -309,7 +416,8 @@ export class CategoriesComponent implements OnInit {
                   this.allYearsData[currentYear][x].positiveReview,
                 negativeReviewData:
                   this.allYearsData[currentYear][x].negativeReview,
-                positiveReviewData: 0,
+                bestReview: this.allYearsData[currentYear][x].bestReview,
+                worstReview: this.allYearsData[currentYear][x].worstReview,
               });
               monthsAdded++;
             }
@@ -328,7 +436,9 @@ export class CategoriesComponent implements OnInit {
                     this.allYearsData[currentYear - 1][x].positiveReview,
                   negativeReviewData:
                     this.allYearsData[currentYear - 1][x].negativeReview,
-                  positiveReviewData: 0,
+                  bestReview: this.allYearsData[currentYear - 1][x].bestReview,
+                  worstReview:
+                    this.allYearsData[currentYear - 1][x].worstReview,
                 });
                 monthsAdded++;
               }
@@ -337,10 +447,10 @@ export class CategoriesComponent implements OnInit {
         }
       }
 
-      console.log(LastThreeMonthsDataForReview);
-
       let positiveData = [];
       let negativeData = [];
+      let bestReview = [];
+      let LeastReview = [];
       let months = [];
 
       for (let i = 0; i < LastThreeMonthsDataForReview.length; i++) {
@@ -349,10 +459,12 @@ export class CategoriesComponent implements OnInit {
             negativeData.push(LastThreeMonthsDataForReview[i][item]);
           } else if (item === 'possitiveReviewData') {
             positiveData.push(LastThreeMonthsDataForReview[i][item]);
-          } else {
+          } else if (item === 'month') {
             months.push(
               this.monthsCheck(LastThreeMonthsDataForReview[i][item])
             );
+            LeastReview.push(LastThreeMonthsDataForReview[i].worstReview);
+            bestReview.push(LastThreeMonthsDataForReview[i].bestReview);
           }
         }
       }
@@ -369,6 +481,8 @@ export class CategoriesComponent implements OnInit {
             backgroundColor: ['#FF9F1C'],
             data: dataArray[item],
             borderWidth: 0.2,
+            worstReviews: LeastReview,
+            bestReviews: bestReview,
           });
         }
         if (item === 'negativeReview') {
@@ -378,6 +492,8 @@ export class CategoriesComponent implements OnInit {
             backgroundColor: ['#CB997E'],
             data: dataArray[item],
             borderWidth: 0.2,
+            worstReviews: LeastReview,
+            bestReviews: bestReview,
           });
         }
       }
@@ -407,6 +523,32 @@ export class CategoriesComponent implements OnInit {
               },
             },
           },
+          tooltip: {
+            callbacks: {
+              label: function (context: any) {
+                const datasetIndex = context.datasetIndex;
+                const dataIndex = context.dataIndex;
+                const chartData = context.chart.data.datasets[datasetIndex];
+
+                const label = chartData.label;
+
+                let reviewType = '';
+                if (label === 'Positive Review') {
+                  reviewType = 'Positive Review';
+                } else if (label === 'Negative Review') {
+                  reviewType = 'Negative Review';
+                }
+
+                const value = context.parsed.y;
+                const bestReview = context.dataset.bestReviews[dataIndex];
+                const worstReview = context.dataset.worstReviews[dataIndex];
+
+                return `${reviewType}: ${value}
+                    Best Review: ${bestReview}
+                    Least Review: ${worstReview}`;
+              },
+            },
+          },
         },
       };
     }
@@ -428,9 +570,21 @@ export class CategoriesComponent implements OnInit {
 
         this.onSelectingCategory(firstElementBody);
         this.getsummaryAndRecomendations(firstElementBody);
+        this.graphDataForDoghnutChart();
+        this.InitPipe();
       },
       (error: Error) => {
         alert(error.message);
+        this.InitPipe();
+        this.allCategoriesOverTime = this.categories;
+
+        let firstElement = this.allCategoriesOverTime[0];
+
+        let firstElementBody = {
+          value: firstElement,
+        };
+
+        this.onSelectingCategory(firstElementBody);
       }
     );
   }
@@ -446,9 +600,8 @@ export class CategoriesComponent implements OnInit {
       (res: any) => {
         this.statusTrue = res.status;
         this.loading = false;
-        // if (res.answer.length > 0) {
+
         this.summaryRecomendations = res.answer;
-        // }
       },
       (error: any) => {
         this.statusTrue = error.status;
@@ -594,56 +747,63 @@ export class CategoriesComponent implements OnInit {
     }
 
     let jsonObjectData = Object.values(DataForCategories);
+
     return jsonObjectData;
   }
 
   average(data: number[]) {
+    console.log(data);
+
     let sum = 0;
     let removedUndefinedData: number[] = data.filter(
       (x: number | undefined) => x !== undefined
     );
+    console.log(removedUndefinedData);
 
     if (removedUndefinedData) {
       for (let i = 0; i < removedUndefinedData.length; i++) {
         sum += removedUndefinedData[i];
       }
     }
+
     return Number((sum / removedUndefinedData.length).toFixed(1));
   }
 
   selectedDataFilter(event: string, selectedYear1: number) {
-    const data: any[] = this.csvallData();
+    if (event !== undefined) {
+      const data: any[] = this.csvallData();
 
-    this.categorieMonthwise = data
-      .filter((x) => x.year === selectedYear1)
-      .map((x) => ({
-        month: x.month,
-        categories: x.categories.map((y: any) => y[event]),
-        avgValue: this.average(x.categories.map((y: any) => y?.[event])),
-        label: event,
-      }));
+      this.categorieMonthwise = data
+        .filter((x) => x.year === selectedYear1)
+        .map((x) => ({
+          month: x.month,
+          categories: x.categories.map((y: any) => y[event]),
+          avgValue: this.average(x.categories.map((y: any) => y?.[event])),
+          label: event,
+        }));
+    }
   }
 
   LastThreeMonthsData(event: string) {
-    const data = this.csvallData();
-    console.log(data);
+    if (event !== undefined) {
+      const data = this.csvallData();
 
-    let last3Objects = data.splice(-4);
+      let last3Objects = data.splice(-4);
 
-    this.threeMonthsDataSet = last3Objects.map((x: any) => {
-      return {
-        month: x.month,
-        categories: x.categories.map((y: any) => y[event]),
-        avgValue: this.average(x.categories.map((y: any) => y?.[event])),
-        label: event,
-      };
-    });
+      this.threeMonthsDataSet = last3Objects.map((x: any) => {
+        return {
+          month: x.month,
+          categories: x.categories.map((y: any) => y[event]),
+          avgValue: this.average(x.categories.map((y: any) => y?.[event])),
+          label: event,
+        };
+      });
+    }
   }
 
   /**selecting value */
   onSelectingCategory(event: summaryEvent) {
     this.categoryLoding = false;
-
     if (event.value) {
       this.selectedValue = event.value.toUpperCase();
     }
@@ -683,6 +843,9 @@ export class CategoriesComponent implements OnInit {
     let datasetArr: datasetData[] = [];
     let month: string[] = [];
 
+    let bestValueArray: number[] = [];
+    let LeastValueArray: number[] = [];
+
     let label = dataset[0]['label'];
     let data: number[] = [];
     let jsonData: datasetData = {
@@ -702,10 +865,26 @@ export class CategoriesComponent implements OnInit {
       } else {
         data.push(0);
       }
-
       month.push(this.monthsCheck(Number(dataset[i]['month'])));
+
+      let bestValue: number = 0;
+      let LeastValue: number = 1;
+
+      dataset[i].categories.forEach((x) => {
+        if (bestValue < x) {
+          bestValue = x;
+        }
+        if (LeastValue > x) {
+          LeastValue = x;
+        }
+      });
+      bestValueArray.push(bestValue);
+      LeastValueArray.push(LeastValue);
     }
+
     jsonData['data'] = data;
+    (jsonData['bestReviews'] = bestValueArray),
+      (jsonData['worstReviews'] = LeastValueArray);
 
     datasetArr.push(jsonData);
 
@@ -737,6 +916,24 @@ export class CategoriesComponent implements OnInit {
         legend: {
           display: false,
         },
+        tooltip: {
+          callbacks: {
+            label: function (context: any) {
+              const dataIndex = context.dataIndex;
+              const datasetIndex = context.datasetIndex;
+              const value = context.parsed.y;
+              const bestReviews = context.dataset.bestReviews[dataIndex];
+              const worstReviews = context.dataset.worstReviews[dataIndex];
+              const chartData = context.chart.data.datasets[datasetIndex];
+
+              const label = chartData.label;
+
+              return `${label}: ${value}
+                  Best Review: ${bestReviews}
+                  Least Review: ${worstReviews}`;
+            },
+          },
+        },
       },
     };
   }
@@ -744,17 +941,40 @@ export class CategoriesComponent implements OnInit {
   /**graph ploting */
   selectedCategoriGraphData() {
     let month = new Date().getMonth() - 1;
+    console.log(this.categorieMonthwise);
 
     let requiredData: number[] = new Array(month).fill(0);
+    let bestValueArray: number[] = new Array(month).fill(0);
+    let LeastValueArray: number[] = new Array(month).fill(0);
 
     this.categorieMonthwise.forEach((x: categorieMonthwise) => {
       const monthIndex: number = Number(x.month) - 1;
+
       if (x.avgValue) {
         requiredData[monthIndex] = Number(x.avgValue);
       } else {
         requiredData[monthIndex] = 0;
       }
+      let bestValue: number = 0;
+      let LeastValue: number = 1;
+
+      x.categories.forEach((y) => {
+        if (x.avgValue) {
+          if (bestValue < y) {
+            bestValue = y;
+          }
+          if (LeastValue > y) {
+            LeastValue = y;
+          }
+        } else {
+          bestValue = 0;
+          LeastValue = 0;
+        }
+        bestValueArray[monthIndex] = bestValue;
+        LeastValueArray[monthIndex] = LeastValue;
+      });
     });
+
     for (let i = 0; i <= month; i++) {
       if (requiredData[i] === undefined) {
         requiredData[i] = 0;
@@ -781,6 +1001,8 @@ export class CategoriesComponent implements OnInit {
           label: this.selectedValue,
           backgroundColor: ['#FF9F1C'],
           data: requiredData,
+          bestReviews: bestValueArray,
+          worstReviews: LeastValueArray,
           borderColor: '#FF9F1C',
           borderWidth: 1,
           lineTension: 0.5,
@@ -815,23 +1037,85 @@ export class CategoriesComponent implements OnInit {
             },
           },
         },
+
+        tooltip: {
+          callbacks: {
+            label: function (context: any) {
+              const datasetIndex = context.datasetIndex;
+              const dataIndex = context.dataIndex;
+              const value = context.parsed.y;
+              const bestReview = context.dataset.bestReviews[dataIndex];
+              const worstReview = context.dataset.worstReviews[dataIndex];
+              const chartData = context.chart.data.datasets[datasetIndex];
+
+              const label = chartData.label;
+
+              return `${label}: ${value}
+                  Best Review: ${bestReview}
+                  Least Review: ${worstReview}`;
+            },
+          },
+        },
       },
     };
   }
 
+  graphDataForDoghnutChart() {
+    const data: any[] = this.csvallData();
+
+    let result: any[] = [];
+    let year = new Date().getFullYear();
+    this.categories.forEach((element) => {
+      let count = 0;
+      let bestReview = 0;
+      let worstReview = 1;
+      data
+        .filter((x) => x.year === year)
+        .forEach((x) => {
+          x.categories.forEach((y: any) => {
+            if (Object.keys(y).includes(element.toUpperCase())) {
+              count++;
+            }
+            let selectedelement = element.toUpperCase();
+
+            const value = y[selectedelement];
+
+            if (value !== undefined) {
+              if (value > bestReview) {
+                bestReview = value;
+              }
+              if (worstReview > value) {
+                worstReview = value;
+              }
+            }
+          });
+        });
+
+      result.push({
+        name: element,
+        value: count,
+        BestReview: bestReview,
+        WorstReview: worstReview,
+      });
+    });
+
+    return result;
+  }
+
   private InitPipe(): void {
-    console.log(this.csvData);
     this.myChart = echarts.init(document.getElementById('pipe') as any);
 
     const option = {
       tooltip: {
         trigger: 'item',
         formatter: function (params: any) {
-          return `${params.name}: ${params.value} (${params.percent}%)`;
+          return `${params.name}: ${params.value} (${params.percent}%)
+          Best Review: ${params.data.BestReview}
+          Least Review: ${params.data.WorstReview}`;
         },
       },
       legend: {
-        show: false, // Remove legend
+        show: false,
       },
       color: [
         '#FF9F1C',
@@ -849,7 +1133,7 @@ export class CategoriesComponent implements OnInit {
           type: 'pie',
           radius: ['80%', '88%'],
           avoidLabelOverlap: false,
-          padAngle: 1,
+          padAngle: 0.2,
           itemStyle: {
             borderRadius: 7,
           },
@@ -872,33 +1156,7 @@ export class CategoriesComponent implements OnInit {
               show: false,
             },
           },
-          data: [
-            { value: 31, name: 'Service Quality' },
-            { value: 32, name: 'Cleanliness' },
-            { value: 19, name: 'Room Comfort' },
-            { value: 40, name: 'Amenities' },
-            { value: 23, name: 'Food and Dining' },
-            { value: 15, name: 'Location' },
-            { value: 19, name: 'Wi-Fi/Internet Quality' },
-            { value: 21, name: 'Value for Money' },
-            { value: 10, name: 'FamilyFriendliness' },
-            { value: 11, name: 'Accessibility Features' },
-            { value: 9, name: 'Business Facilities' },
-            { value: 21, name: 'Safety and Security' },
-            { value: 10, name: 'Pet-Friendly Policies' },
-            { value: 6, name: 'Noise Level' },
-            { value: 10, name: 'Environmental Practices' },
-            { value: 6, name: 'Check-in/Check-out Process' },
-            { value: 5, name: 'Bathroom Quality' },
-            { value: 9, name: 'Views and Scenery' },
-            { value: 21, name: 'Parking and Transportation Options' },
-            { value: 25, name: 'Cultural and Local Experiences' },
-            { value: 18, name: 'Health and Wellness Facilities' },
-            { value: 10, name: 'In-Room Amenities and Technology' },
-            { value: 11, name: 'Social and Common Spaces' },
-            { value: 12, name: 'Personalization and Guest Services' },
-            { value: 11, name: 'Meeting and Event Facilities' },
-          ],
+          data: this.graphDataForDoghnutChart(),
         },
       ],
     };

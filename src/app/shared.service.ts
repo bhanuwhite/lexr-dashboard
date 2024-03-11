@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class SharedService {
-
   base_url: String = 'https://api.feedback.dataisland.ai';
 
   constructor(private http: HttpClient) {}

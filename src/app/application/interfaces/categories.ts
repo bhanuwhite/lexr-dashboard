@@ -55,7 +55,7 @@ export interface yearDataForSentimentGraph {
 }
 export interface categorieMonthwise {
   month: string | number;
-  categories: number[];
+  categories: any[];
   avgValue: number;
   label: string;
 }
@@ -72,17 +72,26 @@ export interface datasetData {
   type?: string;
   fill?: boolean;
   tension?: number;
+  worstReviews?: any;
+  bestReviews?: any;
 }
 export interface graphData {
   labels: Array<string | number>;
   datasets: datasetData[];
+  worstReviews?: any;
+  bestReviews?: any;
 }
 
 export interface yearsData {
   [index: number]: allYearData;
 }
 export interface allYearData {
-  [index: number]: { positiveReview: number; negativeReview: number };
+  [index: number]: {
+    bestReview: any;
+    worstReview: any;
+    positiveReview: number;
+    negativeReview: number;
+  };
 }
 
 export interface years {
@@ -100,6 +109,8 @@ export interface summaryRecomendations {
 export interface year {
   possitiveReviewData: number[];
   negativeReviewData: number[];
+  LeastReview: number[];
+  BestReview: number[];
 }
 
 export interface yearData {
@@ -143,6 +154,7 @@ export interface ScalesOptions {
 
 export interface PluginsOptions {
   legend: LegendOptions;
+  tooltip?: any;
 }
 
 export interface Options {

@@ -58,7 +58,6 @@ export class CategoriesComponent implements OnInit {
   selectedYear: years = {
     year: '',
   };
-  categories: string[] = [];
 
   constructor(
     private sharedservice: SharedService,
@@ -258,38 +257,9 @@ export class CategoriesComponent implements OnInit {
       { year: 'Last 3 months' },
     ];
 
-    this.categories = [
-      'Service Quality',
-      'Cleanliness',
-      'Room Comfort',
-      'Amenities',
-      'Food and Dining',
-      'Location',
-      'Value for Money',
-      'Wi-Fi/Internet Quality',
-      'FamilyFriendliness',
-      'Accessibility Features',
-      'Business Facilities',
-      'Safety and Security',
-      'Pet-Friendly Policies',
-      'Noise Level',
-      'Environmental Practices',
-      'Check-in/Check-out Process',
-      'Bathroom Quality',
-      'Views and Scenery',
-      'Parking and Transportation Options',
-      'Cultural and Local Experiences',
-      'Health and Wellness Facilities',
-      'In-Room Amenities and Technology',
-      'Social and Common Spaces',
-      'Personalization and Guest Services',
-      'Meeting and Event Facilities',
-    ];
-
     this.getAllcatogryData();
 
     this.csvallData();
-    // this.InitPipe();
   }
 
   getByYearData(event: yearDataForSentimentGraph) {
@@ -574,7 +544,6 @@ export class CategoriesComponent implements OnInit {
     this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
         const categoryResponce = res as categoryResponce;
-
         this.allCategoriesOverTime = categoryResponce.answer.sort();
 
         let firstElement = this.allCategoriesOverTime[0];
@@ -590,16 +559,6 @@ export class CategoriesComponent implements OnInit {
       },
       (error: Error) => {
         alert(error.message);
-        this.InitPipe();
-        this.allCategoriesOverTime = this.categories;
-
-        let firstElement = this.allCategoriesOverTime[0];
-
-        let firstElementBody = {
-          value: firstElement,
-        };
-
-        this.onSelectingCategory(firstElementBody);
       }
     );
   }
@@ -1107,7 +1066,7 @@ export class CategoriesComponent implements OnInit {
 
     let result: any[] = [];
     let year = new Date().getFullYear();
-    this.categories.forEach((element) => {
+    this.allCategoriesOverTime.forEach((element) => {
       let count = 0;
       let bestReview = 0;
       let worstReview = 1;

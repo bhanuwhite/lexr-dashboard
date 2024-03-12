@@ -64,7 +64,6 @@ export class DashboardComponent implements OnInit {
       .get('assets/review_with_sentiments.csv', { responseType: 'text' })
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
-        console.log(this.csvData);
 
         let requiredDataset: dataset[] = [];
 
@@ -244,8 +243,6 @@ export class DashboardComponent implements OnInit {
   getAllcatogryData() {
     this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
-        console.log(res);
-        // Sort the answer array if it exists, or assign an empty array otherwise
         this.allCategories = res?.answer?.sort() || [];
       },
       (error: Error) => {
@@ -322,8 +319,6 @@ export class DashboardComponent implements OnInit {
 
       Object.keys(years).forEach((year: any) => {
         Object.keys(years[year]).forEach((month: any) => {
-          console.log(month);
-
           const daysInMonth = new Date(year, month, 0).getDate();
           for (let date = 1; date <= daysInMonth; date++) {
             if (!years[year][month][date]) {

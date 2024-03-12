@@ -3,7 +3,9 @@ export const ROUTES: any[] = [
     id: 'overview',
     title: 'Overview',
     type: 'item',
-    icon: 'pi pi-th-large',
+    icon: `<span class="material-symbols-outlined">
+    overview
+    </span>`,
     url: '/',
     header: 'Overview',
   },

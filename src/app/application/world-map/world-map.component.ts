@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import {
   Component,
   ElementRef,
@@ -6,6 +7,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
+import * as Papa from 'papaparse';
+
 declare var google: any;
 
 @Component({
@@ -15,32 +18,82 @@ declare var google: any;
   encapsulation: ViewEncapsulation.None,
 })
 export class WorldMapComponent implements OnInit {
-  constructor(private sharedservice:SharedService,private Route:ActivatedRoute){
+  csvData: any[] = [];
+  uniqueCountries: Set<string> = new Set();
+  countriesData: any;
+  reviewsByCountry: any;
+  modifiedDataByCountry: any[] = [];
 
-    this.Route.data.subscribe((res)=>{
-    this.sharedservice.recieveHeaderName(res['name'])
-    })
-
-      }
+  constructor(
+    private sharedservice: SharedService,
+    private Route: ActivatedRoute,
+    private http: HttpClient
+  ) {
+    this.Route.data.subscribe((res) => {
+      this.sharedservice.recieveHeaderName(res['name']);
+    });
+  }
 
   ngOnInit() {
     google.charts.load('current', {
       packages: ['geochart'],
     });
-    google.charts.setOnLoadCallback(this.drawRegionsMap);
+    google.charts.setOnLoadCallback(() => {
+      this.csvAllData();
+    });
   }
 
-  drawRegionsMap() {
-    var data = google.visualization.arrayToDataTable([
-      ['Country', 'Popularity'],
-      ['Germany', 200],
-      ['United States', 300],
-      ['Brazil', 400],
-      ['Canada', 500],
-      ['France', 600],
-      ['India', 500],
-      ['RU', 700],
-    ]);
+  csvAllData() {
+    this.http
+      .get('assets/review_with_sentiments.csv', { responseType: 'text' })
+      .subscribe((data) => {
+        this.csvData = Papa.parse(data, { header: true }).data;
+
+        this.csvData.forEach((x) => {
+          if (x.country) {
+            this.uniqueCountries.add(x.country.toLowerCase());
+          }
+        });
+        this.reviewsByCountry = Array.from(this.uniqueCountries).reduce(
+          (acc: { [x: string]: any[] }, country: string) => {
+            // Filter csvData based on the current country
+            const reviewsForCountry = this.csvData
+              .filter(
+                (obj: any) =>
+                  obj.country?.toLowerCase() === country.toLowerCase()
+              )
+              .map((obj: any) => obj.sentiment_score);
+
+            acc[country] = reviewsForCountry;
+
+            return acc;
+          },
+          {}
+        );
+        this.calculateReview(this.reviewsByCountry);
+      });
+  }
+
+  calculateReview(data: any) {
+    let bestReview;
+    let leastReview;
+    for (let item in data) {
+      let numberArr = data[item];
+      bestReview = Math.max(...numberArr);
+      leastReview = Math.min(...numberArr);
+      this.modifiedDataByCountry.push([
+        item.toUpperCase(),
+        bestReview,
+        leastReview,
+      ]);
+    }
+    this.drawRegionsMap(this.modifiedDataByCountry);
+  }
+
+  drawRegionsMap(finalData: any) {
+    finalData.unshift(['Country', 'Best Review', 'Least Review']);
+
+    var data = google.visualization.arrayToDataTable(finalData);
 
     var options = {
       colorAxis: { colors: ['#E39224', '#FF9F1C'] },

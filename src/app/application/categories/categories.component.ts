@@ -767,13 +767,10 @@ export class CategoriesComponent implements OnInit {
   }
 
   average(data: number[]) {
-    console.log(data);
-
     let sum = 0;
     let removedUndefinedData: number[] = data.filter(
       (x: number | undefined) => x !== undefined
     );
-    console.log(removedUndefinedData);
 
     if (removedUndefinedData) {
       for (let i = 0; i < removedUndefinedData.length; i++) {
@@ -882,22 +879,20 @@ export class CategoriesComponent implements OnInit {
       }
       month.push(this.monthsCheck(Number(dataset[i]['month'])));
 
-      let bestValue: number = 0;
-      let LeastValue: number = 1;
+      let bestValue: number;
+      let LeastValue: number;
 
-      dataset[i].categories.forEach((x) => {
-        if (dataset[i].avgValue) {
-          if (bestValue < x) {
-            bestValue = x;
-          }
-          if (LeastValue > x) {
-            LeastValue = x;
-          }
-        } else {
-          bestValue = 0;
-          LeastValue = 0;
-        }
-      });
+      let removedUndefinedData: number[] = dataset[i].categories.filter(
+        (x: number | undefined) => x !== undefined
+      );
+
+      if (dataset[i].avgValue) {
+        bestValue = Math.max(...removedUndefinedData);
+        LeastValue = Math.min(...removedUndefinedData);
+      } else {
+        bestValue = 0;
+        LeastValue = 0;
+      }
       bestValueArray.push(bestValue);
       LeastValueArray.push(LeastValue);
     }
@@ -976,7 +971,6 @@ export class CategoriesComponent implements OnInit {
   /**graph ploting */
   selectedCategoriGraphData() {
     let month = new Date().getMonth() - 1;
-    console.log(this.categorieMonthwise);
 
     let requiredData: number[] = new Array(month).fill(0);
     let bestValueArray: number[] = new Array(month).fill(0);
@@ -990,24 +984,22 @@ export class CategoriesComponent implements OnInit {
       } else {
         requiredData[monthIndex] = 0;
       }
-      let bestValue: number = 0;
-      let LeastValue: number = 1;
+      let bestValue: number;
+      let LeastValue: number;
 
-      x.categories.forEach((y) => {
-        if (x.avgValue) {
-          if (bestValue < y) {
-            bestValue = y;
-          }
-          if (LeastValue > y) {
-            LeastValue = y;
-          }
-        } else {
-          bestValue = 0;
-          LeastValue = 0;
-        }
-        bestValueArray[monthIndex] = bestValue;
-        LeastValueArray[monthIndex] = LeastValue;
-      });
+      let removedUndefinedData: number[] = x.categories.filter(
+        (x: number | undefined) => x !== undefined
+      );
+
+      if (x.avgValue) {
+        bestValue = Math.max(...removedUndefinedData);
+        LeastValue = Math.min(...removedUndefinedData);
+      } else {
+        bestValue = 0;
+        LeastValue = 0;
+      }
+      bestValueArray[monthIndex] = bestValue;
+      LeastValueArray[monthIndex] = LeastValue;
     });
 
     for (let i = 0; i <= month; i++) {
@@ -1115,7 +1107,7 @@ export class CategoriesComponent implements OnInit {
 
     let result: any[] = [];
     let year = new Date().getFullYear();
-    this.allCategoriesOverTime.forEach((element) => {
+    this.categories.forEach((element) => {
       let count = 0;
       let bestReview = 0;
       let worstReview = 1;
@@ -1163,13 +1155,16 @@ export class CategoriesComponent implements OnInit {
           const bestReview = data.BestReview;
           const worstReview = data.WorstReview;
 
-          return [
-            `${name}: ${value} (${percent}%)`,
-            `Best Review: ${bestReview}`,
-            `Least Review: ${worstReview}`,
-          ].join('\n');
+          return `
+            <div style="display: flex; flex-direction: column;">
+              <div>${name}: ${value} (${percent}%)</div>
+              <div>Best Review: ${bestReview}</div>
+              <div>Least Review: ${worstReview}</div>
+            </div>
+          `;
         },
       },
+
       legend: {
         show: false,
       },

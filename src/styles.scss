@@ -28,7 +28,15 @@ body {
   height: 40px !important;
   display: flex !important;
   align-items: center !important;
+}
+.info_content_width .p-dropdown.p-component {
   width: 140px;
+}
+.info_content_width .p-dropdown-panel {
+  width: 150px;
+}
+.p-dropdown-panel .p-dropdown-item {
+  white-space: pre-wrap;
 }
 
 .p-dropdown .p-dropdown-label {
@@ -137,6 +145,9 @@ canvas {
     width: 300px !important;
     height: 330px !important;
   }
+}
+.getsummary_details_drpdn .p-dropdown-panel {
+  width: auto;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1140px) {

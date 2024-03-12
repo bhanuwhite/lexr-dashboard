@@ -573,9 +573,11 @@ export class CategoriesComponent implements OnInit {
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {
         this.statusTrue = res.status;
+
         this.loading = false;
 
         this.summaryRecomendations = res.answer;
+        // console.log(this.summaryRecomendations);
       },
       (error: any) => {
         this.statusTrue = error.status;

@@ -31,7 +31,7 @@
                 <p-dropdown
                   [options]="allCategoriesOverTime"
                   (onChange)="getsummaryAndRecomendations($event)"
-                  class="getsummary_details_drpdn"
+                  class="info_content_width"
                 ></p-dropdown>
               </div>
             </div>
@@ -41,10 +41,7 @@
             >
               <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
             </div>
-            <div
-              class="this_week"
-              *ngIf="summaryRecomendations && !loading"
-            >
+            <div class="this_week" *ngIf="summaryRecomendations && !loading">
               <div class="my-3">
                 <span class="this_week">{{
                   summaryRecomendations.summary
@@ -64,7 +61,14 @@
               *ngIf="
                 !summaryRecomendations.summary &&
                 !loading &&
-                statusTrue === true"
+                statusTrue === true
+              "
+            >
+              No Data Available to this Recommendation
+            </div>
+            <div
+              class="this_week d-flex justify-content-center mt-5"
+              *ngIf="summaryRecomendations && !loading && statusTrue === false"
             >
               No Data Available to this Recommendation
             </div>

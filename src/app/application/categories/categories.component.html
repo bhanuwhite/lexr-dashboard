@@ -23,7 +23,7 @@
         </div>
         <div class="col-lg-5">
           <div class="card my-4 p-3 border-none" style="border-radius: 20px">
-            <div class="d-flex justify-content-between summ_mobile mb-3">
+            <div class="d-flex justify-content-between summ_mobile mb-5">
               <div class="text-black fw-500 title">
                 Summary and Recommendation
               </div>
@@ -31,12 +31,12 @@
                 <p-dropdown
                   [options]="allCategoriesOverTime"
                   (onChange)="getsummaryAndRecomendations($event)"
-                  class="info_content_width"
+                  class="getsummary_details_drpdn"
                 ></p-dropdown>
               </div>
             </div>
             <div
-              class="this_week d-flex justify-content-center"
+              class="this_week d-flex justify-content-center mt-5"
               *ngIf="loading"
             >
               <p-progressSpinner ariaLabel="loading"></p-progressSpinner>

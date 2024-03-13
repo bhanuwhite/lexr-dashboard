@@ -83,6 +83,8 @@ export class CategoriesComponent implements OnInit {
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
 
+        console.log(this.csvData);
+
         this.csvData.forEach((each: any) => {
           const year = new Date(each.date).getFullYear();
           const month = new Date(each.date).getMonth() + 1;
@@ -1067,32 +1069,31 @@ export class CategoriesComponent implements OnInit {
     const data: any[] = this.csvallData();
 
     let result: any[] = [];
-    let year = new Date().getFullYear();
+
     this.allCategoriesOverTime.forEach((element) => {
       let count = 0;
       let bestReview = 0;
       let worstReview = 1;
-      data
-        .filter((x) => x.year === year)
-        .forEach((x) => {
-          x.categories.forEach((y: any) => {
-            if (Object.keys(y).includes(element.toUpperCase())) {
-              count++;
-            }
-            let selectedelement = element.toUpperCase();
 
-            const value = y[selectedelement];
+      data.forEach((x) => {
+        x.categories.forEach((y: any) => {
+          if (Object.keys(y).includes(element.toUpperCase())) {
+            count++;
+          }
+          let selectedelement = element.toUpperCase();
 
-            if (value !== undefined) {
-              if (value > bestReview) {
-                bestReview = value;
-              }
-              if (worstReview > value) {
-                worstReview = value;
-              }
+          const value = y[selectedelement];
+
+          if (value !== undefined) {
+            if (value > bestReview) {
+              bestReview = value;
             }
-          });
+            if (worstReview > value) {
+              worstReview = value;
+            }
+          }
         });
+      });
 
       result.push({
         name: element,
@@ -1145,7 +1146,7 @@ export class CategoriesComponent implements OnInit {
           type: 'pie',
           radius: ['80%', '88%'],
           avoidLabelOverlap: false,
-          padAngle: 0.2,
+          padAngle: 1,
           itemStyle: {
             borderRadius: 7,
           },

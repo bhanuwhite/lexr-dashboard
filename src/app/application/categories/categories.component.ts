@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
 import * as echarts from 'echarts';
 import { ECharts } from 'echarts';
+
 import {
   DropdownChangeEvent,
   LastThreeMonthsForReview,
@@ -58,11 +59,12 @@ export class CategoriesComponent implements OnInit {
   selectedYear: years = {
     year: '',
   };
+  summaryData: any;
 
   constructor(
     private sharedservice: SharedService,
     private Route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient // private spinner: NgxSpinnerService
   ) {
     this.Route.data.subscribe((res) => {
       this.sharedservice.recieveHeaderName(res['name']);
@@ -82,8 +84,6 @@ export class CategoriesComponent implements OnInit {
       .get('assets/review_with_sentiments.csv', { responseType: 'text' })
       .subscribe((data) => {
         this.csvData = Papa.parse(data, { header: true }).data;
-
-        console.log(this.csvData);
 
         this.csvData.forEach((each: any) => {
           const year = new Date(each.date).getFullYear();
@@ -368,9 +368,9 @@ export class CategoriesComponent implements OnInit {
                 const worstReviews = context.dataset.worstReviews[dataIndex];
 
                 return (
-                  'Best Review: ' +
+                  'Best Score: ' +
                   bestReviews +
-                  '\nLeast Review: ' +
+                  '\nWorst Score: ' +
                   worstReviews
                 );
               },
@@ -528,9 +528,9 @@ export class CategoriesComponent implements OnInit {
                 const worstReviews = context.dataset.worstReviews[dataIndex];
 
                 return (
-                  'Best Review: ' +
+                  'Best Score: ' +
                   bestReviews +
-                  '\nLeast Review: ' +
+                  '\nWorst Score: ' +
                   worstReviews
                 );
               },
@@ -567,6 +567,7 @@ export class CategoriesComponent implements OnInit {
 
   getsummaryAndRecomendations(event: any) {
     this.loading = true;
+
     let selectedValue: string = '';
     if (event.value) {
       selectedValue = event.value;
@@ -579,7 +580,6 @@ export class CategoriesComponent implements OnInit {
         this.loading = false;
 
         this.summaryRecomendations = res.answer;
-        // console.log(this.summaryRecomendations);
       },
       (error: any) => {
         this.statusTrue = error.status;
@@ -919,10 +919,7 @@ export class CategoriesComponent implements OnInit {
               const worstReviews = context.dataset.worstReviews[dataIndex];
 
               return (
-                'Best Review: ' +
-                bestReviews +
-                '\nLeast Review: ' +
-                worstReviews
+                'Best Score: ' + bestReviews + '\nWorst Score: ' + worstReviews
               );
             },
           },
@@ -1036,10 +1033,7 @@ export class CategoriesComponent implements OnInit {
           callbacks: {
             label: function (context: any) {
               const datasetIndex = context.datasetIndex;
-              const dataIndex = context.dataIndex;
               const value = context.parsed.y;
-              const bestReview = context.dataset.bestReviews[dataIndex];
-              const worstReview = context.dataset.worstReviews[dataIndex];
               const chartData = context.chart.data.datasets[datasetIndex];
 
               const label = chartData.label;
@@ -1048,15 +1042,11 @@ export class CategoriesComponent implements OnInit {
             },
             afterLabel: function (context: any) {
               const dataIndex = context.dataIndex;
-              const datasetIndex = context.datasetIndex;
               const bestReviews = context.dataset.bestReviews[dataIndex];
               const worstReviews = context.dataset.worstReviews[dataIndex];
 
               return (
-                'Best Review: ' +
-                bestReviews +
-                '\nLeast Review: ' +
-                worstReviews
+                'Best Score: ' + bestReviews + '\nWorst Score: ' + worstReviews
               );
             },
           },
@@ -1074,12 +1064,13 @@ export class CategoriesComponent implements OnInit {
       let count = 0;
       let bestReview = 0;
       let worstReview = 1;
-
+      let summaryReccommendation = '';
       data.forEach((x) => {
         x.categories.forEach((y: any) => {
           if (Object.keys(y).includes(element.toUpperCase())) {
             count++;
           }
+
           let selectedelement = element.toUpperCase();
 
           const value = y[selectedelement];
@@ -1100,6 +1091,7 @@ export class CategoriesComponent implements OnInit {
         value: count,
         BestReview: bestReview,
         WorstReview: worstReview,
+        summaryReccommendation: summaryReccommendation,
       });
     });
 
@@ -1112,16 +1104,23 @@ export class CategoriesComponent implements OnInit {
     const option = {
       tooltip: {
         trigger: 'item',
-        formatter: function (params: any) {
+        formatter: (params: any) => {
           const { name, value, percent, data } = params;
+
           const bestReview = data.BestReview;
           const worstReview = data.WorstReview;
-
+          let summaryReccommendation = '........';
+          // summaryReccommendation = 'loading......';
+          // setTimeout(() => {
+          // }, 500);
+          summaryReccommendation = data.summaryReccommendation;
+          // await new Promise((resolve) => setTimeout(resolve, 500));
           return `
-            <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; flex-direction: column; width:auto;">
               <div>${name}: ${value} (${percent}%)</div>
-              <div>Best Review: ${bestReview}</div>
-              <div>Least Review: ${worstReview}</div>
+              <div>Best Score: ${bestReview}</div>
+              <div>Worst Score: ${worstReview}</div>
+              <div style="max-height:auto; "><p>Summary Review: ${summaryReccommendation}</p></div>
             </div>
           `;
         },
@@ -1173,7 +1172,39 @@ export class CategoriesComponent implements OnInit {
         },
       ],
     };
+    // this.myChart.setOption(option);
 
-    this.myChart.setOption(option);
+    this.myChart
+      .on('mouseover', (data: any) => {
+        let element = data.data.name;
+
+        this.sharedservice.getsummaryAndRecomendations(element).subscribe(
+          (res: any) => {
+            setTimeout(() => {
+              this.summaryData = '........';
+            }, 1000);
+
+            this.summaryData = res.answer.summary;
+
+            data.data.summaryReccommendation = this.summaryData;
+
+            // this.graphDataForDoghnutChart();
+            // this.InitPipe();
+          },
+          (error: any) => {
+            this.statusTrue = error.status;
+            this.loading = false;
+          }
+        );
+      })
+      .setOption(option);
+
+    this.myChart.dispatchAction({
+      type: 'showTip',
+    });
+
+    // this.myChart.on('mouseup', (data: any) => {
+    //   this.summaryData = '';
+    // });
   }
 }

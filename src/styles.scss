@@ -166,3 +166,17 @@ canvas {
     }
   }
 }
+p-progressSpinner .p-progress-spinner-circle {
+  stroke-dasharray: 89, 200;
+  stroke-dashoffset: 0;
+  stroke: orange !important;
+  animation: none !important;
+  stroke-linecap: round;
+}
+// .custom-spinner .p-progress-spinner-svg circle {
+//   stroke: #000000; /* Black stroke */
+// }
+
+// .custom-spinner .p-progress-spinner-svg circle.p-progress-spinner-stroke {
+//   stroke: #ffa500; /* Orange fill */
+// }

@@ -39,7 +39,7 @@
               class="this_week d-flex justify-content-center mt-5"
               *ngIf="loading"
             >
-              <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+              <p-progressSpinner ariaLabel="loading"> </p-progressSpinner>
             </div>
             <div class="this_week" *ngIf="summaryRecomendations && !loading">
               <div class="my-3">
@@ -64,13 +64,13 @@
                 statusTrue === true
               "
             >
-              No Data Available to this Recommendation
+              No data available for this Category.
             </div>
             <div
               class="this_week d-flex justify-content-center mt-5"
               *ngIf="summaryRecomendations && !loading && statusTrue === false"
             >
-              No Data Available to this Recommendation
+              No data available for this Category.
             </div>
           </div>
         </div>

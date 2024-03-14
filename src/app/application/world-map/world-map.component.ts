@@ -96,7 +96,7 @@ export class WorldMapComponent implements OnInit {
     var data = google.visualization.arrayToDataTable(finalData);
 
     var options = {
-      colorAxis: { colors: ['#E39224', '#FF9F1C'] },
+      colorAxis: { colors: ['#F8CB91', '#FF960D'] },
       chartArea: { width: '100%', height: '100%' },
     };
 

@@ -30,6 +30,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     DropdownModule,
     CardModule,
     SelectButtonModule,
+    ProgressSpinnerModule,
     // GMapModule,
     TagModule,
     LayoutModule,

@@ -24,6 +24,7 @@ import { ToastModule } from 'primeng/toast';
 import { ScrollerModule } from 'primeng/scroller';
 import { DividerModule } from 'primeng/divider';
 import { ReactiveFormsModule } from '@angular/forms';
+// import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ScrollerModule,
     DividerModule,
     ReactiveFormsModule,
+    // NgxSpinnerModule,
   ],
 })
 export class ApplicationModule {}

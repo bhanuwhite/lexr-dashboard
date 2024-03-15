@@ -221,7 +221,7 @@
               This week
             </div>
 
-            <div class="row m-1">
+            <div class="row m-1" *ngFor="let data of TrendsCategoryDetials">
               <div
                 class="text-black fw-bold col-lg-6 col-md-6 col-sm-6 d-flex gap-2 align-items-center fs-15"
               >
@@ -231,30 +231,6 @@
                 class="text-black col-lg-6 col-md-6 col-sm-6 justify-content-end d-flex gap-2 align-items-center fs-15"
               >
                 <span class="fs-15 rotameduim" style="color: green">+12%</span>
-              </div>
-            </div>
-            <div class="row m-1">
-              <div
-                class="text-black fw-bold col-lg-6 col-sm-6 d-flex gap-2 align-items-center fs-15"
-              >
-                <span class="fw-600 rotameduim fs-17">SPA</span>
-              </div>
-              <div
-                class="text-black col-lg-6 col-sm-6 justify-content-end d-flex gap-2 align-items-center fs-15"
-              >
-                <span class="fs-15 rotameduim" style="color: green">+4%</span>
-              </div>
-            </div>
-            <div class="row m-1">
-              <div
-                class="text-black fw-bold col-lg-6 col-sm-6 d-flex gap-2 align-items-center fs-15"
-              >
-                <span class="fw-600 rotameduim fs-17">Reception</span>
-              </div>
-              <div
-                class="text-black col-lg-6 col-sm-6 justify-content-end d-flex gap-2 align-items-center fs-15"
-              >
-                <span class="fs-15 rotameduim" style="color: red">-20%</span>
               </div>
             </div>
           </div>
@@ -282,7 +258,13 @@
                 ></p-dropdown>
               </div>
             </div>
-            <div *ngIf="allCategories">
+            <div
+              *ngIf="performanceLoader"
+              class="d-flex justify-content-center mt-5 pt-5"
+            >
+              <p-progressSpinner></p-progressSpinner>
+            </div>
+            <div *ngIf="allCategories && !performanceLoader">
               <p-chart type="line" [data]="dataa" [options]="options"></p-chart>
             </div>
           </div>

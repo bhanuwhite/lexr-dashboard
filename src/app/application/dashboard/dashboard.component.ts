@@ -55,6 +55,8 @@ export class DashboardComponent implements OnInit {
   selectedValue: string = '';
   dataa!: any;
   summaryRecomendations: any;
+  TrendsCategoryDetials: any[] = [];
+  performanceLoader: boolean = false;
 
   constructor(
     private sharedservice: SharedService,
@@ -254,6 +256,8 @@ export class DashboardComponent implements OnInit {
       { year: 'Last 3 months' },
     ];
     YearGraphData = ['All'];
+
+    this.getTrendsCategoriesByWeek();
   }
 
   /**Getting data based on years */
@@ -305,6 +309,7 @@ export class DashboardComponent implements OnInit {
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {
         summaryRecomendations = res.answer.summary;
+        // console.log(summaryRecomendations);
       },
       (error: any) => {
         alert(error.message);
@@ -631,16 +636,12 @@ export class DashboardComponent implements OnInit {
     }
   }
   selectedDataFilter(event: string, selectedYear1: number) {
-    let reviewData: any;
-
     if (event !== undefined) {
       const data: any[] = this.csvallData();
-      reviewData = this.getsummaryAndRecomendations(event);
 
       this.categorieMonthwise = data
         .filter((x) => x.year === selectedYear1)
         .map((x) => ({
-          summary_Review: reviewData,
           month: x.month,
           categories: x.categories.map((y: any) => y[event]),
           avgValue: this.average(x.categories.map((y: any) => y?.[event])),
@@ -653,9 +654,22 @@ export class DashboardComponent implements OnInit {
   selectedCategoriGraphData() {
     let month = new Date().getMonth() - 1;
 
+    let summaryResponce: string[] = [];
     let requiredData: number[] = [];
     let bestValueArray: number[] = new Array(month).fill(0);
     let LeastValueArray: number[] = new Array(month).fill(0);
+
+    this.performanceLoader = true;
+    // console.log(this.categorieMonthwise[0].label);
+    this.sharedservice
+      .getsummaryAndRecomendations(this.categorieMonthwise[0].label)
+      .subscribe((res: any) => {
+        let summary = res.answer.summary;
+        setTimeout(() => {
+          this.performanceLoader = false;
+        }, 1000);
+        summaryResponce.push(summary);
+      });
 
     this.categorieMonthwise.forEach((x: categorieMonthwise) => {
       const monthIndex: number = Number(x.month) - 1;
@@ -703,6 +717,7 @@ export class DashboardComponent implements OnInit {
           data: requiredData,
           bestReviews: bestValueArray,
           worstReviews: LeastValueArray,
+          summary_Review: summaryResponce,
           borderColor: '#FF9F1C',
           borderWidth: 1,
           lineTension: 0.5,
@@ -745,6 +760,8 @@ export class DashboardComponent implements OnInit {
           padding: 8,
           callbacks: {
             label: function (context: any) {
+              console.log(context);
+
               const datasetIndex = context.datasetIndex;
               const value = context.parsed.y;
               const chartData = context.chart.data.datasets[datasetIndex];
@@ -757,13 +774,51 @@ export class DashboardComponent implements OnInit {
               const dataIndex = context.dataIndex;
               const bestReviews = context.dataset.bestReviews[dataIndex];
               const worstReviews = context.dataset.worstReviews[dataIndex];
+              const summary_Review = context.dataset.summary_Review[0];
 
               return (
-                'Best Score: ' + bestReviews + '\nWorst Score: ' + worstReviews
+                'Best Score: ' +
+                bestReviews +
+                '\nWorst Score: ' +
+                worstReviews +
+                '\nsummary_Review: ' +
+                summary_Review
               );
             },
           },
         },
+        //strats
+        // tooltip: {
+        //   callbacks: {
+        //     title: function (tooltipItems: any, data: any) {
+        //       return ''; // Set an empty title, as we are customizing the labels
+        //     },
+        //     label: function (tooltipItem: any, data: any) {
+        //       const datasetIndex = tooltipItem.datasetIndex;
+        //       const value = tooltipItem.yLabel;
+        //       const label = data.datasets[datasetIndex].label || '';
+
+        //       return `${label}: ${value}`;
+        //     },
+        //     afterLabel: function (tooltipItem: any, data: any) {
+        //       const dataIndex = tooltipItem.index;
+        //       const bestReviews = data.datasets[0].bestReviews[dataIndex];
+        //       const worstReviews = data.datasets[0].worstReviews[dataIndex];
+        //       const summaryReview = data.datasets[0].summaryReview[dataIndex];
+
+        //       return (
+        //         'Best Score: ' +
+        //         bestReviews +
+        //         '\nWorst Score: ' +
+        //         worstReviews +
+        //         '\nSummary Review: ' +
+        //         summaryReview
+        //       );
+        //     },
+        //   },
+        // },
+
+        //ends
       },
     };
   }
@@ -787,6 +842,18 @@ export class DashboardComponent implements OnInit {
 
   /**graph ploting for Last 12 month  */
   graphPlotingForLast3Months(dataset: categorieMonthwise[]) {
+    let summaryResponce: string[] = [];
+    this.performanceLoader = true;
+    this.sharedservice
+      .getsummaryAndRecomendations(dataset[0].label)
+      .subscribe((res: any) => {
+        let summary = res.answer.summary;
+        setTimeout(() => {
+          this.performanceLoader = false;
+        }, 1000);
+        summaryResponce.push(summary);
+      });
+
     let datasetArr: datasetData[] = [];
     let month: string[] = [];
 
@@ -830,9 +897,12 @@ export class DashboardComponent implements OnInit {
       LeastValueArray.push(LeastValue);
     }
 
+    console.log(summaryResponce);
+
     jsonData['data'] = data;
     (jsonData['bestReviews'] = bestValueArray),
       (jsonData['worstReviews'] = LeastValueArray);
+    jsonData['summary_Review'] = summaryResponce;
 
     datasetArr.push(jsonData);
 
@@ -866,16 +936,13 @@ export class DashboardComponent implements OnInit {
         },
         tooltip: {
           bodyFont: {
-            size: 12, // Adjust the font size
+            size: 12,
           },
 
           callbacks: {
             label: function (context: any) {
-              const dataIndex = context.dataIndex;
               const datasetIndex = context.datasetIndex;
               const value = context.parsed.y;
-              const bestReviews = context.dataset.bestReviews[dataIndex];
-              const worstReviews = context.dataset.worstReviews[dataIndex];
               const chartData = context.chart.data.datasets[datasetIndex];
 
               const label = chartData.label;
@@ -883,18 +950,36 @@ export class DashboardComponent implements OnInit {
               return `${label}: ${value}`;
             },
             afterLabel: function (context: any) {
+              console.log(context);
+
               const dataIndex = context.dataIndex;
-              const datasetIndex = context.datasetIndex;
               const bestReviews = context.dataset.bestReviews[dataIndex];
               const worstReviews = context.dataset.worstReviews[dataIndex];
+              const summary_Review = context.dataset.summary_Review[0];
 
               return (
-                'Best Score: ' + bestReviews + '\nWorst Score: ' + worstReviews
+                'Best Score: ' +
+                bestReviews +
+                '\nWorst Score: ' +
+                worstReviews +
+                '\nsummary_Review: ' +
+                summary_Review
               );
             },
           },
         },
       },
     };
+  }
+
+  getTrendsCategoriesByWeek() {
+    let selectedData = 'week';
+    this.sharedservice
+      .getTrendsCategoriesByWeek(selectedData)
+      .subscribe((res: any) => {
+        console.log(res);
+
+        this.TrendsCategoryDetials = res;
+      });
   }
 }

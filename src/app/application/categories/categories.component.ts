@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
 import { HttpClient } from '@angular/common/http';
@@ -64,6 +64,7 @@ export class CategoriesComponent implements OnInit {
   constructor(
     private sharedservice: SharedService,
     private Route: ActivatedRoute,
+    private changeDetection: ChangeDetectorRef,
     private http: HttpClient // private spinner: NgxSpinnerService
   ) {
     this.Route.data.subscribe((res) => {
@@ -242,10 +243,7 @@ export class CategoriesComponent implements OnInit {
               const worstReviews = context.dataset.worstReviews[dataIndex];
 
               return (
-                'Best Review: ' +
-                bestReviews +
-                '\nLeast Review: ' +
-                worstReviews
+                'Best Score: ' + bestReviews + '\nWorst Score: ' + worstReviews
               );
             },
           },
@@ -1084,6 +1082,7 @@ export class CategoriesComponent implements OnInit {
           }
         });
       });
+      this.changeDetection.detectChanges();
 
       result.push({
         name: element,
@@ -1092,6 +1091,7 @@ export class CategoriesComponent implements OnInit {
         WorstReview: worstReview,
         summaryReccommendation: summaryReccommendation,
       });
+      this.changeDetection.detectChanges();
     });
 
     return result;
@@ -1108,27 +1108,35 @@ export class CategoriesComponent implements OnInit {
 
           const bestReview = data.BestReview;
           const worstReview = data.WorstReview;
-          let summaryReccommendation = '........';
-          // summaryReccommendation = 'loading......';
-          // setTimeout(() => {
-          // }, 500);
-          summaryReccommendation = data.summaryReccommendation;
-          // await new Promise((resolve) => setTimeout(resolve, 500));
-          return `
-            <div style="display: flex; flex-direction: column; width:auto;">
-              <div>${name}: ${value} (${percent}%)</div>
-              <div>Best Score: ${bestReview}</div>
-              <div>Worst Score: ${worstReview}</div>
-  <div style="width: 500px;
-  min-height: 100px;
-  word-break: auto-phrase;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  white-space: pre-wrap;
+          // let summaryReccommendation = data.summaryReccommendation;
+          this.changeDetection.detectChanges();
 
-   "><p class="summary-review-report" >Summary Review: ${summaryReccommendation}</p></div>
-            </div>
-          `;
+          let displayData;
+          if (data.loading) {
+            displayData = `
+              <div style="display: flex; flex-direction: column; width:auto;">
+                <div>${name}: ${value} (${percent}%)</div>
+                <div>Best Score: ${bestReview}</div>
+                <div>Worst Score: ${worstReview}</div>
+                <div style="width: 500px; min-height: 100px; word-break: auto-phrase; -webkit-box-orient: vertical; -webkit-line-clamp: 3; white-space: pre-wrap;">
+                  <p class="summary-review-report" >Summary Review: Loading..</p>
+                </div>
+              </div>
+            `;
+          } else {
+            displayData = `
+              <div style="display: flex; flex-direction: column; width:auto;">
+                <div>${name}: ${value} (${percent}%)</div>
+                <div>Best Score: ${bestReview}</div>
+                <div>Worst Score: ${worstReview}</div>
+                <div style="width: 500px; min-height: 100px; word-break: auto-phrase; -webkit-box-orient: vertical; -webkit-line-clamp: 3; white-space: pre-wrap;">
+                  <p class="summary-review-report" >Summary Review: ${data.summaryReccommendation}</p>
+                </div>
+              </div>
+            `;
+          }
+
+          return displayData;
         },
       },
 
@@ -1182,20 +1190,25 @@ export class CategoriesComponent implements OnInit {
 
     this.myChart
       .on('mouseover', (data: any) => {
+        console.log(data);
+        data.data.loading = true;
         let element = data.data.name;
 
         this.sharedservice.getsummaryAndRecomendations(element).subscribe(
           (res: any) => {
-            setTimeout(() => {
-              this.summaryData = '........';
-            }, 1000);
-
             this.summaryData = res.answer.summary;
-
+            data.data.loading = false;
             data.data.summaryReccommendation = this.summaryData;
 
-            // this.graphDataForDoghnutChart();
-            // this.InitPipe();
+            if (this.myChart) {
+              this.myChart.dispatchAction({
+                type: 'showTip',
+                seriesIndex: 0,
+                dataIndex: data.dataIndex,
+                position: 'left',
+              });
+            }
+            this.changeDetection.detectChanges();
           },
           (error: any) => {
             this.statusTrue = error.status;
@@ -1204,13 +1217,5 @@ export class CategoriesComponent implements OnInit {
         );
       })
       .setOption(option);
-
-    this.myChart.dispatchAction({
-      type: 'showTip',
-    });
-
-    // this.myChart.on('mouseup', (data: any) => {
-    //   this.summaryData = '';
-    // });
   }
 }

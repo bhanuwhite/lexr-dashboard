@@ -74,6 +74,7 @@ export interface datasetData {
   tension?: number;
   worstReviews?: any;
   bestReviews?: any;
+  summary_Review?: any;
 }
 export interface graphData {
   labels: Array<string | number>;

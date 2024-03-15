@@ -32,4 +32,9 @@ export class SharedService {
     const url = `${this.base_url}/${endPoint}`;
     return this.http.get(url);
   }
+  public getTrendsCategoriesByWeek(item: string) {
+    let endPoint = `average_rating_change_all_categories?groupby=${item}`;
+    const url = `${this.base_url}/${endPoint}`;
+    return this.http.get(url);
+  }
 }

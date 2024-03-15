@@ -737,7 +737,7 @@ export class CategoriesComponent implements OnInit {
 
     if (removedUndefinedData) {
       for (let i = 0; i < removedUndefinedData.length; i++) {
-        sum += removedUndefinedData[i];
+        sum += Number(removedUndefinedData[i]);
       }
     }
 
@@ -837,8 +837,6 @@ export class CategoriesComponent implements OnInit {
 
       if (!Number.isNaN(dataset[i]['avgValue'])) {
         data.push(dataset[i]['avgValue']);
-      } else {
-        data.push(0);
       }
       month.push(this.monthsCheck(Number(dataset[i]['month'])));
 
@@ -932,7 +930,7 @@ export class CategoriesComponent implements OnInit {
   selectedCategoriGraphData() {
     let month = new Date().getMonth() - 1;
 
-    let requiredData: number[] = new Array(month).fill(0);
+    let requiredData: number[] = [];
     let bestValueArray: number[] = new Array(month).fill(0);
     let LeastValueArray: number[] = new Array(month).fill(0);
 
@@ -941,9 +939,10 @@ export class CategoriesComponent implements OnInit {
 
       if (x.avgValue) {
         requiredData[monthIndex] = Number(x.avgValue);
-      } else {
-        requiredData[monthIndex] = 0;
       }
+      //  else {
+      //   requiredData[monthIndex] = 0;
+      // }
       let bestValue: number;
       let LeastValue: number;
 
@@ -962,11 +961,11 @@ export class CategoriesComponent implements OnInit {
       LeastValueArray[monthIndex] = LeastValue;
     });
 
-    for (let i = 0; i <= month; i++) {
-      if (requiredData[i] === undefined) {
-        requiredData[i] = 0;
-      }
-    }
+    // for (let i = 0; i <= month; i++) {
+    //   if (requiredData[i] === undefined) {
+    //     requiredData[i] = 0;
+    //   }
+    // }
 
     this.dataa = {
       labels: [
@@ -1099,7 +1098,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   private InitPipe(): void {
-    this.myChart = echarts.init(document.getElementById('pipe') as any);
+    this.myChart = echarts.init(document.getElementById('pieChart') as any);
 
     const option = {
       tooltip: {
@@ -1120,7 +1119,14 @@ export class CategoriesComponent implements OnInit {
               <div>${name}: ${value} (${percent}%)</div>
               <div>Best Score: ${bestReview}</div>
               <div>Worst Score: ${worstReview}</div>
-              <div style="max-height:auto; "><p>Summary Review: ${summaryReccommendation}</p></div>
+  <div style="width: 500px;
+  min-height: 100px;
+  word-break: auto-phrase;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  white-space: pre-wrap;
+
+   "><p class="summary-review-report" >Summary Review: ${summaryReccommendation}</p></div>
             </div>
           `;
         },

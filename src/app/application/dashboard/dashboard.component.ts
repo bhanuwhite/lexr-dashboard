@@ -20,6 +20,13 @@ import {
   YearData,
 } from '../interfaces/dashboard';
 import { number } from 'echarts';
+import {
+  ReviewData,
+  avgDataForCategories,
+  categorieMonthwise,
+  datasetData,
+  summaryEvent,
+} from '../interfaces/categories';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +36,7 @@ import { number } from 'echarts';
 export class DashboardComponent implements OnInit {
   visibleSidebar1!: boolean;
   data!: graphData;
-  options!: Options;
+  options!: any;
   allCategories: string[] = [];
   csvData: any[] = [];
   reviewsCount: number = 0;
@@ -42,6 +49,12 @@ export class DashboardComponent implements OnInit {
   formattedYears: yearsArray[] = [];
   allYearsData: allYearsData = {};
   currentYear: number = 0;
+  selectedYear: any;
+  categorieMonthwise: categorieMonthwise[] = [];
+  threeMonthsDataSet: categorieMonthwise[] = [];
+  selectedValue: string = '';
+  dataa!: any;
+  summaryRecomendations: any;
 
   constructor(
     private sharedservice: SharedService,
@@ -235,20 +248,70 @@ export class DashboardComponent implements OnInit {
 
     this.getAllcatogryData();
 
-    this.formattedYears = [{ year: 'This Year' }, { year: 'This Month' }];
-
+    this.formattedYears = [
+      { year: 'This Year' },
+      { year: 'Last Year' },
+      { year: 'Last 3 months' },
+    ];
     YearGraphData = ['All'];
+  }
+
+  /**Getting data based on years */
+  getCategoriesByYear(event: DropdownChangeEvent) {
+    if (event.value.year === 'This Year') {
+      let currentYear = new Date().getFullYear();
+      this.selectedDataFilter(this.selectedValue, currentYear);
+      this.selectedCategoriGraphData();
+    } else if (event.value.year === 'Last Year') {
+      let previousYear = new Date().getFullYear() - 1;
+      this.selectedDataFilter(this.selectedValue, previousYear);
+      this.selectedCategoriGraphData();
+    } else {
+      this.LastThreeMonthsData(this.selectedValue);
+      this.graphPlotingForLast3Months(this.threeMonthsDataSet);
+    }
   }
 
   getAllcatogryData() {
     this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
-        this.allCategories = res?.answer?.sort() || [];
+        this.allCategories = res?.answer?.sort();
+        // this.allCategoriesOverTime = categoryResponce.answer.sort();
+
+        let firstElement = this.allCategories[0];
+
+        let firstElementBody = {
+          value: firstElement,
+        };
+
+        this.onSelectingCategory(firstElementBody);
+        this.getsummaryAndRecomendations(firstElementBody);
       },
       (error: Error) => {
         alert(error.message);
       }
     );
+  }
+
+  getsummaryAndRecomendations(selectedCategory: any) {
+    let selectedValue: string = '';
+    if (selectedCategory.value) {
+      selectedValue = selectedCategory.value;
+    } else {
+      selectedValue = selectedCategory;
+    }
+
+    let summaryRecomendations;
+    this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
+      (res: any) => {
+        summaryRecomendations = res.answer.summary;
+      },
+      (error: any) => {
+        alert(error.message);
+      }
+    );
+
+    return summaryRecomendations;
   }
 
   onSelectingYear(event: DropdownChangeEvent) {
@@ -394,7 +457,7 @@ export class DashboardComponent implements OnInit {
   }
 
   monthsCheck(month: number) {
-    switch (month + 1) {
+    switch (month) {
       case 1:
         return 'Jan';
 
@@ -431,5 +494,407 @@ export class DashboardComponent implements OnInit {
       default:
         return '';
     }
+  }
+  yearCheck(date: Date) {
+    const year = new Date(date).getFullYear();
+    return year;
+  }
+
+  monthCheck(date: Date) {
+    const month = new Date(date).getMonth() + 1;
+    switch (month) {
+      case 1:
+        return '1';
+
+      case 2:
+        return '2';
+
+      case 3:
+        return '3';
+      case 4:
+        return '4';
+
+      case 5:
+        return '5';
+
+      case 6:
+        return '6';
+      case 7:
+        return '7';
+
+      case 8:
+        return '8';
+
+      case 9:
+        return '9';
+      case 10:
+        return '10';
+
+      case 11:
+        return '11';
+
+      case 12:
+        return '12';
+
+      default:
+        return '';
+    }
+  }
+  average(data: number[]) {
+    let sum = 0;
+    let removedUndefinedData: number[] = data.filter(
+      (x: number | undefined) => x !== undefined
+    );
+
+    if (removedUndefinedData) {
+      for (let i = 0; i < removedUndefinedData.length; i++) {
+        sum += removedUndefinedData[i];
+      }
+    }
+
+    return Number((sum / removedUndefinedData.length).toFixed(1));
+  }
+
+  csvallData() {
+    let allYearsData = this.csvData?.map((x: ReviewData) => {
+      const year = this.yearCheck(x.date);
+      const month = this.monthCheck(x.date);
+      const categories = x.categories
+        ? JSON.parse(String(x.categories).replace(/'/g, '"'))
+        : {};
+
+      return {
+        year: year,
+        month: month,
+        categories: categories,
+      };
+    });
+
+    let DataForCategories: avgDataForCategories[] = [];
+    let allYearsDataForCategories: any = {};
+
+    for (let i = 0; i < allYearsData?.length; i++) {
+      const year = allYearsData[i].year;
+      const month = allYearsData[i].month;
+      const categories = allYearsData[i].categories;
+
+      let modifyObjectKey = Object.entries(categories);
+      modifyObjectKey.map((x: any) => (x[0] = x[0].toUpperCase()));
+
+      let modifyCategories = Object.fromEntries(modifyObjectKey);
+
+      if (!allYearsDataForCategories[year]) {
+        allYearsDataForCategories[year] = {};
+      }
+
+      if (!allYearsDataForCategories[year][month]) {
+        allYearsDataForCategories[year][month] = {
+          year,
+          month,
+          categories: [modifyCategories],
+        };
+      } else {
+        allYearsDataForCategories[year][month].categories.push(
+          modifyCategories
+        );
+      }
+    }
+
+    for (let year in allYearsDataForCategories) {
+      for (let month in allYearsDataForCategories[year]) {
+        DataForCategories.push(allYearsDataForCategories[year][month]);
+      }
+    }
+
+    let jsonObjectData = Object.values(DataForCategories);
+
+    return jsonObjectData;
+  }
+
+  onSelectingCategory(event: summaryEvent) {
+    // this.categoryLoding = false;
+    if (event.value) {
+      this.selectedValue = event.value.toUpperCase();
+    }
+
+    if (this.selectedYear.year === 'This Year') {
+      const currentYear = new Date().getFullYear();
+      this.selectedDataFilter(this.selectedValue, currentYear);
+      this.selectedCategoriGraphData();
+    } else if (this.selectedYear.year === 'Last Year') {
+      const year = new Date().getFullYear() - 1;
+      this.selectedDataFilter(this.selectedValue, year);
+      this.selectedCategoriGraphData();
+    } else {
+      this.LastThreeMonthsData(this.selectedValue);
+      this.graphPlotingForLast3Months(this.threeMonthsDataSet);
+    }
+  }
+  selectedDataFilter(event: string, selectedYear1: number) {
+    let reviewData: any;
+
+    if (event !== undefined) {
+      const data: any[] = this.csvallData();
+      reviewData = this.getsummaryAndRecomendations(event);
+
+      this.categorieMonthwise = data
+        .filter((x) => x.year === selectedYear1)
+        .map((x) => ({
+          summary_Review: reviewData,
+          month: x.month,
+          categories: x.categories.map((y: any) => y[event]),
+          avgValue: this.average(x.categories.map((y: any) => y?.[event])),
+          label: event,
+        }));
+    }
+  }
+
+  /**graph ploting */
+  selectedCategoriGraphData() {
+    let month = new Date().getMonth() - 1;
+
+    let requiredData: number[] = [];
+    let bestValueArray: number[] = new Array(month).fill(0);
+    let LeastValueArray: number[] = new Array(month).fill(0);
+
+    this.categorieMonthwise.forEach((x: categorieMonthwise) => {
+      const monthIndex: number = Number(x.month) - 1;
+
+      if (x.avgValue) {
+        requiredData[monthIndex] = Number(x.avgValue);
+      }
+      let bestValue: number;
+      let LeastValue: number;
+
+      let removedUndefinedData: number[] = x.categories.filter(
+        (x: number | undefined) => x !== undefined
+      );
+
+      if (x.avgValue) {
+        bestValue = Math.max(...removedUndefinedData);
+        LeastValue = Math.min(...removedUndefinedData);
+      } else {
+        bestValue = 0;
+        LeastValue = 0;
+      }
+      bestValueArray[monthIndex] = bestValue;
+      LeastValueArray[monthIndex] = LeastValue;
+    });
+
+    this.dataa = {
+      labels: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'july',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ],
+      datasets: [
+        {
+          label: this.selectedValue,
+          backgroundColor: ['#FF9F1C'],
+          data: requiredData,
+          bestReviews: bestValueArray,
+          worstReviews: LeastValueArray,
+          borderColor: '#FF9F1C',
+          borderWidth: 1,
+          lineTension: 0.5,
+        },
+      ],
+    };
+
+    this.options = {
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          min: 0,
+          max: 1,
+          ticks: {
+            stepSize: 0.1,
+            callback: function (value: number, index: number, values: number) {
+              return ((index + 0) * 0.1).toFixed(1);
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'RotaBlack',
+            },
+          },
+        },
+
+        tooltip: {
+          bodyFont: {
+            size: 12,
+          },
+          padding: 8,
+          callbacks: {
+            label: function (context: any) {
+              const datasetIndex = context.datasetIndex;
+              const value = context.parsed.y;
+              const chartData = context.chart.data.datasets[datasetIndex];
+
+              const label = chartData.label;
+
+              return `${label}: ${value}`;
+            },
+            afterLabel: function (context: any) {
+              const dataIndex = context.dataIndex;
+              const bestReviews = context.dataset.bestReviews[dataIndex];
+              const worstReviews = context.dataset.worstReviews[dataIndex];
+
+              return (
+                'Best Score: ' + bestReviews + '\nWorst Score: ' + worstReviews
+              );
+            },
+          },
+        },
+      },
+    };
+  }
+
+  LastThreeMonthsData(event: string) {
+    if (event !== undefined) {
+      const data = this.csvallData();
+
+      let last3Objects = data.splice(-4);
+
+      this.threeMonthsDataSet = last3Objects.map((x: any) => {
+        return {
+          month: x.month,
+          categories: x.categories.map((y: any) => y[event]),
+          avgValue: this.average(x.categories.map((y: any) => y?.[event])),
+          label: event,
+        };
+      });
+    }
+  }
+
+  /**graph ploting for Last 12 month  */
+  graphPlotingForLast3Months(dataset: categorieMonthwise[]) {
+    let datasetArr: datasetData[] = [];
+    let month: string[] = [];
+
+    let bestValueArray: number[] = [];
+    let LeastValueArray: number[] = [];
+
+    let label = dataset[0]['label'];
+    let data: number[] = [];
+    let jsonData: datasetData = {
+      label: '',
+      data: [],
+    };
+    for (let i = 0; i < dataset.length - 1; i++) {
+      {
+        (jsonData.fill = false),
+          (jsonData.tension = 0.4),
+          (jsonData.borderColor = '#FF9F1C'),
+          (jsonData.label = label);
+      }
+
+      if (!Number.isNaN(dataset[i]['avgValue'])) {
+        data.push(dataset[i]['avgValue']);
+      }
+      month.push(this.monthsCheck(Number(dataset[i]['month'])));
+
+      let bestValue: number;
+      let LeastValue: number;
+
+      let removedUndefinedData: number[] = dataset[i].categories.filter(
+        (x: number | undefined) => x !== undefined
+      );
+
+      if (dataset[i].avgValue) {
+        bestValue = Math.max(...removedUndefinedData);
+        LeastValue = Math.min(...removedUndefinedData);
+      } else {
+        bestValue = 0;
+        LeastValue = 0;
+      }
+      bestValueArray.push(bestValue);
+      LeastValueArray.push(LeastValue);
+    }
+
+    jsonData['data'] = data;
+    (jsonData['bestReviews'] = bestValueArray),
+      (jsonData['worstReviews'] = LeastValueArray);
+
+    datasetArr.push(jsonData);
+
+    this.dataa = {
+      labels: month,
+      datasets: datasetArr,
+    };
+
+    this.options = {
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          min: 0,
+          max: 1,
+          ticks: {
+            stepSize: 0.1,
+            callback: function (value: any, index: number, values: any) {
+              return ((index + 0) * 0.1).toFixed(1);
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          bodyFont: {
+            size: 12, // Adjust the font size
+          },
+
+          callbacks: {
+            label: function (context: any) {
+              const dataIndex = context.dataIndex;
+              const datasetIndex = context.datasetIndex;
+              const value = context.parsed.y;
+              const bestReviews = context.dataset.bestReviews[dataIndex];
+              const worstReviews = context.dataset.worstReviews[dataIndex];
+              const chartData = context.chart.data.datasets[datasetIndex];
+
+              const label = chartData.label;
+
+              return `${label}: ${value}`;
+            },
+            afterLabel: function (context: any) {
+              const dataIndex = context.dataIndex;
+              const datasetIndex = context.datasetIndex;
+              const bestReviews = context.dataset.bestReviews[dataIndex];
+              const worstReviews = context.dataset.worstReviews[dataIndex];
+
+              return (
+                'Best Score: ' + bestReviews + '\nWorst Score: ' + worstReviews
+              );
+            },
+          },
+        },
+      },
+    };
   }
 }

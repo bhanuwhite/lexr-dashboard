@@ -79,8 +79,10 @@ export class WorldMapComponent implements OnInit {
     let leastReview;
     for (let item in data) {
       let numberArr = data[item];
+
       bestReview = Math.max(...numberArr);
       leastReview = Math.min(...numberArr);
+
       this.modifiedDataByCountry.push([
         item.toUpperCase(),
         bestReview,
@@ -91,12 +93,12 @@ export class WorldMapComponent implements OnInit {
   }
 
   drawRegionsMap(finalData: any) {
-    finalData.unshift(['Country', 'Best Review', 'Least Review']);
+    finalData.unshift(['Country', 'Best Score', 'Worst Score']);
 
     var data = google.visualization.arrayToDataTable(finalData);
 
     var options = {
-      colorAxis: { colors: ['#F8CB91', '#FF960D'] },
+      colorAxis: { colors: ['#F8CB91', '#F8AE4C', '#FF960D'] },
       chartArea: { width: '100%', height: '100%' },
     };
 

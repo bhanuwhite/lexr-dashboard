@@ -266,19 +266,25 @@
             class="card p-3 Sentiment chart_card border-none"
             style="border-radius: 20px"
           >
-            <div class="d-flex flex-wrap justify-content-between mb-3">
-              <div class="text-black fw-600 title">Sentiment Performance</div>
-              <div class="d-flex flex-wrap gap-2">
-                <p-dropdown [options]="allCategories"></p-dropdown>
+            <div class="d-flex justify-content-between mb-3">
+              <div class="text-black fw-400 title">Sentiment Performance</div>
+              <div class="d-flex gap-3 dropdown-div">
+                <p-dropdown
+                  [options]="allCategories"
+                  (onChange)="onSelectingCategory($event)"
+                  class="getsummary_details_drpdn"
+                ></p-dropdown>
                 <p-dropdown
                   optionLabel="year"
                   [options]="formattedYears"
-                  (onChange)="onSelectingYear($event)"
+                  (onChange)="getCategoriesByYear($event)"
+                  [(ngModel)]="selectedYear"
                 ></p-dropdown>
               </div>
             </div>
-
-            <p-chart type="line" [data]="data" [options]="options"></p-chart>
+            <div *ngIf="allCategories">
+              <p-chart type="line" [data]="dataa" [options]="options"></p-chart>
+            </div>
           </div>
         </div>
         <div class="col-lg-4">

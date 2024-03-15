@@ -309,7 +309,6 @@ export class DashboardComponent implements OnInit {
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {
         summaryRecomendations = res.answer.summary;
-        // console.log(summaryRecomendations);
       },
       (error: any) => {
         alert(error.message);
@@ -660,7 +659,6 @@ export class DashboardComponent implements OnInit {
     let LeastValueArray: number[] = new Array(month).fill(0);
 
     this.performanceLoader = true;
-    // console.log(this.categorieMonthwise[0].label);
     this.sharedservice
       .getsummaryAndRecomendations(this.categorieMonthwise[0].label)
       .subscribe((res: any) => {
@@ -760,8 +758,6 @@ export class DashboardComponent implements OnInit {
           padding: 8,
           callbacks: {
             label: function (context: any) {
-              console.log(context);
-
               const datasetIndex = context.datasetIndex;
               const value = context.parsed.y;
               const chartData = context.chart.data.datasets[datasetIndex];
@@ -787,38 +783,6 @@ export class DashboardComponent implements OnInit {
             },
           },
         },
-        //strats
-        // tooltip: {
-        //   callbacks: {
-        //     title: function (tooltipItems: any, data: any) {
-        //       return ''; // Set an empty title, as we are customizing the labels
-        //     },
-        //     label: function (tooltipItem: any, data: any) {
-        //       const datasetIndex = tooltipItem.datasetIndex;
-        //       const value = tooltipItem.yLabel;
-        //       const label = data.datasets[datasetIndex].label || '';
-
-        //       return `${label}: ${value}`;
-        //     },
-        //     afterLabel: function (tooltipItem: any, data: any) {
-        //       const dataIndex = tooltipItem.index;
-        //       const bestReviews = data.datasets[0].bestReviews[dataIndex];
-        //       const worstReviews = data.datasets[0].worstReviews[dataIndex];
-        //       const summaryReview = data.datasets[0].summaryReview[dataIndex];
-
-        //       return (
-        //         'Best Score: ' +
-        //         bestReviews +
-        //         '\nWorst Score: ' +
-        //         worstReviews +
-        //         '\nSummary Review: ' +
-        //         summaryReview
-        //       );
-        //     },
-        //   },
-        // },
-
-        //ends
       },
     };
   }
@@ -897,8 +861,6 @@ export class DashboardComponent implements OnInit {
       LeastValueArray.push(LeastValue);
     }
 
-    console.log(summaryResponce);
-
     jsonData['data'] = data;
     (jsonData['bestReviews'] = bestValueArray),
       (jsonData['worstReviews'] = LeastValueArray);
@@ -950,8 +912,6 @@ export class DashboardComponent implements OnInit {
               return `${label}: ${value}`;
             },
             afterLabel: function (context: any) {
-              console.log(context);
-
               const dataIndex = context.dataIndex;
               const bestReviews = context.dataset.bestReviews[dataIndex];
               const worstReviews = context.dataset.worstReviews[dataIndex];
@@ -977,8 +937,6 @@ export class DashboardComponent implements OnInit {
     this.sharedservice
       .getTrendsCategoriesByWeek(selectedData)
       .subscribe((res: any) => {
-        console.log(res);
-
         this.TrendsCategoryDetials = res;
       });
   }

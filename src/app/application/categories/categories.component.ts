@@ -1190,7 +1190,6 @@ export class CategoriesComponent implements OnInit {
 
     this.myChart
       .on('mouseover', (data: any) => {
-        console.log(data);
         data.data.loading = true;
         let element = data.data.name;
 

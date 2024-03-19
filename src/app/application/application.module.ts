@@ -24,6 +24,7 @@ import { ToastModule } from 'primeng/toast';
 import { ScrollerModule } from 'primeng/scroller';
 import { DividerModule } from 'primeng/divider';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GraphComponentComponent } from './graph-component/graph-component.component';
 // import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
@@ -33,6 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AskAnythingComponent,
     WorldMapComponent,
     YourNeighborsComponent,
+    GraphComponentComponent,
   ],
   imports: [
     CommonModule,

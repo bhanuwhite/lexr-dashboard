@@ -37,4 +37,16 @@ export class SharedService {
     const url = `${this.base_url}/${endPoint}`;
     return this.http.get(url);
   }
+
+  public getCountryReview(country: string) {
+    let endPoint = `get_country_name_review/${country}`;
+    const url = `${this.base_url}/${endPoint}`;
+    return this.http.get(url);
+  }
+
+  public getAllCountriesReview() {
+    let endPoint = 'get_country_reviews';
+    const url = `${this.base_url}/${endPoint}`;
+    return this.http.get(url);
+  }
 }

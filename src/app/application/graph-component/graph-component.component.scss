@@ -1,0 +1,19 @@
+.chart_card {
+  min-height: 470px !important;
+  position: relative;
+  @media only screen and (max-width: 760px) {
+    min-height: auto !important;
+    margin: 10px 0 !important;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 1140px) {
+    min-height: auto !important;
+    margin: 10px 0 !important;
+  }
+}
+
+.custom-tooltip {
+  width: 200px; /* Set the desired width */
+  background-color: white; /* Customize background color */
+  border: 1px solid #ccc; /* Add border */
+  padding: 10px; /* Add padding */
+}

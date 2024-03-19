@@ -1,12 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
+import { CountryData } from '../interfaces/world_map';
 import * as Papa from 'papaparse';
 
 declare var google: any;
@@ -20,9 +16,10 @@ declare var google: any;
 export class WorldMapComponent implements OnInit {
   csvData: any[] = [];
   uniqueCountries: Set<string> = new Set();
-  countriesData: any;
-  reviewsByCountry: any;
+  annotations: any[] = [];
+  reviewsByCountry: CountryData = {};
   modifiedDataByCountry: any[] = [];
+  loader: boolean = false;
 
   constructor(
     private sharedservice: SharedService,
@@ -41,6 +38,8 @@ export class WorldMapComponent implements OnInit {
     google.charts.setOnLoadCallback(() => {
       this.csvAllData();
     });
+    // this.getAllCountriesReview();
+    this.getCountryReview();
   }
 
   csvAllData() {
@@ -70,18 +69,31 @@ export class WorldMapComponent implements OnInit {
           },
           {}
         );
+
         this.calculateReview(this.reviewsByCountry);
       });
   }
 
   calculateReview(data: any) {
+    this.loader = true;
     let bestReview;
     let leastReview;
+    let country_review;
     for (let item in data) {
       let numberArr = data[item];
 
       bestReview = Math.max(...numberArr);
       leastReview = Math.min(...numberArr);
+
+      this.sharedservice.getCountryReview(item).subscribe({
+        next: (res: any) => {
+          country_review = res;
+          console.log(country_review[item]?.summary);
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
 
       this.modifiedDataByCountry.push([
         item.toUpperCase(),
@@ -89,10 +101,11 @@ export class WorldMapComponent implements OnInit {
         leastReview,
       ]);
     }
-    this.drawRegionsMap(this.modifiedDataByCountry);
+
+    this.drawRegionsMap(this.modifiedDataByCountry, this.annotations);
   }
 
-  drawRegionsMap(finalData: any) {
+  drawRegionsMap(finalData: any, annotations: any) {
     finalData.unshift(['Country', 'Best Score', 'Worst Score']);
 
     var data = google.visualization.arrayToDataTable(finalData);
@@ -107,5 +120,23 @@ export class WorldMapComponent implements OnInit {
     );
 
     chart.draw(data, options);
+    this.loader = false;
+  }
+
+  getAllCountriesReview() {
+    this.sharedservice.getAllCountriesReview().subscribe({
+      next: (res: any) => {},
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
+  }
+  getCountryReview() {
+    this.sharedservice.getCountryReview('India').subscribe({
+      next: (res: any) => {},
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
   }
 }

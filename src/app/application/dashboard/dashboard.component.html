@@ -157,7 +157,7 @@
               This week
             </div>
 
-            <div *ngIf="!trendsLoader" class="d-flex justify-content-center">
+            <div *ngIf="trendsLoader" class="d-flex justify-content-center">
               <p-progressSpinner></p-progressSpinner>
             </div>
             <div *ngIf="TrendsCategoryDetials">
@@ -204,7 +204,10 @@
                 }}</a>
               </div>
             </div>
-            <div *ngif="!TrendsCategoryDetials && !trendsLoader">
+            <div
+              *ngIf="!TrendsCategoryDetials && !trendsLoader"
+              class="d-flex justify-content-center"
+            >
               No data Available
             </div>
           </div>

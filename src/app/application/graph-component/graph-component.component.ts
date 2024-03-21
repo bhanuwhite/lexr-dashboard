@@ -82,7 +82,6 @@ export class GraphComponentComponent {
       this.selectedCategoriGraphData();
     } else {
       this.LastThreeMonthsData(this.selectedValue);
-      this.graphPlotingForLast3Months(this.threeMonthsDataSet);
     }
   }
 
@@ -137,10 +136,9 @@ export class GraphComponentComponent {
         }, 1000);
         summaryResponce.push(summary);
       });
-    // debugger;
+
     this.categorieMonthwise.forEach((x: categorieMonthwise) => {
       const monthIndex: number = Number(x.month) - 1;
-      console.log(x);
 
       if (x.avgValue) {
         requiredData[monthIndex] = Number(x.avgValue);
@@ -258,22 +256,58 @@ export class GraphComponentComponent {
     };
   }
 
-  /** To get the last 3 months Data */
   LastThreeMonthsData(event: string) {
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1;
+    let LastThreeMonthsDataForReview: any[] = [];
+
     if (event !== undefined) {
       const data = this.csvRequiredData;
 
-      let last3Objects = data.splice(-4);
+      const getPreviousMonth = (year: number, month: number) => {
+        if (month === 1) {
+          return { year: year - 1, month: 12 };
+        } else {
+          return { year: year, month: month - 1 };
+        }
+      };
 
-      this.threeMonthsDataSet = last3Objects.map((x: any) => {
-        return {
-          month: x.month,
-          categories: x.categories.map((y: any) => y[event]),
-          avgValue: this.average(x.categories.map((y: any) => y?.[event])),
-          label: event,
-        };
-      });
+      let { year, month } = { year: currentYear, month: currentMonth };
+      for (let i = 0; i < 3; i++) {
+        LastThreeMonthsDataForReview.push({ year, month });
+        ({ year, month } = getPreviousMonth(year, month));
+      }
+
+      LastThreeMonthsDataForReview = LastThreeMonthsDataForReview.filter(
+        (monthObj: any) => {
+          const foundData = data.find(
+            (element: any) =>
+              element.year === monthObj.year &&
+              parseInt(element.month) === monthObj.month
+          );
+          return foundData !== undefined;
+        }
+      );
+      LastThreeMonthsDataForReview = LastThreeMonthsDataForReview.map(
+        (monthObj: any) => {
+          const foundData = data.find(
+            (element: any) =>
+              element.year === monthObj.year &&
+              parseInt(element.month) === monthObj.month
+          );
+          return {
+            month: monthObj.month,
+            categories: foundData.categories.map((y: any) => y[event]),
+            avgValue: this.average(
+              foundData.categories.map((y: any) => y?.[event])
+            ),
+            label: event,
+          };
+        }
+      );
     }
+
+    this.graphPlotingForLast3Months(LastThreeMonthsDataForReview);
   }
 
   /**To get the month number */
@@ -322,7 +356,7 @@ export class GraphComponentComponent {
     let summaryResponce: string[] = [];
     this.performanceLoader = true;
     this.sharedService
-      .getsummaryAndRecomendations(dataset[0].label)
+      .getsummaryAndRecomendations(dataset[0]?.label)
       .subscribe((res: any) => {
         let summary = res.answer.summary;
         setTimeout(() => {
@@ -343,7 +377,7 @@ export class GraphComponentComponent {
       label: '',
       data: [],
     };
-    for (let i = 0; i < dataset.length - 1; i++) {
+    for (let i = 0; i < dataset.length; i++) {
       {
         (jsonData.fill = false),
           (jsonData.tension = 0.4),
@@ -354,7 +388,7 @@ export class GraphComponentComponent {
       if (!Number.isNaN(dataset[i]['avgValue'])) {
         data.push(dataset[i]['avgValue']);
       }
-      month.push(this.monthsCheck(Number(dataset[i]['month'])));
+      month.unshift(this.monthsCheck(Number(dataset[i]['month'])));
 
       let bestValue: number;
       let LeastValue: number;
@@ -380,6 +414,8 @@ export class GraphComponentComponent {
     jsonData['summary_Review'] = summaryResponce;
 
     datasetArr.push(jsonData);
+
+    datasetArr.reverse();
 
     this.dataa = {
       labels: month,
@@ -457,7 +493,6 @@ export class GraphComponentComponent {
       this.selectedCategoriGraphData();
     } else {
       this.LastThreeMonthsData(this.selectedValue);
-      this.graphPlotingForLast3Months(this.threeMonthsDataSet);
     }
   }
 

@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   meanSentimentScore: number = 0;
   formattedYears: yearsArray[] = [];
   TrendsCategoryDetials: any;
-  trendsLoader: boolean = false;
+  trendsLoader: boolean = true;
 
   constructor(
     private sharedservice: SharedService,
@@ -97,7 +97,6 @@ export class DashboardComponent implements OnInit {
 
   getTrendsCategoriesByWeek() {
     let selectedData = 'week';
-    this.trendsLoader = true;
     this.sharedservice.getTrendsCategoriesByWeek(selectedData).subscribe(
       (res: any) => {
         this.TrendsCategoryDetials = res;

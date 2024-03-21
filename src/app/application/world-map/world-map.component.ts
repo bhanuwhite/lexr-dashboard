@@ -88,7 +88,6 @@ export class WorldMapComponent implements OnInit {
       this.sharedservice.getCountryReview(item).subscribe({
         next: (res: any) => {
           country_review = res;
-          console.log(country_review[item]?.summary);
         },
         error: (err: any) => {
           console.log(err);

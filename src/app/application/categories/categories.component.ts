@@ -543,12 +543,11 @@ export class CategoriesComponent implements OnInit {
       let bestReview = 0;
       let worstReview = 1;
       let summaryReccommendation = '';
-      data.forEach((x) => {
+      data?.forEach((x) => {
         x.categories.forEach((y: any) => {
           if (Object.keys(y).includes(element.toUpperCase())) {
             count++;
           }
-
           let selectedelement = element.toUpperCase();
 
           const value = y[selectedelement];
@@ -633,6 +632,15 @@ export class CategoriesComponent implements OnInit {
         '#CB997E',
         '#AF9455',
         '#FFBF69',
+        '#FF9F1C',
+        '#CB997E',
+        '#AF9455',
+        '#FFBF69',
+        '#FF9F1C',
+        '#CB997E',
+        '#AF9455',
+        '#FFBF69',
+        '#FF9F1C',
       ],
       series: [
         {
@@ -640,9 +648,9 @@ export class CategoriesComponent implements OnInit {
           type: 'pie',
           radius: ['80%', '88%'],
           avoidLabelOverlap: false,
-          padAngle: 1,
+          padAngle: 0.1,
           itemStyle: {
-            borderRadius: 7,
+            borderRadius: 5,
           },
           label: {
             normal: {

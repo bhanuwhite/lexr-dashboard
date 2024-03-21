@@ -157,10 +157,7 @@
               This week
             </div>
 
-            <div
-              *ngIf="!TrendsCategoryDetials"
-              class="d-flex justify-content-center"
-            >
+            <div *ngIf="!trendsLoader" class="d-flex justify-content-center">
               <p-progressSpinner></p-progressSpinner>
             </div>
             <div *ngIf="TrendsCategoryDetials">
@@ -184,22 +181,31 @@
                       *ngIf="
                         TrendsCategoryDetials[key].change_in_percentage !== 'NA'
                       "
-                      >{{
-                        TrendsCategoryDetials[key].change_in_percentage
-                      }}
-                      %</span
                     >
+                      {{
+                        TrendsCategoryDetials[key].change_in_percentage / 100
+                      }}%
+                    </span>
                     <span
                       class="fs-15 rotameduim"
-                      style="color: blue"
+                      style="color: grey"
                       *ngIf="
                         TrendsCategoryDetials[key].change_in_percentage === 'NA'
                       "
-                      >0 %</span
                     >
+                      0%
+                    </span>
                   </div>
                 </div>
               </div>
+              <div class="d-flex justify-content-end m-2">
+                <a href="#" (click)="toggleCategories()">{{
+                  showAllCategories ? "Show Less" : "View All"
+                }}</a>
+              </div>
+            </div>
+            <div *ngif="!TrendsCategoryDetials && !trendsLoader">
+              No data Available
             </div>
           </div>
         </div>

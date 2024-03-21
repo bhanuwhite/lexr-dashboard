@@ -97,24 +97,31 @@ export class DashboardComponent implements OnInit {
 
   getTrendsCategoriesByWeek() {
     let selectedData = 'week';
-    this, (this.trendsLoader = true);
-
+    this.trendsLoader = true;
     this.sharedservice.getTrendsCategoriesByWeek(selectedData).subscribe(
       (res: any) => {
         this.TrendsCategoryDetials = res;
         this.trendsLoader = false;
       },
       (error: any) => {
-        console.log(error);
+        alert(error);
+        this.trendsLoader = false;
       }
     );
   }
+  showAllCategories: boolean = false;
 
   getTrendsApiKeys() {
-    let TredsApiKeys = Object.keys(this.TrendsCategoryDetials || '')
-      .sort()
-      .slice(0, 3);
+    if (this.showAllCategories) {
+      return Object.keys(this.TrendsCategoryDetials || '').sort();
+    } else {
+      return Object.keys(this.TrendsCategoryDetials || '')
+        .sort()
+        .slice(0, 3);
+    }
+  }
 
-    return TredsApiKeys;
+  toggleCategories() {
+    this.showAllCategories = !this.showAllCategories;
   }
 }

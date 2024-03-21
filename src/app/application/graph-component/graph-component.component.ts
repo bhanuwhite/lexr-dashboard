@@ -115,7 +115,7 @@ export class GraphComponentComponent {
       }
     }
 
-    return Number((sum / removedUndefinedData.length).toFixed(1));
+    return Number((sum / removedUndefinedData.length).toFixed(1)) * 100;
   }
 
   /**graph ploting for selected Category */
@@ -137,9 +137,10 @@ export class GraphComponentComponent {
         }, 1000);
         summaryResponce.push(summary);
       });
-
+    // debugger;
     this.categorieMonthwise.forEach((x: categorieMonthwise) => {
       const monthIndex: number = Number(x.month) - 1;
+      console.log(x);
 
       if (x.avgValue) {
         requiredData[monthIndex] = Number(x.avgValue);
@@ -202,11 +203,11 @@ export class GraphComponentComponent {
         },
         y: {
           min: 0,
-          max: 1,
+          max: 100,
           ticks: {
-            stepSize: 0.1,
-            callback: function (value: number, index: number, values: number) {
-              return ((index + 0) * 0.1).toFixed(1);
+            stepSize: 10,
+            callback: function (value: any, index: number, values: any) {
+              return value.toFixed(0);
             },
           },
         },
@@ -395,11 +396,11 @@ export class GraphComponentComponent {
         },
         y: {
           min: 0,
-          max: 1,
+          max: 100,
           ticks: {
-            stepSize: 0.1,
+            stepSize: 10,
             callback: function (value: any, index: number, values: any) {
-              return ((index + 0) * 0.1).toFixed(1);
+              return value.toFixed(0);
             },
           },
         },

@@ -74,8 +74,10 @@ export class DashboardComponent implements OnInit {
             (sum / (this.csvData.length - count)).toFixed(2)
           );
 
-          if (this.csvData[i].country) {
-            this.uniqueCountries.add(this.csvData[i].country.toLowerCase());
+          if (this.csvData[i].normalized_country) {
+            this.uniqueCountries.add(
+              this.csvData[i].normalized_country.toLowerCase()
+            );
           }
 
           this.countryCount = this.uniqueCountries.size;
@@ -90,7 +92,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: (error: any) => {
-        console.log(error);
+        this.sharedservice.errorMessage(error.message);
       },
     });
   }
@@ -103,7 +105,7 @@ export class DashboardComponent implements OnInit {
         this.trendsLoader = false;
       },
       (error: any) => {
-        alert(error);
+        this.sharedservice.errorMessage(error.statusText);
         this.trendsLoader = false;
       }
     );

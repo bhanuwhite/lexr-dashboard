@@ -25,8 +25,13 @@
     >
       <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
     </div>
-    <div *ngIf="allCategoriesOverTime && !performanceLoader">
+    <div *ngIf="allCategoriesOverTime && !performanceLoader && !summaryError">
       <p-chart type="line" [data]="dataa" [options]="options"></p-chart>
+    </div>
+    <div *ngIf="summaryError && !performanceLoader">
+      <h4 class="text-black d-flex justify-content-center mt-5 pt-5">
+        No data Available
+      </h4>
     </div>
   </div>
 </div>

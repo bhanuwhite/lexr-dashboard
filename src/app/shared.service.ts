@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 export class SharedService {
   base_url: String = 'https://api.feedback.dataisland.ai';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) {}
 
   private headerNamesub = new BehaviorSubject<string>('');
   public headerName$ = this.headerNamesub.asObservable();
@@ -48,5 +49,10 @@ export class SharedService {
     let endPoint = 'get_country_reviews';
     const url = `${this.base_url}/${endPoint}`;
     return this.http.get(url);
+  }
+
+  errorMessage(message: string) {
+    this.toastr.error(message);
+    // this.toastr.error('This is an error toast.', 'Error');
   }
 }

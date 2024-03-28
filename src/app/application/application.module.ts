@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { ToastrModule } from 'ngx-toastr';
 import { ApplicationRoutingModule } from './application-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TagModule } from 'primeng/tag';
@@ -10,7 +11,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { environment } from 'src/environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
@@ -25,6 +25,14 @@ import { ScrollerModule } from 'primeng/scroller';
 import { DividerModule } from 'primeng/divider';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GraphComponentComponent } from './graph-component/graph-component.component';
+
+import {
+  MapsModule,
+  LegendService,
+  ZoomService,
+  MapsTooltipService,
+} from '@syncfusion/ej2-angular-maps';
+
 // import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
@@ -54,7 +62,10 @@ import { GraphComponentComponent } from './graph-component/graph-component.compo
     ScrollerModule,
     DividerModule,
     ReactiveFormsModule,
+    MapsModule,
+    ToastrModule,
     // NgxSpinnerModule,
   ],
+  providers: [LegendService, ZoomService, MapsTooltipService],
 })
 export class ApplicationModule {}

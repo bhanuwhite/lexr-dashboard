@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
 import { CountryData } from '../interfaces/world_map';
 import * as Papa from 'papaparse';
-
+const countryData = require('country-data').countries;
 declare var google: any;
 
 @Component({
@@ -20,6 +20,8 @@ export class WorldMapComponent implements OnInit {
   reviewsByCountry: CountryData = {};
   modifiedDataByCountry: any[] = [];
   loader: boolean = false;
+  chartData!: any[];
+  chartType!: string;
 
   constructor(
     private sharedservice: SharedService,
@@ -38,8 +40,6 @@ export class WorldMapComponent implements OnInit {
     google.charts.setOnLoadCallback(() => {
       this.csvAllData();
     });
-    // this.getAllCountriesReview();
-    this.getCountryReview();
   }
 
   csvAllData() {
@@ -55,7 +55,6 @@ export class WorldMapComponent implements OnInit {
         });
         this.reviewsByCountry = Array.from(this.uniqueCountries).reduce(
           (acc: { [x: string]: any[] }, country: string) => {
-            // Filter csvData based on the current country
             const reviewsForCountry = this.csvData
               .filter(
                 (obj: any) =>
@@ -78,21 +77,17 @@ export class WorldMapComponent implements OnInit {
     this.loader = true;
     let bestReview;
     let leastReview;
-    let country_review;
+    let avgValue;
     for (let item in data) {
       let numberArr = data[item];
-
+      let sum = 0;
       bestReview = Math.max(...numberArr);
       leastReview = Math.min(...numberArr);
 
-      this.sharedservice.getCountryReview(item).subscribe({
-        next: (res: any) => {
-          country_review = res;
-        },
-        error: (err: any) => {
-          console.log(err);
-        },
-      });
+      for (let i = 0; i < numberArr.length; i++) {
+        sum += Number(numberArr[i]);
+      }
+      avgValue = Number((sum / numberArr.length).toFixed(2));
 
       this.modifiedDataByCountry.push([
         item.toUpperCase(),
@@ -100,12 +95,13 @@ export class WorldMapComponent implements OnInit {
         leastReview,
       ]);
     }
-
-    this.drawRegionsMap(this.modifiedDataByCountry, this.annotations);
+    this.drawRegionsMap(this.modifiedDataByCountry);
   }
 
-  drawRegionsMap(finalData: any, annotations: any) {
-    finalData.unshift(['Country', 'Best Score', 'Worst Score']);
+  drawRegionsMap(finalData: any) {
+    console.log(finalData);
+
+    finalData.unshift(['Country', 'Best Score', 'LeastReview']);
 
     var data = google.visualization.arrayToDataTable(finalData);
 
@@ -119,23 +115,7 @@ export class WorldMapComponent implements OnInit {
     );
 
     chart.draw(data, options);
-    this.loader = false;
-  }
 
-  getAllCountriesReview() {
-    this.sharedservice.getAllCountriesReview().subscribe({
-      next: (res: any) => {},
-      error: (err: any) => {
-        console.log(err);
-      },
-    });
-  }
-  getCountryReview() {
-    this.sharedservice.getCountryReview('India').subscribe({
-      next: (res: any) => {},
-      error: (err: any) => {
-        console.log(err);
-      },
-    });
+    this.loader = false;
   }
 }

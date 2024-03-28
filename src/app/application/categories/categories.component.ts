@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
 import * as echarts from 'echarts';
 import { ECharts } from 'echarts';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import {
   Options,
@@ -37,6 +39,8 @@ export class CategoriesComponent implements OnInit {
   allCategoriesOverTime: string[] = [];
   statusTrue!: string | number | boolean;
   private myChart: ECharts | null = null;
+
+  private destroy$: Subject<void> = new Subject<void>();
 
   selectedYear: years = {
     year: '',
@@ -142,11 +146,11 @@ export class CategoriesComponent implements OnInit {
         let event = {
           value: { year: 'This Year' },
         };
-        this.getJsonObjectData();
+        // this.getJsonObjectData();
         this.getByYearData(event);
       },
       (error: any) => {
-        console.log(error);
+        this.sharedservice.errorMessage(error.message);
       }
     );
   }
@@ -158,7 +162,7 @@ export class CategoriesComponent implements OnInit {
         this.csvRequiredData = data;
       },
       (error: any) => {
-        console.log(error);
+        this.sharedservice.errorMessage(error.message);
       }
     );
   }
@@ -459,11 +463,11 @@ export class CategoriesComponent implements OnInit {
         };
 
         this.getsummaryAndRecomendations(firstElementBody);
+
         this.graphDataForDoghnutChart();
-        this.InitPipe();
       },
       (error: Error) => {
-        alert(error.message);
+        this.sharedservice.errorMessage(error.message);
       }
     );
   }
@@ -476,6 +480,7 @@ export class CategoriesComponent implements OnInit {
     if (event.value) {
       selectedValue = event.value;
     }
+    console.log(selectedValue);
 
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {
@@ -486,6 +491,7 @@ export class CategoriesComponent implements OnInit {
         this.summaryRecomendations = res.answer;
       },
       (error: any) => {
+        this.sharedservice.errorMessage(error.message);
         this.statusTrue = error.status;
         this.loading = false;
       }
@@ -534,50 +540,58 @@ export class CategoriesComponent implements OnInit {
   }
 
   graphDataForDoghnutChart() {
-    const data: any[] = this.csvRequiredData;
+    this.ApplicationService.csvallData().subscribe(
+      (res: any[]) => {
+        const data: any[] = res;
 
-    let result: any[] = [];
+        let result: any[] = [];
 
-    this.allCategoriesOverTime.forEach((element) => {
-      let count = 0;
-      let bestReview = 0;
-      let worstReview = 1;
-      let summaryReccommendation = '';
-      data?.forEach((x) => {
-        x.categories.forEach((y: any) => {
-          if (Object.keys(y).includes(element.toUpperCase())) {
-            count++;
-          }
-          let selectedelement = element.toUpperCase();
+        this.allCategoriesOverTime.forEach((element) => {
+          let count = 0;
+          let bestReview = 0;
+          let worstReview = 1;
+          let summaryReccommendation = '';
 
-          const value = y[selectedelement];
+          data?.forEach((x) => {
+            x.categories.forEach((y: any) => {
+              if (Object.keys(y).includes(element.toUpperCase())) {
+                count++;
+              }
+              let selectedelement = element.toUpperCase();
 
-          if (value !== undefined) {
-            if (value > bestReview) {
-              bestReview = value;
-            }
-            if (worstReview > value) {
-              worstReview = value;
-            }
-          }
+              const value = y[selectedelement];
+
+              if (value !== undefined) {
+                if (value > bestReview) {
+                  bestReview = value;
+                }
+                if (worstReview > value) {
+                  worstReview = value;
+                }
+              }
+            });
+          });
+
+          result.push({
+            name: element,
+            value: count,
+            BestReview: bestReview,
+            WorstReview: worstReview,
+            summaryReccommendation: summaryReccommendation,
+          });
+          // this.changeDetection.detectChanges();
         });
-      });
-      this.changeDetection.detectChanges();
 
-      result.push({
-        name: element,
-        value: count,
-        BestReview: bestReview,
-        WorstReview: worstReview,
-        summaryReccommendation: summaryReccommendation,
-      });
-      this.changeDetection.detectChanges();
-    });
-
-    return result;
+        this.InitPipe(result);
+        return result;
+      },
+      (error: any) => {
+        this.sharedservice.errorMessage(error.message);
+      }
+    );
   }
 
-  private InitPipe(): void {
+  private InitPipe(data: any): void {
     this.myChart = echarts.init(document.getElementById('pieChart') as any);
 
     const option = {
@@ -588,8 +602,6 @@ export class CategoriesComponent implements OnInit {
 
           const bestReview = data.BestReview;
           const worstReview = data.WorstReview;
-          // let summaryReccommendation = data.summaryReccommendation;
-          this.changeDetection.detectChanges();
 
           let displayData;
           if (data.loading) {
@@ -599,7 +611,7 @@ export class CategoriesComponent implements OnInit {
                 <div>Best Score: ${bestReview}</div>
                 <div>Worst Score: ${worstReview}</div>
                 <div style="width: 500px; min-height: 100px; word-break: auto-phrase; -webkit-box-orient: vertical; -webkit-line-clamp: 3; white-space: pre-wrap;">
-                  <p class="summary-review-report" >Summary Review: Loading..</p>
+                  <p class="summary-review-report" >Summary Review: Loading...</p>
                 </div>
               </div>
             `;
@@ -650,7 +662,7 @@ export class CategoriesComponent implements OnInit {
           avoidLabelOverlap: false,
           padAngle: 0.1,
           itemStyle: {
-            borderRadius: 5,
+            borderRadius: 10,
           },
           label: {
             normal: {
@@ -671,38 +683,41 @@ export class CategoriesComponent implements OnInit {
               show: false,
             },
           },
-          data: this.graphDataForDoghnutChart(),
+          data: data,
         },
       ],
     };
-    // this.myChart.setOption(option);
 
     this.myChart
       .on('mouseover', (data: any) => {
         data.data.loading = true;
         let element = data.data.name;
+        this.destroy$.next();
 
-        this.sharedservice.getsummaryAndRecomendations(element).subscribe(
-          (res: any) => {
-            this.summaryData = res.answer.summary;
-            data.data.loading = false;
-            data.data.summaryReccommendation = this.summaryData;
+        this.sharedservice
+          .getsummaryAndRecomendations(element)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+            (res: any) => {
+              this.summaryData = res.answer.summary;
+              data.data.loading = false;
+              data.data.summaryReccommendation = this.summaryData;
 
-            if (this.myChart) {
-              this.myChart.dispatchAction({
-                type: 'showTip',
-                seriesIndex: 0,
-                dataIndex: data.dataIndex,
-                position: 'left',
-              });
+              if (this.myChart) {
+                this.myChart.dispatchAction({
+                  type: 'showTip',
+                  seriesIndex: 0,
+                  dataIndex: data.dataIndex,
+                  position: 'left',
+                });
+              }
+            },
+            (error: any) => {
+              this.sharedservice.errorMessage(error.message);
+              this.statusTrue = error.status;
+              this.loading = false;
             }
-            this.changeDetection.detectChanges();
-          },
-          (error: any) => {
-            this.statusTrue = error.status;
-            this.loading = false;
-          }
-        );
+          );
       })
       .setOption(option);
   }

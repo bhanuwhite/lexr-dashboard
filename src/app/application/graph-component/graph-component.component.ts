@@ -16,11 +16,13 @@ import { ApplicationServiceService } from '../application-service.service';
 })
 export class GraphComponentComponent {
   selectedValue: any;
+  selectedCategory: any;
   categoryLoding: any;
   selectedYear: any;
   csvData: any;
   options: any;
   dataa: any;
+  summaryError: boolean = false;
 
   @Input() title: string = 'Sentiment Performance'; // Default title
 
@@ -59,9 +61,7 @@ export class GraphComponentComponent {
       (data: any[]) => {
         this.csvRequiredData = data;
       },
-      (error: any) => {
-        console.log(error);
-      }
+      (error: any) => {}
     );
   }
 
@@ -70,6 +70,7 @@ export class GraphComponentComponent {
     this.categoryLoding = false;
     if (event.value) {
       this.selectedValue = event.value.toUpperCase();
+      this.selectedCategory = event.value;
     }
 
     if (this.selectedYear.year === 'This Year') {
@@ -88,6 +89,8 @@ export class GraphComponentComponent {
   /** FILTERING THE DATA BASED ON SELECTING CATEGORY */
   filteringDataBasedOnCategory(event: string, selectedYear1: number) {
     if (event !== undefined) {
+      console.log(this.csvRequiredData);
+
       const data: any[] = this.csvRequiredData;
 
       this.categorieMonthwise = data
@@ -127,16 +130,25 @@ export class GraphComponentComponent {
     let LeastValueArray: number[] = new Array(month).fill(0);
 
     this.performanceLoader = true;
-    this.sharedService
-      .getsummaryAndRecomendations(this.categorieMonthwise[0].label)
-      .subscribe((res: any) => {
-        let summary = res.answer.summary;
-        setTimeout(() => {
-          this.performanceLoader = false;
-        }, 1000);
-        summaryResponce.push(summary);
-      });
 
+    this.sharedService
+      .getsummaryAndRecomendations(this.selectedCategory)
+      .subscribe({
+        next: (res: any) => {
+          let summary = res.answer.summary;
+          setTimeout(() => {
+            this.performanceLoader = false;
+          }, 200);
+          this.summaryError = false;
+          summaryResponce.push(summary);
+        },
+        error: (err: any) => {
+          this.summaryError = true;
+          this.performanceLoader = false;
+          this.sharedService.errorMessage(err.statusText);
+        },
+      });
+    console.log(this.categorieMonthwise);
     this.categorieMonthwise.forEach((x: categorieMonthwise) => {
       const monthIndex: number = Number(x.month) - 1;
 
@@ -356,13 +368,20 @@ export class GraphComponentComponent {
     let summaryResponce: string[] = [];
     this.performanceLoader = true;
     this.sharedService
-      .getsummaryAndRecomendations(dataset[0]?.label)
-      .subscribe((res: any) => {
-        let summary = res.answer.summary;
-        setTimeout(() => {
+      .getsummaryAndRecomendations(this.selectedCategory)
+      .subscribe({
+        next: (res: any) => {
+          let summary = res.answer.summary;
+          setTimeout(() => {
+            this.performanceLoader = false;
+          }, 200);
+          summaryResponce.push(summary);
+        },
+        error: (err: any) => {
           this.performanceLoader = false;
-        }, 500);
-        summaryResponce.push(summary);
+
+          this.sharedService.errorMessage(err.statusText);
+        },
       });
 
     let datasetArr: datasetData[] = [];
@@ -502,7 +521,6 @@ export class GraphComponentComponent {
 
     this.sharedService.getAllCategories().subscribe(
       (res: any) => {
-        // const categoryResponce = res as categoryResponce;
         this.allCategoriesOverTime = res.answer.sort();
 
         let firstElement = this.allCategoriesOverTime[0];
@@ -514,18 +532,17 @@ export class GraphComponentComponent {
         this.onSelectingCategory(firstElementBody);
       },
       (error: Error) => {
-        alert(error.message);
+        this.sharedService.errorMessage(error.message);
       }
     );
   }
 
-  customizeTooltip() {
-    // Get the tooltip element
-    let tooltips = document.querySelectorAll('.chartjs-tooltip');
+  // customizeTooltip() {
 
-    // Add a custom class to each tooltip element
-    tooltips.forEach((tooltip) => {
-      tooltip.classList.add('custom-tooltip'); // Add your custom class here
-    });
-  }
+  //   let tooltips = document.querySelectorAll('.chartjs-tooltip');
+
+  //   tooltips.forEach((tooltip) => {
+  //     tooltip.classList.add('custom-tooltip');
+  //   });
+  // }
 }

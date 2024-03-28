@@ -93,6 +93,7 @@ export class WorldMapComponent implements OnInit {
         item.toUpperCase(),
         bestReview,
         leastReview,
+        avgValue,
       ]);
     }
     this.drawRegionsMap(this.modifiedDataByCountry);
@@ -101,9 +102,40 @@ export class WorldMapComponent implements OnInit {
   drawRegionsMap(finalData: any) {
     console.log(finalData);
 
-    finalData.unshift(['Country', 'Best Score', 'LeastReview']);
+    finalData.unshift([
+      'Country',
+      'Best Score',
+      'LeastReview',
+      'Average Value',
+    ]);
 
     var data = google.visualization.arrayToDataTable(finalData);
+
+    var view = new google.visualization.DataView(data);
+
+    view.setColumns([
+      0,
+      {
+        type: 'number',
+
+        calc: function (dt: any, row: any) {
+          var BestScore = dt.getValue(row, 1);
+          var LeastReview = dt.getValue(row, 2);
+          var AverageValue = dt.getValue(row, 3);
+
+          return {
+            v: BestScore,
+            f:
+              ' Best Score : ' +
+              BestScore +
+              ', Least Score : ' +
+              LeastReview +
+              ', Average Value :' +
+              AverageValue,
+          };
+        },
+      },
+    ]);
 
     var options = {
       colorAxis: { colors: ['#F8CB91', '#F8AE4C', '#FF960D'] },
@@ -114,7 +146,7 @@ export class WorldMapComponent implements OnInit {
       document.getElementById('regions_div')
     );
 
-    chart.draw(data, options);
+    chart.draw(view, options);
 
     this.loader = false;
   }

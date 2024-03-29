@@ -480,7 +480,6 @@ export class CategoriesComponent implements OnInit {
     if (event.value) {
       selectedValue = event.value;
     }
-    console.log(selectedValue);
 
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {

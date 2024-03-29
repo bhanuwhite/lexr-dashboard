@@ -72,12 +72,13 @@ export class GraphComponentComponent {
       this.selectedValue = event.value.toUpperCase();
       this.selectedCategory = event.value;
     }
+    console.log(this.selectedYear);
 
-    if (this.selectedYear.year === 'This Year') {
+    if (this.selectedYear?.year === 'This Year') {
       const currentYear = new Date().getFullYear();
       this.filteringDataBasedOnCategory(this.selectedValue, currentYear);
       this.selectedCategoriGraphData();
-    } else if (this.selectedYear.year === 'Last Year') {
+    } else if (this.selectedYear?.year === 'Last Year') {
       const year = new Date().getFullYear() - 1;
       this.filteringDataBasedOnCategory(this.selectedValue, year);
       this.selectedCategoriGraphData();
@@ -89,8 +90,6 @@ export class GraphComponentComponent {
   /** FILTERING THE DATA BASED ON SELECTING CATEGORY */
   filteringDataBasedOnCategory(event: string, selectedYear1: number) {
     if (event !== undefined) {
-      console.log(this.csvRequiredData);
-
       const data: any[] = this.csvRequiredData;
 
       this.categorieMonthwise = data
@@ -148,7 +147,7 @@ export class GraphComponentComponent {
           this.sharedService.errorMessage(err.statusText);
         },
       });
-    console.log(this.categorieMonthwise);
+
     this.categorieMonthwise.forEach((x: categorieMonthwise) => {
       const monthIndex: number = Number(x.month) - 1;
 

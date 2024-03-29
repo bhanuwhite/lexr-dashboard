@@ -74,11 +74,11 @@ export class GraphComponentComponent {
     }
     console.log(this.selectedYear);
 
-    if (this.selectedYear?.year === 'This Year') {
+    if (this.selectedYear.year === 'This Year') {
       const currentYear = new Date().getFullYear();
       this.filteringDataBasedOnCategory(this.selectedValue, currentYear);
       this.selectedCategoriGraphData();
-    } else if (this.selectedYear?.year === 'Last Year') {
+    } else if (this.selectedYear.year === 'Last Year') {
       const year = new Date().getFullYear() - 1;
       this.filteringDataBasedOnCategory(this.selectedValue, year);
       this.selectedCategoriGraphData();

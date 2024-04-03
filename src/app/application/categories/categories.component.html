@@ -41,7 +41,10 @@
             >
               <p-progressSpinner ariaLabel="loading"> </p-progressSpinner>
             </div>
-            <div class="this_week" *ngIf="summaryRecomendations && !loading">
+            <div
+              class="this_week"
+              *ngIf="summaryRecomendations && !loading && !statusTrue"
+            >
               <div class="my-3">
                 <span class="this_week">{{
                   summaryRecomendations.summary
@@ -58,17 +61,7 @@
             </div>
             <div
               class="this_week d-flex justify-content-center mt-5"
-              *ngIf="
-                !summaryRecomendations.summary &&
-                !loading &&
-                statusTrue === true
-              "
-            >
-              No data available for this Category.
-            </div>
-            <div
-              class="this_week d-flex justify-content-center mt-5"
-              *ngIf="summaryRecomendations && !loading && statusTrue === false"
+              *ngIf="!loading && statusTrue === true"
             >
               No data available for this Category.
             </div>
@@ -76,10 +69,10 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-7">
+        <div class="col-lg-8">
           <app-graph-component title="Category over Time"></app-graph-component>
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-4">
           <div
             class="card p-3 my-0 top_category border-none"
             style="border-radius: 20px"

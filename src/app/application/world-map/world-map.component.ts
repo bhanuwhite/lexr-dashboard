@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
 import { CountryData } from '../interfaces/world_map';
 import * as Papa from 'papaparse';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 const countryData = require('country-data').countries;
 declare var google: any;
 
@@ -22,6 +24,7 @@ export class WorldMapComponent implements OnInit {
   loader: boolean = false;
   chartData!: any[];
   chartType!: string;
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private sharedservice: SharedService,
@@ -49,10 +52,11 @@ export class WorldMapComponent implements OnInit {
         this.csvData = Papa.parse(data, { header: true }).data;
 
         this.csvData.forEach((x) => {
-          if (x.country) {
-            this.uniqueCountries.add(x.country.toLowerCase());
+          if (x.normalized_country) {
+            this.uniqueCountries.add(x.normalized_country.toLowerCase());
           }
         });
+
         this.reviewsByCountry = Array.from(this.uniqueCountries).reduce(
           (acc: { [x: string]: any[] }, country: string) => {
             const reviewsForCountry = this.csvData
@@ -78,16 +82,20 @@ export class WorldMapComponent implements OnInit {
     let bestReview;
     let leastReview;
     let avgValue;
+
     for (let item in data) {
       let numberArr = data[item];
-      let sum = 0;
-      bestReview = Math.max(...numberArr);
-      leastReview = Math.min(...numberArr);
 
-      for (let i = 0; i < numberArr.length; i++) {
-        sum += Number(numberArr[i]);
+      if (numberArr.length > 0) {
+        let sum = 0;
+        bestReview = Math.max(...numberArr);
+        leastReview = Math.min(...numberArr);
+
+        for (let i = 0; i < numberArr.length; i++) {
+          sum += Number(numberArr[i]);
+        }
+        avgValue = Number((sum / numberArr.length).toFixed(2));
       }
-      avgValue = Number((sum / numberArr.length).toFixed(2));
 
       this.modifiedDataByCountry.push([
         item.toUpperCase(),
@@ -96,12 +104,11 @@ export class WorldMapComponent implements OnInit {
         avgValue,
       ]);
     }
+
     this.drawRegionsMap(this.modifiedDataByCountry);
   }
 
   drawRegionsMap(finalData: any) {
-    console.log(finalData);
-
     finalData.unshift([
       'Country',
       'Best Score',
@@ -115,10 +122,12 @@ export class WorldMapComponent implements OnInit {
 
     view.setColumns([
       0,
+
       {
         type: 'number',
 
-        calc: function (dt: any, row: any) {
+        calc: (dt: any, row: any) => {
+          var country = dt.getValue(row, 0);
           var BestScore = dt.getValue(row, 1);
           var LeastReview = dt.getValue(row, 2);
           var AverageValue = dt.getValue(row, 3);
@@ -145,6 +154,49 @@ export class WorldMapComponent implements OnInit {
     var chart = new google.visualization.GeoChart(
       document.getElementById('regions_div')
     );
+
+    google.visualization.events.addListener(chart, 'select', () => {
+      this.destroy$.next();
+      var selection = chart.getSelection();
+
+      if (selection.length > 0) {
+        var selectedCountry = data.getValue(selection[0].row, 0);
+        this.sharedservice
+          .getCountryReview(selectedCountry.toLowerCase())
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((res: any) => {
+            let summary = res[selectedCountry.toLowerCase()].summary;
+
+            view.setColumns([
+              0,
+              {
+                type: 'number',
+
+                calc: (dt: any, row: any) => {
+                  var country = dt.getValue(row, 0);
+                  var BestScore = dt.getValue(row, 1);
+                  var LeastReview = dt.getValue(row, 2);
+                  var AverageValue = dt.getValue(row, 3);
+                  var countrySummary = summary;
+
+                  return {
+                    v: BestScore,
+                    f:
+                      ' Best Score : ' +
+                      BestScore +
+                      ', Least Score : ' +
+                      LeastReview +
+                      ', Average Value :' +
+                      AverageValue +
+                      ',summary :' +
+                      countrySummary,
+                  };
+                },
+              },
+            ]);
+          });
+      }
+    });
 
     chart.draw(view, options);
 

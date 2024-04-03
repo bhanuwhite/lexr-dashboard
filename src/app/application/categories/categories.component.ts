@@ -37,7 +37,7 @@ export class CategoriesComponent implements OnInit {
   formattedYears: years[] = [];
   allYearsData: yearsData = {};
   allCategoriesOverTime: string[] = [];
-  statusTrue!: string | number | boolean;
+  statusTrue!: boolean;
   private myChart: ECharts | null = null;
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -294,50 +294,39 @@ export class CategoriesComponent implements OnInit {
   graphPlotingForMonths() {
     let requiredData: any[] = [];
     let currentYear = new Date().getFullYear();
-    let currentmonth = new Date().getMonth();
+    let currentMonth = new Date().getMonth();
     let LastThreeMonthsDataForReview: any[] = [];
 
-    for (let year in this.allYearsData) {
-      if (Number(year) === currentYear) {
-        let monthsAdded = 0;
-        for (let x = currentmonth + 1; x > 0 && monthsAdded < 3; x--) {
-          if (
-            this.allYearsData[currentYear] &&
-            this.allYearsData[currentYear][x] !== undefined
-          ) {
-            LastThreeMonthsDataForReview.unshift({
-              month: x,
-              possitiveReviewData:
-                this.allYearsData[currentYear][x].positiveReview,
-              negativeReviewData:
-                this.allYearsData[currentYear][x].negativeReview,
-              bestReview: this.allYearsData[currentYear][x].bestReview,
-              worstReview: this.allYearsData[currentYear][x].worstReview,
-            });
-            monthsAdded++;
-          }
-        }
+    for (let i = 0; i < 3; i++) {
+      let targetMonth = currentMonth - i;
+      let targetYear = currentYear;
 
-        // If necessary, loop through the previous year
-        if (monthsAdded < 3) {
-          for (let x = 12; x > 0 && monthsAdded < 3; x--) {
-            if (
-              this.allYearsData[currentYear - 1] &&
-              this.allYearsData[currentYear - 1][x] !== undefined
-            ) {
-              LastThreeMonthsDataForReview.unshift({
-                month: x,
-                possitiveReviewData:
-                  this.allYearsData[currentYear - 1][x].positiveReview,
-                negativeReviewData:
-                  this.allYearsData[currentYear - 1][x].negativeReview,
-                bestReview: this.allYearsData[currentYear - 1][x].bestReview,
-                worstReview: this.allYearsData[currentYear - 1][x].worstReview,
-              });
-              monthsAdded++;
-            }
-          }
-        }
+      if (targetMonth <= 0) {
+        targetMonth += 12;
+        targetYear -= 1;
+      }
+
+      if (
+        this.allYearsData[targetYear] &&
+        this.allYearsData[targetYear][targetMonth]
+      ) {
+        LastThreeMonthsDataForReview.unshift({
+          month: targetMonth,
+          possitiveReviewData:
+            this.allYearsData[targetYear][targetMonth].positiveReview,
+          negativeReviewData:
+            this.allYearsData[targetYear][targetMonth].negativeReview,
+          bestReview: this.allYearsData[targetYear][targetMonth].bestReview,
+          worstReview: this.allYearsData[targetYear][targetMonth].worstReview,
+        });
+      } else {
+        LastThreeMonthsDataForReview.unshift({
+          month: targetMonth,
+          possitiveReviewData: 0,
+          negativeReviewData: 0,
+          bestReview: 0,
+          worstReview: 0,
+        });
       }
     }
 
@@ -483,15 +472,13 @@ export class CategoriesComponent implements OnInit {
 
     this.sharedservice.getsummaryAndRecomendations(selectedValue).subscribe(
       (res: any) => {
-        this.statusTrue = res.status;
-
         this.loading = false;
 
         this.summaryRecomendations = res.answer;
       },
       (error: any) => {
         this.sharedservice.errorMessage(error.message);
-        this.statusTrue = error.status;
+        this.statusTrue = true;
         this.loading = false;
       }
     );
@@ -691,32 +678,49 @@ export class CategoriesComponent implements OnInit {
       .on('mouseover', (data: any) => {
         data.data.loading = true;
         let element = data.data.name;
-        this.destroy$.next();
 
-        this.sharedservice
-          .getsummaryAndRecomendations(element)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-            (res: any) => {
-              this.summaryData = res.answer.summary;
-              data.data.loading = false;
-              data.data.summaryReccommendation = this.summaryData;
+        let localCategoryData = localStorage.getItem(element);
 
-              if (this.myChart) {
-                this.myChart.dispatchAction({
-                  type: 'showTip',
-                  seriesIndex: 0,
-                  dataIndex: data.dataIndex,
-                  position: 'left',
-                });
+        if (!localCategoryData) {
+          this.destroy$.next();
+          this.sharedservice
+            .getsummaryAndRecomendations(element)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+              (res: any) => {
+                this.summaryData = res.answer.summary;
+                localStorage.setItem(element, this.summaryData);
+                data.data.loading = false;
+                data.data.summaryReccommendation = this.summaryData;
+
+                if (this.myChart) {
+                  this.myChart.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: 0,
+                    dataIndex: data.dataIndex,
+                    position: 'left',
+                  });
+                }
+              },
+              (error: any) => {
+                this.sharedservice.errorMessage(error.message);
+                this.statusTrue = true;
+                this.loading = false;
               }
-            },
-            (error: any) => {
-              this.sharedservice.errorMessage(error.message);
-              this.statusTrue = error.status;
-              this.loading = false;
-            }
-          );
+            );
+        } else {
+          data.data.loading = false;
+          data.data.summaryReccommendation = this.summaryData;
+
+          if (this.myChart) {
+            this.myChart.dispatchAction({
+              type: 'showTip',
+              seriesIndex: 0,
+              dataIndex: data.dataIndex,
+              position: 'left',
+            });
+          }
+        }
       })
       .setOption(option);
   }

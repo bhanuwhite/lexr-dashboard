@@ -82,8 +82,6 @@ export class DashboardComponent implements OnInit {
 
           this.countryCount = this.uniqueCountries.size;
 
-          console.log(this.countryCount, 'counted Countries');
-
           if (this.csvData[i].sentiment_score > 0.6) {
             this.possitiveCount++;
           } else if (this.csvData[i].sentiment_score < 0.4) {

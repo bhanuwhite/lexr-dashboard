@@ -51,6 +51,12 @@ export class SharedService {
     return this.http.get(url);
   }
 
+  public getSubCategories(category: any) {
+    let endPoint = `get_subcategories?main_category=${category}`;
+    const url = `${this.base_url}/${endPoint}`;
+    return this.http.get(url);
+  }
+
   errorMessage(message: string) {
     this.toastr.error(message);
     // this.toastr.error('This is an error toast.', 'Error');

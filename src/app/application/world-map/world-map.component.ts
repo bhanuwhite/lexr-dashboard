@@ -127,7 +127,6 @@ export class WorldMapComponent implements OnInit {
         type: 'number',
 
         calc: (dt: any, row: any) => {
-          var country = dt.getValue(row, 0);
           var BestScore = dt.getValue(row, 1);
           var LeastReview = dt.getValue(row, 2);
           var AverageValue = dt.getValue(row, 3);
@@ -156,7 +155,6 @@ export class WorldMapComponent implements OnInit {
     );
 
     google.visualization.events.addListener(chart, 'select', () => {
-      this.destroy$.next();
       var selection = chart.getSelection();
 
       if (selection.length > 0) {
@@ -164,36 +162,62 @@ export class WorldMapComponent implements OnInit {
         this.sharedservice
           .getCountryReview(selectedCountry.toLowerCase())
           .pipe(takeUntil(this.destroy$))
-          .subscribe((res: any) => {
-            let summary = res[selectedCountry.toLowerCase()].summary;
+          .subscribe({
+            next: (res: any) => {
+              const countryData = res[selectedCountry.toLowerCase()];
+              if (countryData) {
+                const countryReview = countryData.summary;
+                if (countryReview) {
+                  const filteredData = this.modifiedDataByCountry.filter(
+                    (data) => {
+                      return (
+                        data[0].toLowerCase() === selectedCountry.toLowerCase()
+                      );
+                    }
+                  );
+                  const indexValue =
+                    filteredData.length > 0
+                      ? this.modifiedDataByCountry.indexOf(filteredData[0])
+                      : -1;
+                  if (indexValue !== -1) {
+                    const summaryValue = this.modifiedDataByCountry[indexValue];
+                    summaryValue[3] = countryReview;
 
-            view.setColumns([
-              0,
-              {
-                type: 'number',
+                    console.log(this.modifiedDataByCountry);
 
-                calc: (dt: any, row: any) => {
-                  var country = dt.getValue(row, 0);
-                  var BestScore = dt.getValue(row, 1);
-                  var LeastReview = dt.getValue(row, 2);
-                  var AverageValue = dt.getValue(row, 3);
-                  var countrySummary = summary;
-
-                  return {
-                    v: BestScore,
-                    f:
-                      ' Best Score : ' +
-                      BestScore +
-                      ', Least Score : ' +
-                      LeastReview +
-                      ', Average Value :' +
-                      AverageValue +
-                      ',summary :' +
-                      countrySummary,
-                  };
-                },
-              },
-            ]);
+                    var data = google.visualization.arrayToDataTable(
+                      this.modifiedDataByCountry
+                    );
+                    var view = new google.visualization.DataView(data);
+                    view.setColumns([
+                      0,
+                      {
+                        type: 'number',
+                        calc: (dt: any, row: any) => {
+                          var BestScore = dt.getValue(row, 1);
+                          var LeastReview = dt.getValue(row, 2);
+                          var summary = dt.getValue(row, 3);
+                          return {
+                            v: BestScore,
+                            f:
+                              ' Best Score : ' +
+                              BestScore +
+                              ', Least Score : ' +
+                              LeastReview +
+                              ',Summary :' +
+                              summary,
+                          };
+                        },
+                      },
+                    ]);
+                    chart.draw(view, options);
+                  }
+                }
+              }
+            },
+            error: (err: any) => {
+              this.sharedservice.errorMessage(err.message);
+            },
           });
       }
     });

@@ -18,6 +18,7 @@
               type="bar"
               [data]="data"
               [options]="bargraphData"
+              width="700"
             ></p-chart>
           </div>
         </div>
@@ -42,7 +43,7 @@
               <p-progressSpinner ariaLabel="loading"> </p-progressSpinner>
             </div>
             <div
-              class="this_week"
+              class="this_week mt-3"
               *ngIf="summaryRecomendations && !loading && !statusTrue"
             >
               <div class="my-3">
@@ -69,7 +70,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-8 card border-none">
           <app-graph-component title="Category over Time"></app-graph-component>
         </div>
         <div class="col-lg-4">
@@ -90,7 +91,6 @@
               <p-progressSpinner></p-progressSpinner>
             </div>
             <div
-              *ngIf="!doughnutChartLoader"
               id="pieChart"
               style="height: 600px; display: flex; text-align: center"
             ></div>

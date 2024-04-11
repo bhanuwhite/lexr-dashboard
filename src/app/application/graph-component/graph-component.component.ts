@@ -22,8 +22,9 @@ export class GraphComponentComponent implements OnInit {
   options: any;
   dataa: any;
   summaryError: boolean = false;
+  loadingSpinner: boolean = false;
 
-  @Input() Name: string = 'Sentiment Performance'; // Default title
+  @Input() title: string = '';
 
   categorieMonthwise: categorieMonthwise[] = [];
   threeMonthsDataSet: categorieMonthwise[] = [];
@@ -67,7 +68,7 @@ export class GraphComponentComponent implements OnInit {
 
   /** CHNAGING THE DATA ON SELECTING CATEGORY */
   onSelectingCategory(event: summaryEvent) {
-    this.categoryLoding = false;
+    // this.categoryLoding = false;
     if (event.value) {
       this.selectedValue = event.value.toUpperCase();
       this.selectedCategory = event.value;
@@ -86,74 +87,78 @@ export class GraphComponentComponent implements OnInit {
 
   /** FILTERING THE DATA BASED ON SELECTING CATEGORY */
   filteringDataBasedOnCategory(event: string, selectedYear1: number) {
+    this.loadingSpinner = true;
     if (event !== undefined) {
       const data: any[] = this.csvRequiredData;
 
       let filteredcategorieMonthwise: any[] = [];
+      if (this.selectedCategory) {
+        this.sharedService.getSubCategories(this.selectedCategory).subscribe({
+          next: (res: any) => {
+            res.forEach((i: any) => {
+              this.loadingSpinner = false;
 
-      this.sharedService.getSubCategories(this.selectedCategory).subscribe({
-        next: (res: any) => {
-          res.forEach((i: any) => {
-            let categoryReplaced = i.replace(/_/g, ' ');
-            data
-              ?.filter((x: any) => x.year === selectedYear1)
-              .map((x: any) =>
-                filteredcategorieMonthwise.push({
-                  month: x.month,
-                  categories: x.categories.map(
-                    (y: any) => y[categoryReplaced.toUpperCase()]
-                  ),
-                  label: i,
-                })
+              let categoryReplaced = i.replace(/_/g, ' ');
+              data
+                ?.filter((x: any) => x.year === selectedYear1)
+                .map((x: any) =>
+                  filteredcategorieMonthwise.push({
+                    month: x.month,
+                    categories: x.categories.map(
+                      (y: any) => y[categoryReplaced.toUpperCase()]
+                    ),
+                    label: i,
+                  })
+                );
+            });
+
+            const aggregatedData: any = {};
+
+            filteredcategorieMonthwise.forEach((item) => {
+              const month = item.month;
+              const categories = item.categories;
+
+              if (!aggregatedData[month]) {
+                aggregatedData[month] = {
+                  month: month,
+                  avgValue: [],
+                  categories: [],
+                  label: item.label,
+                };
+              }
+
+              aggregatedData[month].categories =
+                aggregatedData[month].categories.concat(categories);
+            });
+
+            const result = Object.values(aggregatedData);
+
+            result.forEach((item: any) => {
+              let removedUndefinedData: number[] = item.categories.filter(
+                (x: number | undefined) => x !== undefined
               );
-          });
+              if (removedUndefinedData.length > 0) {
+                const sum = removedUndefinedData.reduce(
+                  (acc: any, val: any) => acc + val,
+                  0
+                );
+                item.avgValue = (
+                  (sum / removedUndefinedData.length) *
+                  100
+                ).toFixed(1);
+              } else {
+                item.avgValue = NaN;
+              }
+            });
 
-          const aggregatedData: any = {};
-
-          filteredcategorieMonthwise.forEach((item) => {
-            const month = item.month;
-            const categories = item.categories;
-
-            if (!aggregatedData[month]) {
-              aggregatedData[month] = {
-                month: month,
-                avgValue: [],
-                categories: [],
-                label: item.label,
-              };
-            }
-
-            aggregatedData[month].categories =
-              aggregatedData[month].categories.concat(categories);
-          });
-
-          const result = Object.values(aggregatedData);
-
-          result.forEach((item: any) => {
-            let removedUndefinedData: number[] = item.categories.filter(
-              (x: number | undefined) => x !== undefined
-            );
-            if (removedUndefinedData.length > 0) {
-              const sum = removedUndefinedData.reduce(
-                (acc: any, val: any) => acc + val,
-                0
-              );
-              item.avgValue = (
-                (sum / removedUndefinedData.length) *
-                100
-              ).toFixed(1);
-            } else {
-              item.avgValue = NaN;
-            }
-          });
-
-          this.selectedCategoriGraphData(result);
-        },
-        error: (err: any) => {
-          this.sharedService.errorMessage(err.message);
-          this.summaryError = true;
-        },
-      });
+            this.selectedCategoriGraphData(result);
+          },
+          error: (err: any) => {
+            this.sharedService.errorMessage(err.message);
+            this.summaryError = true;
+          },
+        });
+      }
     }
   }
 
@@ -380,12 +385,14 @@ export class GraphComponentComponent implements OnInit {
     let currentMonth = new Date().getMonth(); //giving prevoius month Number
     let LastThreeMonthsDataForReview: any[] = [];
     let filteredcategorieMonthWise: any[] = [];
+    this.loadingSpinner = true;
 
     const data = this.csvRequiredData;
     this.sharedService
       .getSubCategories(this.selectedCategory)
       .subscribe((res: any) => {
         res.forEach((i: any) => {
+          this.loadingSpinner = false;
           let categoryReplaced = i.replace(/_/g, ' ');
           data
             ?.filter(
@@ -533,6 +540,8 @@ export class GraphComponentComponent implements OnInit {
   }
   /**graph ploting for Last 3 months  */
   graphPlotingForLast3Months(dataset: categorieMonthwise[]) {
+    console.log(dataset);
+
     let apiCallMadeForElement: any[] = [];
     let activeRequests: any = [];
     let summaryResponce: string[] = [];
@@ -542,7 +551,7 @@ export class GraphComponentComponent implements OnInit {
     let bestValueArray: number[] = [];
     let LeastValueArray: number[] = [];
     let label = dataset[0]['label'];
-    let data: number[] = [];
+    let data: any[] = [];
     let jsonData: datasetData = {
       label: '',
       data: [],
@@ -557,7 +566,7 @@ export class GraphComponentComponent implements OnInit {
       }
 
       if (!Number.isNaN(dataset[i]['avgValue'])) {
-        data.push(dataset[i]['avgValue']);
+        data.push({ x: dataset[i].month, y: dataset[i]['avgValue'] });
       }
       month.push(this.monthsCheck(Number(dataset[i]['month'])));
 
@@ -578,6 +587,7 @@ export class GraphComponentComponent implements OnInit {
       bestValueArray.push(bestValue);
       LeastValueArray.push(LeastValue);
     }
+    console.log(data);
 
     jsonData['data'] = data;
     (jsonData['bestReviews'] = bestValueArray),
@@ -637,7 +647,7 @@ export class GraphComponentComponent implements OnInit {
                 '\nWorst Score: ' +
                 worstReviews +
                 '\nSummary : ' +
-                'CategorySummary'
+                'Loading...'
               );
             },
           },
@@ -665,7 +675,6 @@ export class GraphComponentComponent implements OnInit {
 
                     localStorage.setItem(selectedCategory, summaryCountry);
 
-                    const datasetIndex = chartElement[0].datasetIndex;
                     const chartInstance = event.chart;
                     if (chartInstance && chartInstance.tooltip) {
                       chartInstance.tooltip.setActiveElements(chartElement);
@@ -692,7 +701,6 @@ export class GraphComponentComponent implements OnInit {
                 });
               activeRequests[dataIndex] = request;
             } else {
-              const datasetIndex = chartElement[0].datasetIndex;
               const chartInstance = event.chart;
               if (chartInstance && chartInstance.tooltip) {
                 chartInstance.tooltip.setActiveElements(chartElement);
@@ -736,7 +744,7 @@ export class GraphComponentComponent implements OnInit {
   getAllcatogryData() {
     this.sharedService.getAllCategories().subscribe(
       (res: any) => {
-        this.allCategoriesOverTime = res.answer.sort();
+        this.allCategoriesOverTime = res?.answer.sort();
 
         let firstElement = this.allCategoriesOverTime[0];
 

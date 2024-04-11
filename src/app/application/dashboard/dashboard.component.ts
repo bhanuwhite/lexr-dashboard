@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   formattedYears: yearsArray[] = [];
   TrendsCategoryDetials: any;
   trendsLoader: boolean = true;
+  showAllCategories: boolean = false;
 
   constructor(
     private sharedservice: SharedService,
@@ -110,7 +111,6 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-  showAllCategories: boolean = false;
 
   getTrendsApiKeys() {
     if (this.showAllCategories) {

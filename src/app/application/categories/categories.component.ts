@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared.service';
 import * as echarts from 'echarts';
@@ -24,6 +24,7 @@ import { ApplicationServiceService } from '../application-service.service';
   styleUrls: ['./categories.component.scss'],
 })
 export class CategoriesComponent implements OnInit {
+  title: string = '"Category over Time';
   data!: graphData;
   options!: Options;
   bargraphData!: Options;
@@ -52,7 +53,6 @@ export class CategoriesComponent implements OnInit {
   constructor(
     private sharedservice: SharedService,
     private Route: ActivatedRoute,
-    private changeDetection: ChangeDetectorRef,
     private ApplicationService: ApplicationServiceService
   ) {
     this.Route.data.subscribe((res) => {
@@ -441,12 +441,12 @@ export class CategoriesComponent implements OnInit {
     this.doughnutChartLoader = true;
     this.sharedservice.getAllCategories().subscribe(
       (res: any) => {
-        const categoryResponce = res as categoryResponce;
-        this.allCategoriesOverTime = categoryResponce.answer.sort();
-
         this.doughnutChartLoader = false;
-        let firstElement = this.allCategoriesOverTime[0];
 
+        const categoryResponce = res as categoryResponce;
+        this.loading = false;
+        this.allCategoriesOverTime = categoryResponce.answer.sort();
+        let firstElement = this.allCategoriesOverTime[0];
         let firstElementBody = {
           value: firstElement,
         };
@@ -456,6 +456,8 @@ export class CategoriesComponent implements OnInit {
         this.graphDataForDoghnutChart();
       },
       (error: Error) => {
+        this.loading = false;
+        this.statusTrue = true;
         this.sharedservice.errorMessage(error.message);
       }
     );
@@ -529,7 +531,7 @@ export class CategoriesComponent implements OnInit {
     this.ApplicationService.csvallData().subscribe(
       (res: any[]) => {
         const data: any[] = res;
-
+        console.log(res);
         let result: any[] = [];
 
         this.allCategoriesOverTime.forEach((element) => {
@@ -578,6 +580,8 @@ export class CategoriesComponent implements OnInit {
   }
 
   private InitPipe(data: any): void {
+    console.log(data);
+
     this.myChart = echarts.init(document.getElementById('pieChart') as any);
 
     const option = {

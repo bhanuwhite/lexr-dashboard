@@ -531,7 +531,7 @@ export class CategoriesComponent implements OnInit {
     this.ApplicationService.csvallData().subscribe(
       (res: any[]) => {
         const data: any[] = res;
-        console.log(res);
+
         let result: any[] = [];
 
         this.allCategoriesOverTime.forEach((element) => {
@@ -567,7 +567,6 @@ export class CategoriesComponent implements OnInit {
             WorstReview: worstReview,
             summaryReccommendation: summaryReccommendation,
           });
-          // this.changeDetection.detectChanges();
         });
 
         this.InitPipe(result);
@@ -580,8 +579,6 @@ export class CategoriesComponent implements OnInit {
   }
 
   private InitPipe(data: any): void {
-    console.log(data);
-
     this.myChart = echarts.init(document.getElementById('pieChart') as any);
 
     const option = {
@@ -714,8 +711,7 @@ export class CategoriesComponent implements OnInit {
             );
         } else {
           data.data.loading = false;
-          data.data.summaryReccommendation = this.summaryData;
-
+          data.data.summaryReccommendation = localCategoryData;
           if (this.myChart) {
             this.myChart.dispatchAction({
               type: 'showTip',

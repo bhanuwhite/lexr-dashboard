@@ -183,8 +183,6 @@ export class WorldMapComponent implements OnInit {
                     const summaryValue = this.modifiedDataByCountry[indexValue];
                     summaryValue[3] = countryReview;
 
-                    console.log(this.modifiedDataByCountry);
-
                     var data = google.visualization.arrayToDataTable(
                       this.modifiedDataByCountry
                     );

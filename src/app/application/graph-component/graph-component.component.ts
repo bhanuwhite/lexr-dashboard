@@ -540,8 +540,6 @@ export class GraphComponentComponent implements OnInit {
   }
   /**graph ploting for Last 3 months  */
   graphPlotingForLast3Months(dataset: categorieMonthwise[]) {
-    console.log(dataset);
-
     let apiCallMadeForElement: any[] = [];
     let activeRequests: any = [];
     let summaryResponce: string[] = [];
@@ -587,7 +585,6 @@ export class GraphComponentComponent implements OnInit {
       bestValueArray.push(bestValue);
       LeastValueArray.push(LeastValue);
     }
-    console.log(data);
 
     jsonData['data'] = data;
     (jsonData['bestReviews'] = bestValueArray),
